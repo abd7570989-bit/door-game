@@ -1,7 +1,7 @@
 {
   "name": "do-not-open-the-door",
   "productName": "DoNotOpenTheDoor",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "لا تفتح الباب | DO NOT OPEN THE DOOR",
   "main": "main.js",
   "private": true,
@@ -24,10 +24,23 @@
   "build": {
     "appId": "com.abd7570989.donotopenthedoor",
     "productName": "DoNotOpenTheDoor",
-    "files": ["main.js", "app/**/*"],
+    "files": [
+      "main.js",
+      "app/**/*"
+    ],
     "asar": true,
-    "win": { "target": ["portable"] },
-    "portable": { "artifactName": "DoNotOpenTheDoor.exe" },
-    "directories": { "output": "dist" }
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "portable": {
+      "artifactName": "DoNotOpenTheDoor.exe"
+    },
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    }
   }
 }

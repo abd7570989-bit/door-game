@@ -1,0 +1,33 @@
+{
+  "name": "do-not-open-the-door",
+  "productName": "DoNotOpenTheDoor",
+  "version": "1.0.0",
+  "description": "لا تفتح الباب | DO NOT OPEN THE DOOR",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "prepare-game": "node scripts/prepare.js",
+    "start": "npm run prepare-game && electron .",
+    "smoke-test": "npm run prepare-game && electron . --smoke-test",
+    "build": "npm run prepare-game && electron-builder --win portable --x64",
+    "build:linux": "npm run prepare-game && electron-builder --linux dir"
+  },
+  "devDependencies": {
+    "@fontsource/aref-ruqaa": "5.3.0",
+    "@fontsource/caveat": "5.3.0",
+    "@fontsource/noto-kufi-arabic": "5.3.0",
+    "@fontsource/noto-naskh-arabic": "5.3.0",
+    "electron": "44.7.0",
+    "electron-builder": "26.17.0",
+    "three": "0.128.0"
+  },
+  "build": {
+    "appId": "com.abd7570989.donotopenthedoor",
+    "productName": "DoNotOpenTheDoor",
+    "files": ["main.js", "app/**/*"],
+    "asar": true,
+    "win": { "target": ["portable"] },
+    "portable": { "artifactName": "DoNotOpenTheDoor.exe" },
+    "directories": { "output": "dist" }
+  }
+}

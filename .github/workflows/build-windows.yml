@@ -1,0 +1,60 @@
+# Builds DoNotOpenTheDoor.exe on a real Windows machine, checks that the game boots, and uploads it.
+# Pushing a tag like v1.0.0 also publishes it on the Releases page.
+name: Build Windows EXE
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build EXE
+        run: npm run build
+
+      - name: Check the game boots inside the EXE (offline)
+        shell: pwsh
+        run: |
+          $out = "$env:RUNNER_TEMP\smoke.json"
+          $env:GAME_SMOKE_OUT = $out
+          $p = Start-Process -FilePath "dist\win-unpacked\DoNotOpenTheDoor.exe" -ArgumentList "--smoke-test" -PassThru -Wait
+          $report = if (Test-Path $out) { Get-Content $out -Raw } else { "no report written" }
+          Write-Host $report
+          if ($p.ExitCode -ne 0) {
+            Write-Host "::error title=Game did not boot (exit $($p.ExitCode))::$report"
+            exit 1
+          }
+
+      - name: Checksum
+        shell: pwsh
+        run: (Get-FileHash dist/DoNotOpenTheDoor.exe -Algorithm SHA256).Hash | Out-File -Encoding ascii dist/DoNotOpenTheDoor.exe.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DoNotOpenTheDoor-windows
+          path: |
+            dist/DoNotOpenTheDoor.exe
+            dist/DoNotOpenTheDoor.exe.sha256
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/DoNotOpenTheDoor.exe
+            dist/DoNotOpenTheDoor.exe.sha256

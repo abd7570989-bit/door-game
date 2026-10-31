@@ -1018,7 +1018,7 @@ function buildTextures() {
 
 function buildMaterials() {
   M.tile = std({ map: T.tile, r: 0.35 }); M.tileUp = std({ map: T.tileUp, r: 0.4 }); M.marble = std({ map: T.marble, r: 0.22 });
-  M.ktile = std({ map: T.ktile, r: 0.3 });
+  M.ktile = std({ map: T.ktile, r: 0.3 }); M.marbleTrim = std({ map: T.marble, r: 0.22 }); M.plasticOff = std({ color: 0xe2ded4, r: 0.38 });
   M.plaster = std({ map: T.plaster, r: 0.95 }); M.plaster2 = std({ map: T.plaster2, r: 0.95 }); M.majlis = std({ map: T.majlis, r: 0.95 });
   M.ceiling = std({ map: T.ceiling, r: 1 }); M.stucco = std({ map: T.stucco, r: 1 });
   M.concrete = std({ map: T.concrete, r: 0.9 }); M.asphalt = std({ map: T.asphalt, r: 0.55 });
@@ -1050,6 +1050,337 @@ function buildMaterials() {
   M.screenGlass = std({ color: 0x000000, r: 0.04, cc: 1, ccr: 0.03, transparent: true, opacity: 0 });
   M.screenGlass.blending = THREE.CustomBlending; M.screenGlass.blendSrc = THREE.OneFactor; M.screenGlass.blendDst = THREE.OneMinusSrcAlphaFactor; M.screenGlass.userData.envBase = 1.4;
   M.screenGlass.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace('gl_FragColor = vec4( outgoingLight, diffuseColor.a );', 'float sNdV = abs(dot(normalize(normal), normalize(vViewPosition))); float sFr = 0.04 + 0.96 * pow(1.0 - sNdV, 5.0); gl_FragColor = vec4((reflectedLight.directSpecular + reflectedLight.indirectSpecular) * (0.8 + sFr * 2.0), clamp(sFr * 0.5, 0.0, 1.0));'); };
+}
+
+/* =====================================================================
+   MATERIAL BAKERY — every major surface is synthesised on the GPU at boot:
+   tileable colour, relief (normal map) and roughness from layered noise,
+   cells and wood grain; the hand-designed patterns (carpets, sadu,
+   curtains, blankets) are re-woven with knots, fibres and wear
+   ===================================================================== */
+const BK_VS = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+const BK_LIB = `
+varying vec2 vUv;
+uniform float uMode;
+uniform sampler2D tDesign;
+uniform vec2 uDTexel;
+float h21(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+vec2 h22(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973)); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.xx + p3.yz) * p3.zy); }
+float sat(float x) { return clamp(x, 0.0, 1.0); }
+// periodic gradient noise (period P lattice cells), roughly in [-0.7, 0.7]
+float gn(vec2 p, vec2 P) {
+  vec2 i = floor(p), f = fract(p), u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+  vec2 a = mod(i, P), b = mod(i + vec2(1.0, 0.0), P), c = mod(i + vec2(0.0, 1.0), P), d = mod(i + vec2(1.0, 1.0), P);
+  float ga = dot(h22(a) * 2.0 - 1.0, f), gb = dot(h22(b) * 2.0 - 1.0, f - vec2(1.0, 0.0));
+  float gc = dot(h22(c) * 2.0 - 1.0, f - vec2(0.0, 1.0)), gd = dot(h22(d) * 2.0 - 1.0, f - vec2(1.0, 1.0));
+  return mix(mix(ga, gb, u.x), mix(gc, gd, u.x), u.y);
+}
+// tileable fractal noise over uv in [0,1]; F = cells per tile on the first octave
+float fbm(vec2 uv, vec2 F, int oct, float gain) {
+  float s = 0.0, a = 0.5, n = 0.0;
+  for (int i = 0; i < 8; i++) { if (i >= oct) break; s += a * gn(uv * F, F); n += a; F *= 2.0; a *= gain; }
+  return s / n;
+}
+// tileable cells: x = distance to nearest, y = to second nearest, z = cell id
+vec3 cells(vec2 uv, vec2 C) {
+  vec2 p = uv * C, i = floor(p), f = fract(p); float d1 = 8.0, d2 = 8.0, id = 0.0;
+  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) {
+    vec2 o = vec2(float(x), float(y)), c = mod(i + o, C), r = o + h22(c) * 0.9 + 0.05 - f; float d = dot(r, r);
+    if (d < d1) { d2 = d1; d1 = d; id = h21(c + 0.31); } else if (d < d2) d2 = d;
+  }
+  return vec3(sqrt(d1), sqrt(d2), id);
+}
+// distance (in uv) to the nearest joint of an n×n grid, and the cell index
+float gridEdge(vec2 uv, vec2 n, out vec2 cid) { vec2 t = uv * n; cid = mod(floor(t), n); vec2 f = fract(t); vec2 e = min(f, 1.0 - f) / n; return min(e.x, e.y); }
+vec3 design(vec2 uv) {   // the original painted pattern, softened like dyed wool
+  return (texture2D(tDesign, uv).rgb * 2.0 + texture2D(tDesign, uv + uDTexel * vec2(0.6, 0.3)).rgb + texture2D(tDesign, uv - uDTexel * vec2(0.3, 0.6)).rgb) * 0.25;
+}
+`;
+const BK_MAIN = `
+void main() {
+  vec3 c; float h, r;
+  surf(vUv, c, h, r);
+  gl_FragColor = uMode < 0.5 ? vec4(clamp(c, 0.0, 1.0), 1.0) : vec4(h, clamp(r, 0.03, 1.0), 0.0, 1.0);
+}`;
+// ---- the surfaces (colours are authored in sRGB) ----
+const BK_SURF = {
+  // polished porcelain floor: n×n tiles of 60 cm, stone clouds and veins, 3 mm grout, smudges and scuffs
+  porcelain: (base, vein, n) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 cid; float e = gridEdge(uv, vec2(${n}), cid); float id = h21(cid + 3.7);
+  float ts = 1.0 / ${n};
+  float grout = 1.0 - smoothstep(ts * 0.0025, ts * 0.0045, e);
+  float bevel = smoothstep(ts * 0.0025, ts * 0.012, e);
+  vec2 w = vec2(fbm(uv, vec2(3.0), 4, 0.5), fbm(uv + 5.2, vec2(3.0), 4, 0.5));
+  float cl = fbm(uv + w * 0.5, vec2(5.0), 6, 0.55);
+  float v = abs(fbm(uv + w * 0.9 + id * 0.37, vec2(4.0), 6, 0.6));
+  float vein = (1.0 - smoothstep(0.0, 0.022, v)) * smoothstep(-0.1, 0.25, fbm(uv, vec2(2.0), 3, 0.5));
+  vec3 c = ${base} * (0.97 + 0.06 * (id - 0.5)) * (1.0 + cl * 0.22);
+  c = mix(c, ${vein}, vein * 0.45 + sat(cl * 2.0) * 0.06);
+  c *= 1.0 - (1.0 - bevel) * 0.04;
+  col = mix(c, vec3(0.6, 0.56, 0.5), grout);
+  h = mix(0.85 + 0.15 * bevel + id * 0.02, 0.72, grout) + cl * 0.01;
+  float sm = fbm(uv, vec2(9.0), 5, 0.6), sc = sat(1.0 - abs(fbm(uv, vec2(60.0, 6.0), 3, 0.5)) * 40.0);
+  r = mix(0.08 + sat(sm + 0.15) * 0.16 + sc * 0.1, 0.8, grout);
+}`,
+  // polished crema marble; joints = 1 lays it as 2×2 slabs, 0 as one solid piece (sills, steps)
+  marble: (joints) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 cid; float e = gridEdge(uv, vec2(2.0), cid); float id = h21(cid + 1.3) * ${joints};
+  float joint = (1.0 - smoothstep(0.0006, 0.0016, e)) * ${joints};
+  vec2 w = vec2(fbm(uv, vec2(2.0), 5, 0.5), fbm(uv + 7.7, vec2(2.0), 5, 0.5));
+  float tb = fbm(uv + w * 0.8 + id, vec2(3.0), 7, 0.58);
+  float vein = 1.0 - smoothstep(0.0, 0.016, abs(tb)), vein2 = 1.0 - smoothstep(0.0, 0.07, abs(tb - 0.1));
+  vec3 base = vec3(0.93, 0.88, 0.79) * (1.0 + fbm(uv, vec2(7.0), 6, 0.55) * 0.14);
+  col = mix(base, vec3(0.66, 0.56, 0.44), vein * 0.55 + vein2 * 0.14);
+  col = mix(col, vec3(0.55, 0.52, 0.48), joint * 0.6);
+  h = 1.0 - joint * 0.5 + tb * 0.006;
+  r = 0.05 + sat(fbm(uv, vec2(10.0), 4, 0.5) + 0.2) * 0.1 + joint * 0.5;
+}`,
+  // glossy wall ceramic, 8×8 tiles of 15 cm with pillowed edges
+  ceramic: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 cid; float e = gridEdge(uv, vec2(8.0), cid); float id = h21(cid + 9.1);
+  float grout = 1.0 - smoothstep(0.0012, 0.0024, e), edge = smoothstep(0.0012, 0.009, e);
+  vec2 f = fract(uv * 8.0) - 0.5;
+  col = vec3(0.9, 0.92, 0.9) * (0.975 + 0.05 * id) * (1.0 + fbm(uv, vec2(16.0), 4, 0.5) * 0.04);
+  col = mix(col, vec3(0.68, 0.69, 0.66), grout);
+  h = (0.55 + 0.45 * edge - dot(f, f) * 0.12) * (1.0 - grout);
+  r = mix(0.06 + sat(fbm(uv, vec2(24.0), 3, 0.5) + 0.3) * 0.08, 0.85, grout);
+}`,
+  // emulsion-painted plaster: soft mottling and a fine orange-peel roller texture
+  paint: (base, k) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float m = fbm(uv, vec2(4.0), 6, 0.55), peel = fbm(uv, vec2(240.0), 2, 0.5);
+  col = ${base} * (1.0 + m * ${k} + peel * 0.008);
+  h = 0.5 + peel * 0.1 + fbm(uv, vec2(10.0), 3, 0.5) * 0.05;
+  r = 0.84 + fbm(uv, vec2(20.0), 3, 0.5) * 0.1;
+}`,
+  // weathered sand stucco with streaks of grime
+  stucco: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float sand = fbm(uv, vec2(320.0), 2, 0.6), blot = fbm(uv, vec2(4.0), 5, 0.55);
+  float streak = sat(fbm(uv, vec2(10.0, 1.0), 4, 0.5) * 2.0 + 0.1);
+  col = vec3(0.8, 0.69, 0.52) * (1.0 + blot * 0.16 + sand * 0.07) * (1.0 - streak * 0.1);
+  h = 0.5 + sand * 0.5 + blot * 0.08;
+  r = 0.92 - streak * 0.15;
+}`,
+  // concrete: aggregate, broom lines, stains; wet patches go dark and glossy
+  concrete: (wet) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec3 ag = cells(uv, vec2(60.0));
+  float st = fbm(uv, vec2(5.0), 5, 0.55), broom = gn(uv * vec2(400.0, 7.0), vec2(400.0, 7.0));
+  float wetm = ${wet} * smoothstep(-0.05, 0.12, fbm(uv, vec2(3.0), 5, 0.55));
+  col = vec3(0.49, 0.48, 0.46) * (1.0 + st * 0.3 + (ag.z - 0.5) * 0.08 * smoothstep(0.35, 0.1, ag.x));
+  col *= mix(1.0, 0.55, wetm);
+  h = 0.5 + broom * 0.25 + smoothstep(0.3, 0.05, ag.x) * 0.2 + st * 0.1;
+  r = mix(0.82 + st * 0.1, 0.1, wetm);
+}`,
+  // wet asphalt: dark binder, pale stones, puddled hollows
+  asphalt: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec3 a = cells(uv, vec2(140.0)), b = cells(uv + 0.37, vec2(55.0));
+  float stone = smoothstep(0.42, 0.22, a.x) * step(0.55, a.z), big = smoothstep(0.4, 0.2, b.x) * step(0.78, b.z);
+  float pud = smoothstep(0.02, 0.2, fbm(uv, vec2(3.0), 5, 0.55));
+  col = vec3(0.1, 0.1, 0.105) * (1.0 + fbm(uv, vec2(8.0), 4, 0.5) * 0.4) + vec3(0.25, 0.24, 0.22) * (stone * 0.5 + big * 0.4);
+  col *= mix(1.0, 0.6, pud);
+  h = 0.4 + stone * 0.4 + big * 0.5 - pud * 0.2;
+  r = mix(0.55 - stone * 0.1, 0.06, pud);
+}`,
+  // flat-sawn timber: wavy growth rings, rays, pores; grain runs along v
+  wood: (light, dark, rings) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float warp = fbm(uv, vec2(2.0, 1.0), 4, 0.5) * 0.8 + gn(uv * vec2(1.0, 3.0), vec2(1.0, 3.0)) * 0.3;
+  float x = uv.x * ${rings} + warp * 2.0;
+  float ring = pow(0.5 + 0.5 * sin(x * 6.2831853), 3.0);
+  float fiber = fbm(uv, vec2(140.0, 3.0), 4, 0.6);
+  float pore = sat(1.0 - abs(gn(uv * vec2(260.0, 10.0), vec2(260.0, 10.0))) * 6.0) * 0.7;
+  float tone = fbm(uv, vec2(3.0, 2.0), 4, 0.5);
+  col = mix(${light}, ${dark}, sat(ring * 0.36 + fiber * 0.3 + pore * 0.2 + tone * 0.35 + 0.2));
+  h = 0.6 - ring * 0.15 - pore * 0.35 + fiber * 0.12;
+  r = 0.42 + pore * 0.25 + ring * 0.08;
+}`,
+  // interior door: oak veneer, two raised-and-fielded panels (leaf ≈ 0.9 × 2.05 m)
+  door: `
+float panel(vec2 uv, vec4 b) {   // -1 outside, then 0 at the sunk edge rising to 1 on the raised field
+  vec2 d = min(uv - b.xy, b.zw - uv); float e = min(d.x, d.y * 2.25);
+  return e < 0.0 ? -1.0 : smoothstep(0.0, 0.035, e);
+}
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float warp = fbm(uv, vec2(2.0, 1.0), 4, 0.5) * 1.2;
+  float ring = pow(0.5 + 0.5 * sin((uv.x * 7.0 + warp) * 6.2831853), 4.0), pore = sat(1.0 - abs(gn(uv * vec2(160.0, 10.0), vec2(160.0, 10.0))) * 6.0);
+  vec3 c = mix(vec3(0.68, 0.49, 0.31), vec3(0.42, 0.27, 0.15), sat(ring * 0.5 + pore * 0.2 + fbm(uv, vec2(3.0), 4, 0.5) * 0.6 + 0.15));
+  float p = max(panel(uv, vec4(0.14, 0.55, 0.86, 0.92)), panel(uv, vec4(0.14, 0.08, 0.86, 0.45)));
+  float inside = step(0.0, p), pp = max(p, 0.0);
+  col = c * (1.0 - inside * (1.0 - pp) * 0.22) * (0.95 + 0.05 * pp);
+  h = 0.7 - inside * (0.32 * (1.0 - pp) + 0.04 * pp) - pore * 0.05;
+  r = 0.45 + pore * 0.2;
+}`,
+  // the front door: dark hardwood carved with a lattice of diamonds, brass studs down both stiles (≈1.1 × 2.28 m)
+  front: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float warp = fbm(uv, vec2(2.0, 1.0), 4, 0.5);
+  float ring = pow(0.5 + 0.5 * sin((uv.x * 9.0 + warp * 1.4) * 6.2831853), 4.0);
+  vec3 wood = mix(vec3(0.32, 0.19, 0.1), vec3(0.14, 0.07, 0.035), sat(ring * 0.5 + fbm(uv, vec2(4.0), 4, 0.5) * 0.6 + 0.3));
+  vec2 q = vec2(uv.x * 5.8, uv.y * 11.6); vec2 f = fract(q) - 0.5;
+  float dia = abs(abs(f.x) + abs(f.y) - 0.36), groove = 1.0 - smoothstep(0.0, 0.04, dia);
+  float inner = step(0.12, uv.x) * step(uv.x, 0.88) * step(0.06, uv.y) * step(uv.y, 0.94);
+  float frame = 1.0 - smoothstep(0.0, 0.012, min(min(abs(uv.x - 0.12), abs(uv.x - 0.88)), min(abs(uv.y - 0.06), abs(uv.y - 0.94)) * 2.07));
+  groove *= inner;
+  float sx = min(abs(uv.x - 0.055), abs(uv.x - 0.945)) * 1.1, sy = (fract(uv.y * 5.8) - 0.5) / 5.8 * 2.28;
+  float sd = length(vec2(sx, sy)), stud = 1.0 - smoothstep(0.012, 0.016, sd);
+  col = mix(wood * (1.0 - groove * 0.45 - frame * 0.4), vec3(0.72, 0.55, 0.26) * (0.8 + 0.4 * sat(1.0 - sd / 0.016)), stud);
+  h = 0.6 - groove * 0.35 - frame * 0.3 + stud * 0.4 * sqrt(sat(1.0 - sd * sd / 0.000256));
+  r = mix(0.4, 0.28, stud);
+}`,
+  // the green steel gate: two recessed panels, chipped paint, rust blooms
+  gate: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 a = abs(vec2(uv.x - 0.5, mod(uv.y, 0.5) - 0.25));
+  float pnl = smoothstep(0.43, 0.41, a.x) * smoothstep(0.21, 0.19, a.y);
+  float chip = smoothstep(0.32, 0.36, fbm(uv, vec2(12.0), 5, 0.6) + fbm(uv, vec2(60.0), 2, 0.5) * 0.3);
+  float rust = sat(fbm(uv, vec2(10.0, 2.0), 4, 0.55) * 3.0 + 0.1);
+  vec3 paint = vec3(0.17, 0.3, 0.22) * (1.0 + fbm(uv, vec2(6.0), 4, 0.5) * 0.25);
+  col = mix(mix(paint, vec3(0.36, 0.2, 0.11), rust * 0.45), vec3(0.38, 0.19, 0.09), chip);
+  h = 0.5 - pnl * 0.25 - chip * 0.08 + fbm(uv, vec2(80.0), 2, 0.5) * 0.05;
+  r = mix(0.45, 0.85, chip);
+}`,
+  // polished granite: interlocking mineral grains
+  granite: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec3 a = cells(uv, vec2(110.0)), b = cells(uv + 0.5, vec2(48.0));
+  float k = fract(a.z * 7.31 + b.z * 0.2);
+  vec3 c = k < 0.42 ? vec3(0.05, 0.05, 0.055) : k < 0.74 ? vec3(0.3, 0.29, 0.28) : k < 0.92 ? vec3(0.72, 0.7, 0.66) : vec3(0.47, 0.27, 0.2);
+  c *= 0.85 + 0.3 * fract(a.z * 13.7);
+  c *= 1.0 - smoothstep(0.05, 0.0, a.y - a.x) * 0.5;
+  col = c;
+  h = 0.5 + (fract(a.z * 3.1) - 0.5) * 0.04;
+  r = 0.08 + fract(a.z * 5.3) * 0.08;
+}`,
+  // brushed stainless steel
+  brushed: `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  float s = gn(uv * vec2(3.0, 420.0), vec2(3.0, 420.0)) * 0.6 + gn(uv * vec2(9.0, 900.0), vec2(9.0, 900.0)) * 0.4;
+  col = vec3(0.93) * (1.0 + s * 0.08);
+  h = 0.5 + s * 0.3;
+  r = 0.26 + s * 0.12 + sat(fbm(uv, vec2(6.0), 3, 0.5)) * 0.1;
+}`,
+  // chenille sofa fabric: twill weave, soft pile, slight tonal patches
+  velvet: (base) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 q = uv * 260.0; float tw = 0.5 + 0.5 * sin((q.x + q.y) * 3.14159);
+  float pile = fbm(uv, vec2(120.0), 3, 0.6), tonal = fbm(uv, vec2(4.0), 4, 0.5);
+  col = ${base} * (0.86 + tw * 0.1 + pile * 0.25 + tonal * 0.2);
+  h = 0.5 + tw * 0.35 + pile * 0.3;
+  r = 0.88;
+}`,
+  // a hand-knotted rug from a design: one colour per knot, rounded tufts, wear and fading
+  rug: (knots, wear) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec2 jit = vec2(gn(uv * 90.0, vec2(90.0)), gn(uv * 90.0 + 31.7, vec2(90.0))) * uDTexel * 1.2;
+  vec3 d = design(uv + jit);
+  float pile = fbm(uv, ${knots}, 2, 0.6), fib = fbm(uv, ${knots} * 3.0, 2, 0.5);
+  float rows = 0.5 + 0.5 * sin(uv.y * (${knots}).y * 6.2831853), blot = fbm(uv, vec2(5.0), 4, 0.5);
+  float worn = ${wear} * sat(blot * 2.0 + 0.2);
+  vec3 c = d * (0.88 + pile * 0.26 + fib * 0.12 + rows * 0.04);
+  col = mix(c, vec3(dot(c, vec3(0.3, 0.59, 0.11))) * 1.08, worn * 0.3);
+  h = 0.5 + pile * 0.5 + fib * 0.25 - worn * 0.1;
+  r = 0.95;
+}`,
+  // a woven cloth from a design: over-under threads, fibre fuzz
+  weave: (threads, depth) => `
+void surf(vec2 uv, out vec3 col, out float h, out float r) {
+  vec3 d = design(uv);
+  vec2 q = uv * ${threads};
+  float wx = 0.5 + 0.5 * sin(q.x * 6.2831853), wy = 0.5 + 0.5 * sin(q.y * 6.2831853);
+  float over = mod(floor(q.x) + floor(q.y), 2.0) < 1.0 ? wx : wy;
+  float fib = fbm(uv, vec2(200.0), 3, 0.6);
+  col = d * (0.9 + over * 0.12 * ${depth} + fib * 0.18);
+  h = 0.5 + over * 0.35 * ${depth} + fib * 0.25;
+  r = 0.9;
+}`
+};
+// ---- running the bakes ----
+const BK = { tmp: null, quad: null, scene: null, cam: null };
+function bkRT(w, h, type, mips) {
+  const rt = new THREE.WebGLRenderTarget(w, h, { type: type || THREE.UnsignedByteType, format: THREE.RGBAFormat, depthBuffer: false, stencilBuffer: false, minFilter: mips ? THREE.LinearMipmapLinearFilter : THREE.LinearFilter, magFilter: THREE.LinearFilter });
+  rt.texture.wrapS = rt.texture.wrapT = THREE.RepeatWrapping; rt.texture.generateMipmaps = !!mips;
+  return rt;
+}
+function bkDraw(mat, rt) { BK.quad.material = mat; renderer.setRenderTarget(rt); renderer.render(BK.scene, BK.cam); }
+function bake(glsl, w, h, opts) {
+  opts = opts || {};
+  const div = window.BAKE_DIV || 1; w = Math.max(64, w / div); h = Math.max(64, h / div);
+  if (!BK.scene) {
+    BK.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2)); BK.quad.frustumCulled = false;
+    BK.scene = new THREE.Scene(); BK.scene.add(BK.quad); BK.cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    BK.hf = renderer.capabilities.isWebGL2 && (renderer.extensions.has('EXT_color_buffer_float') || renderer.extensions.has('EXT_color_buffer_half_float'));
+    BK.nrm = new THREE.ShaderMaterial({ vertexShader: BK_VS, uniforms: { tH: { value: null }, uT: { value: new THREE.Vector2() }, uK: { value: new THREE.Vector2() } }, depthTest: false, depthWrite: false,
+      fragmentShader: 'varying vec2 vUv; uniform sampler2D tH; uniform vec2 uT, uK;\nvoid main() { float l = texture2D(tH, vUv - vec2(uT.x, 0.0)).r, r = texture2D(tH, vUv + vec2(uT.x, 0.0)).r, d = texture2D(tH, vUv - vec2(0.0, uT.y)).r, u = texture2D(tH, vUv + vec2(0.0, uT.y)).r;\n  vec3 n = normalize(vec3((l - r) * uK.x, (d - u) * uK.y, 1.0)); gl_FragColor = vec4(n * 0.5 + 0.5, 1.0); }' });
+    BK.rgh = new THREE.ShaderMaterial({ vertexShader: BK_VS, uniforms: { tH: { value: null } }, depthTest: false, depthWrite: false,
+      fragmentShader: 'varying vec2 vUv; uniform sampler2D tH;\nvoid main() { float g = texture2D(tH, vUv).g; gl_FragColor = vec4(g, g, g, 1.0); }' });
+  }
+  const dsn = opts.design || null, di = dsn && dsn.image;
+  const m = new THREE.ShaderMaterial({ vertexShader: BK_VS, fragmentShader: BK_LIB + glsl + BK_MAIN, depthTest: false, depthWrite: false,
+    uniforms: { uMode: { value: 0 }, tDesign: { value: dsn }, uDTexel: { value: new THREE.Vector2(di ? 1 / di.width : 0, di ? 1 / di.height : 0) } } });
+  const A = bkRT(w, h, null, true); bkDraw(m, A);
+  if (!BK.tmp || BK.tmp.width !== w || BK.tmp.height !== h) { if (BK.tmp) BK.tmp.dispose(); BK.tmp = bkRT(w, h, BK.hf ? THREE.HalfFloatType : null, false); }
+  m.uniforms.uMode.value = 1; bkDraw(m, BK.tmp);
+  const N = bkRT(w, h, null, true), k = opts.k || 8;   // relief strength is set per 1024 texels so every preset looks alike
+  BK.nrm.uniforms.tH.value = BK.tmp.texture; BK.nrm.uniforms.uT.value.set(1 / w, 1 / h); BK.nrm.uniforms.uK.value.set(k * w / 1024, k * h / 1024); bkDraw(BK.nrm, N);
+  const R = bkRT(Math.max(32, w >> 1), Math.max(32, h >> 1), null, true); BK.rgh.uniforms.tH.value = BK.tmp.texture; bkDraw(BK.rgh, R);
+  m.dispose(); renderer.setRenderTarget(null);
+  A.texture.encoding = THREE.sRGBEncoding;
+  for (const t of [A.texture, N.texture, R.texture]) t.anisotropy = ANISO;
+  return { map: A.texture, normalMap: N.texture, roughnessMap: R.texture };
+}
+function applyBake(m, b, opts) {
+  if (!m || !b) return;
+  opts = opts || {};
+  m.map = b.map; m.normalMap = b.normalMap; m.roughnessMap = b.roughnessMap; m.bumpMap = null; m.roughness = opts.r != null ? opts.r : 1;
+  m.color.setHex(opts.color != null ? opts.color : 0xffffff); m.normalScale.set(opts.ns || 1, opts.ns || 1); m.userData.baked = true; m.needsUpdate = true;
+}
+// every material of the house, re-made; sizes follow the graphics preset
+function bakeAllMaterials() {
+  const q = S.quality, big = q === 'ultra' || q === 'high' ? 2048 : q === 'medium' ? 1024 : 512, mid = q === 'low' ? 512 : 1024, small = q === 'low' ? 256 : 512;
+  const t0 = performance.now(), B = BK_SURF;
+  try {
+    applyBake(M.tile, bake(B.porcelain('vec3(0.85, 0.79, 0.69)', 'vec3(0.62, 0.55, 0.46)', '8.0'), big, big, { k: 10 }));
+    applyBake(M.tileUp, bake(B.porcelain('vec3(0.8, 0.79, 0.76)', 'vec3(0.55, 0.55, 0.56)', '8.0'), big, big, { k: 10 }));
+    applyBake(M.marble, bake(B.marble('1.0'), q === 'ultra' ? big : mid, q === 'ultra' ? big : mid, { k: 10 }));
+    applyBake(M.marbleTrim, bake(B.marble('0.0'), mid, mid, { k: 10 }));
+    applyBake(M.ktile, bake(B.ceramic, mid, mid, { k: 18 }));
+    applyBake(M.plaster, bake(B.paint('vec3(0.89, 0.84, 0.76)', '0.05'), mid, mid, { k: 2 }));
+    applyBake(M.plaster2, bake(B.paint('vec3(0.84, 0.85, 0.79)', '0.05'), mid, mid, { k: 2 }));
+    applyBake(M.majlis, bake(B.paint('vec3(0.91, 0.85, 0.74)', '0.06'), mid, mid, { k: 2 }));
+    applyBake(M.ceiling, bake(B.paint('vec3(0.93, 0.92, 0.89)', '0.03'), mid, mid, { k: 1.2 }));
+    applyBake(M.stucco, bake(B.stucco, mid, mid, { k: 6 }));
+    applyBake(M.concrete, bake(B.concrete('0.0'), mid, mid, { k: 8 }));
+    applyBake(M.wetConcrete, bake(B.concrete('1.0'), mid, mid, { k: 8 }));
+    applyBake(M.asphalt, bake(B.asphalt, mid, mid, { k: 10 }));
+    applyBake(M.wood, bake(B.wood('vec3(0.5, 0.29, 0.17)', 'vec3(0.26, 0.13, 0.06)', '24.0'), mid, mid, { k: 5 }));
+    const wl = bake(B.wood('vec3(0.72, 0.53, 0.35)', 'vec3(0.5, 0.33, 0.19)', '22.0'), mid, mid, { k: 5 });
+    applyBake(M.woodLight, wl); applyBake(M.trim, wl); applyBake(M.board, wl);
+    applyBake(M.woodDark, bake(B.wood('vec3(0.3, 0.19, 0.12)', 'vec3(0.12, 0.06, 0.035)', '28.0'), mid, mid, { k: 5 }));
+    applyBake(M.door, bake(B.door, small, mid, { k: 9 }));
+    applyBake(M.front, bake(B.front, small, mid, { k: 9 }));
+    applyBake(M.gate, bake(B.gate, small, small, { k: 8 }));
+    applyBake(M.counter, bake(B.granite, mid, mid, { k: 3 }));
+    applyBake(M.steel, bake(B.brushed, small, small, { k: 2 }), { color: 0xd8dcdf });
+    applyBake(M.sofaFab, bake(B.velvet('vec3(0.42, 0.28, 0.2)'), mid, mid, { k: 4 }));
+    // the designed textiles, now knotted or woven
+    const cs = q === 'ultra' ? 2048 : mid;
+    applyBake(M.carpet, bake(B.rug('vec2(256.0)', '0.35'), cs, cs, { design: T.carpet, k: 6 }));
+    applyBake(M.carpet2, bake(B.rug('vec2(160.0)', '0.2'), mid, mid, { design: T.carpet2, k: 6 }));
+    if (M.persian) applyBake(M.persian, bake(B.rug('vec2(150.0, 360.0)', '0.3'), mid, mid * 2, { design: T.persian, k: 6 }));
+    applyBake(M.sadu, bake(B.weave('vec2(128.0, 32.0)', '1.4'), mid, small / 2, { design: T.sadu, k: 7 }));
+    applyBake(M.curtain, bake(B.weave('vec2(140.0)', '0.6'), small, small, { design: T.curtain, k: 3 }));
+    applyBake(M.blanket, bake(B.weave('vec2(110.0)', '1.0'), small, small, { design: T.blanket, k: 4 }));
+    applyBake(M.pillowFab, bake(B.weave('vec2(180.0)', '0.8'), small, small, { design: T.damask, k: 3 }));
+    if (M.cloth && T.tablecloth) applyBake(M.cloth, bake(B.weave('vec2(220.0)', '0.5'), small, small, { design: T.tablecloth, k: 2 }), { r: 0.75 });
+  } catch (e) { console.warn('bake failed', e); }
+  renderer.setRenderTarget(null);
+  console.log('materials baked in ' + Math.round(performance.now() - t0) + ' ms');
 }
 
 /* ---------- geometry batching ---------- */
@@ -1119,8 +1450,8 @@ const levelY = lv => lv ? 3.2 : 0, levelH = lv => lv ? 2.8 : 3.0;
 function wallSeg(axis, line, a, b, y0, h, mat, thick, lv, colOn) {
   if (b - a < 0.005) return;
   if (axis === 'x') blockBox((a + b) / 2, y0 + h / 2, line, b - a, h, thick); else blockBox(line, y0 + h / 2, (a + b) / 2, thick, h, b - a);
-  if (axis === 'x') { sbox(b - a, h, thick, (a + b) / 2, y0, line, mat, 1.6); if (colOn) col(a, line - thick / 2, b, line + thick / 2, lv); }
-  else { sbox(thick, h, b - a, line, y0, (a + b) / 2, mat, 1.6); if (colOn) col(line - thick / 2, a, line + thick / 2, b, lv); }
+  if (axis === 'x') { sbox(b - a, h, thick, (a + b) / 2, y0, line, mat, 3.2); if (colOn) col(a, line - thick / 2, b, line + thick / 2, lv); }
+  else { sbox(thick, h, b - a, line, y0, (a + b) / 2, mat, 3.2); if (colOn) col(line - thick / 2, a, line + thick / 2, b, lv); }
   wallDeco(axis, line, a, b, y0, h, thick, mat);
 }
 function wall(axis, line, a, b, lv, openings, mat, thick, y0o, ho) {
@@ -1132,6 +1463,7 @@ function wall(axis, line, a, b, lv, openings, mat, thick, y0o, ho) {
     wallSeg(axis, line, cur, op[0], y0, h, mat, th, lv, true);
     const top = op[2] || 2.2;
     openingTrim(axis, line, op[0], op[1], y0, top, th, mat);
+    if (mat !== M.stucco && op[0] - cur > 0.4 && top > 1.9) for (const f of wallFaces(line, th)) (W.socketCands = W.socketCands || []).push({ axis, face: line + f * th / 2, f, u: op[0] - 0.2, y: y0 + 1.25, kind: 1 });
     if (h - top > 0.01) wallSeg(axis, line, op[0], op[1], y0 + top, h - top, mat, th, lv, false);
     cur = op[1];
   }
@@ -1147,14 +1479,14 @@ function windowDeco(axis, line, c, yb, w, h, side, opts) {
     const g = new THREE.PlaneGeometry(w, h); addStatic(g, gm, c, yb + h / 2, z, 0, side > 0 ? 0 : Math.PI, 0);
     sbox(w + 0.12, 0.06, 0.08, c, yb - 0.06, z, M.white); sbox(w + 0.12, 0.06, 0.06, c, yb + h, z, M.white);
     sbox(0.06, h, 0.06, c - w / 2 - 0.03, yb, z, M.white); sbox(0.06, h, 0.06, c + w / 2 + 0.03, yb, z, M.white); sbox(0.04, h, 0.05, c, yb, z, M.white);
-    if (opts.sill) sbox(w + 0.2, 0.04, 0.18, c, yb - 0.08, line + side * (off + 0.06), M.marble);
+    if (opts.sill) sbox(w + 0.2, 0.04, 0.18, c, yb - 0.08, line + side * (off + 0.06), M.marbleTrim, 1);
     if (opts.curtains) curtainsV3('x', c, w, yb, h, line + side * (off + 0.08), side);
   } else {
     const x = line + side * off;
     const g = new THREE.PlaneGeometry(w, h); addStatic(g, gm, x, yb + h / 2, c, 0, side > 0 ? Math.PI / 2 : -Math.PI / 2, 0);
     sbox(0.08, 0.06, w + 0.12, x, yb - 0.06, c, M.white); sbox(0.06, 0.06, w + 0.12, x, yb + h, c, M.white);
     sbox(0.06, h, 0.06, x, yb, c - w / 2 - 0.03, M.white); sbox(0.06, h, 0.06, x, yb, c + w / 2 + 0.03, M.white); sbox(0.05, h, 0.04, x, yb, c, M.white);
-    if (opts.sill) sbox(0.18, 0.04, w + 0.2, line + side * (off + 0.06), yb - 0.08, c, M.marble);
+    if (opts.sill) sbox(0.18, 0.04, w + 0.2, line + side * (off + 0.06), yb - 0.08, c, M.marbleTrim, 1);
     if (opts.curtains) curtainsV3('z', c, w, yb, h, line + side * (off + 0.08), side);
   }
 }
@@ -1830,13 +2162,13 @@ function domeLightV3(x, y, z, fm) {
 function buildHouse() {
   const O = W.obj;
   /* ---- floors & ceilings ---- */
-  sbox(20, 0.1, 16, 0, -0.1, 0, M.tile, 1.2); blockBox(0, -0.06, 0, 20, 0.1, 16);
-  splane(5, 6, -0.5, 0.004, 5, M.marble, -Math.PI / 2, 0, 1.0);          // entrance marble
+  sbox(20, 0.1, 16, 0, -0.1, 0, M.tile, 4.8); blockBox(0, -0.06, 0, 20, 0.1, 16);
+  splane(5, 6, -0.5, 0.004, 5, M.marble, -Math.PI / 2, 0, 2.0);          // entrance marble
   splane(4, 7, 4, 0.004, -1.5, M.concrete, -Math.PI / 2, 0, 2.5);         // storage
-  splane(4, 7, 8, 0.004, -1.5, M.ktile, -Math.PI / 2, 0, 0.6);            // bathroom
-  const slab = (x1, z1, x2, z2) => { const w = x2 - x1, d = z2 - z1, cx = (x1 + x2) / 2, cz = (z1 + z2) / 2; sbox(w, 0.17, d, cx, 3.0, cz, M.ceiling, 2); blockBox(cx, 3.1, cz, w, 0.2, d); sbox(w, 0.03, d, cx, 3.17, cz, M.tileUp, 1.2); };
+  splane(4, 7, 8, 0.004, -1.5, M.ktile, -Math.PI / 2, 0, 1.2);            // bathroom
+  const slab = (x1, z1, x2, z2) => { const w = x2 - x1, d = z2 - z1, cx = (x1 + x2) / 2, cz = (z1 + z2) / 2; sbox(w, 0.17, d, cx, 3.0, cz, M.ceiling, 3.2); blockBox(cx, 3.1, cz, w, 0.2, d); sbox(w, 0.03, d, cx, 3.17, cz, M.tileUp, 4.8); };
   slab(-10, -8, 0.3, 8); slab(1.8, -8, 10, 8); slab(0.3, -8, 1.8, -5.2); slab(0.3, 0.8, 1.8, 8);
-  sbox(20.5, 0.12, 16.5, 0, 6.0, 0, M.ceiling, 2); sbox(20.5, 0.15, 16.5, 0, 6.12, 0, M.concrete, 3);
+  sbox(20.5, 0.12, 16.5, 0, 6.0, 0, M.ceiling, 3.2); sbox(20.5, 0.15, 16.5, 0, 6.12, 0, M.concrete, 3);
   /* ---- exterior walls (both levels) ---- */
   for (const lv of [0, 1]) {
     wall('x', 8, -10, 10, lv, lv ? [] : [[-0.55, 0.55, 2.3]], null, 0.25);
@@ -1850,7 +2182,7 @@ function buildHouse() {
   sbox(20.6, 0.5, 0.3, 0, 6.2, 8.0, M.stucco, 2); sbox(20.6, 0.5, 0.3, 0, 6.2, -8.0, M.stucco, 2); sbox(0.3, 0.5, 16, -10.1, 6.2, 0, M.stucco, 2); sbox(0.3, 0.5, 16, 10.1, 6.2, 0, M.stucco, 2);
   sbox(20.6, 0.12, 0.2, 0, 3.05, 8.25, M.beige); // floor band
   sbox(1.6, 0.12, 0.6, 0, 2.45, 8.45, M.beige);  // canopy over door
-  sbox(2.2, 0.15, 1.1, 0, -0.1, 8.65, M.marble, 1); // door step
+  sbox(2.2, 0.15, 1.1, 0, -0.1, 8.65, M.marbleTrim, 1); // door step
   /* ---- ground interior walls ---- */
   wall('x', 2, -10, 10, 0, [[-2.6, -0.3, 2.5]]);
   wall('z', -3, 2, 8, 0, [[4.5, 5.5]], M.majlis);
@@ -1863,12 +2195,9 @@ function buildHouse() {
   wall('x', 0, -10, -3, 1, []);
   wall('z', 2, -8, 8, 1, [[-7.4, -6.4], [4.5, 5.5]]);
   wall('x', 2, 2, 10, 1, []);
-  // skirting boards (cheap realism)
-  const skirt = (axis, line, a, b, y0, side) => { if (axis === 'x') sbox(b - a, 0.1, 0.02, (a + b) / 2, y0, line + side * 0.085, M.woodDark); else sbox(0.02, 0.1, b - a, line + side * 0.085, y0, (a + b) / 2, M.woodDark); };
-  skirt('z', -9.875, -8, 8, 0, 1.4); skirt('x', -7.875, -10, 10, 0, 1.4); skirt('z', -9.875, -8, 8, 3.2, 1.4); skirt('x', -7.875, -10, 10, 3.2, 1.4);
 
   /* ---- stairs ---- */
-  for (let i = 0; i < 16; i++) { const top = (i + 1) * 0.2, z0 = 0.8 - i * 0.375; sbox(1.5, top, 0.375, 1.05, 0, z0 - 0.1875, M.marble, 1); }
+  for (let i = 0; i < 16; i++) { const top = (i + 1) * 0.2, z0 = 0.8 - i * 0.375; sbox(1.5, top, 0.375, 1.05, 0, z0 - 0.1875, M.marbleTrim, 1); }
   col(0.2, -5.2, 0.3, 0.8, 2); col(0.3, -5.32, 1.8, -5.2, 0); col(0.3, 0.8, 1.8, 0.9, 1);
   for (let i = 0; i <= 8; i++) { const z = 0.75 - i * 0.74, y = clamp((0.8 - z) / 6, 0, 1) * 3.2; sbox(0.04, 0.95, 0.04, 0.25, y, z, M.woodDark); }
   addStatic(new THREE.BoxGeometry(0.06, 0.06, 6.9), M.woodDark, 0.25, 0.95 + 1.6, -2.2, Math.atan2(3.2, 6), 0, 0);
@@ -1968,7 +2297,7 @@ function buildHouse() {
   const kz = 7.575;
   for (const [a, b] of [[2.6, 5.55], [6.45, 8.6]]) { solid(b - a, 0.88, 0.6, (a + b) / 2, 0, kz, M.woodLight, 1); sbox(b - a + 0.02, 0.04, 0.64, (a + b) / 2, 0.88, kz - 0.02, M.counter); }
   sbox(3.0, 0.65, 0.36, 4.05, 1.55, 7.69, M.woodLight, 1); sbox(2.15, 0.65, 0.36, 7.55, 1.55, 7.69, M.woodLight, 1);
-  sbox(2.74, 0.62, 0.02, 3.97, 0.92, 7.86, M.ktile, 0.6); sbox(1.32, 0.22, 0.02, 6.0, 0.92, 7.86, M.ktile, 0.6); sbox(1.94, 0.62, 0.02, 7.63, 0.92, 7.86, M.ktile, 0.6); sbox(0.02, 0.62, 0.99, 9.86, 0.92, 3.495, M.ktile, 0.6); sbox(0.02, 0.2, 1.22, 9.86, 0.92, 4.6, M.ktile, 0.6); sbox(0.02, 0.62, 1.59, 9.86, 0.92, 6.005, M.ktile, 0.6);
+  sbox(2.74, 0.62, 0.02, 3.97, 0.92, 7.86, M.ktile, 1.2); sbox(1.32, 0.22, 0.02, 6.0, 0.92, 7.86, M.ktile, 1.2); sbox(1.94, 0.62, 0.02, 7.63, 0.92, 7.86, M.ktile, 1.2); sbox(0.02, 0.62, 0.99, 9.86, 0.92, 3.495, M.ktile, 1.2); sbox(0.02, 0.2, 1.22, 9.86, 0.92, 4.6, M.ktile, 1.2); sbox(0.02, 0.62, 1.59, 9.86, 0.92, 6.005, M.ktile, 1.2);
   solid(0.8, 0.88, 0.62, 6.0, 0, 7.55, M.white); sbox(0.78, 0.02, 0.6, 6.0, 0.88, 7.55, M.black);
   sbox(0.9, 0.35, 0.5, 6.0, 1.75, 7.6, M.metal); sbox(0.4, 0.8, 0.3, 6.0, 2.1, 7.7, M.metal);
   solid(0.95, 1.85, 0.66, 9.35, 0, 7.5, M.white);
@@ -2051,7 +2380,7 @@ function buildHouse() {
   addLight('storage', 4, 2.65, -1.5, 0xffc98a, 1.1, 6, 0, { fixture: 'bulb', group: 'storage' });
 
   /* ---- BATHROOM ---- */
-  sbox(0.02, 1.5, 6.6, 9.86, 0, -1.5, M.ktile, 0.6); sbox(3.7, 1.5, 0.02, 8, 0, 1.91, M.ktile, 0.6);
+  sbox(0.02, 1.5, 6.6, 9.86, 0, -1.5, M.ktile, 1.2); sbox(3.7, 1.5, 0.02, 8, 0, 1.91, M.ktile, 1.2);
   solid(0.5, 0.85, 0.45, 9.6, 0, -2.6, M.white); sbox(0.02, 0.7, 0.5, 9.86, 1.1, -2.6, M.mirror);
   blockBox(9.55, 0.21, -0.6, 0.4, 0.42, 0.62); col(9.35, -0.91, 9.75, -0.29, 0);
   windowDeco('z', 10, 0.9, 1.75, 0.6, 0.5, -1, { thick: 0.25, sill: true });
@@ -2135,6 +2464,7 @@ function buildHouse() {
   col(-7.72, 0.9, -7.38, 1.1, 1);         // my backpack
 
   buildDetails();
+  placeSockets();
   flushStatic();
 }
 const lightById = id => W.lights.find(l => l.id === id);
@@ -2216,6 +2546,7 @@ function enhanceMaterials() {
     [M.carpet, 1.6, 0], [M.carpet2, 1.6, 0], [M.sadu, 1.5, 0], [M.fabric, 1.8, 0], [M.curtain, 1.2, 0], [M.blanket, 1.5, 0], [M.cardboard, 1.3, 1], [M.persian, 1.5, 0], [M.nylon, 1.4, 0], [M.trim, 0.7, 1], [M.sofaFab, 1.3, 0], [M.pillowFab, 1.0, 0], [M.counter, 0.9, 0], [M.cloth, 0.5, 1], [M.shadeFab, 0.8, 0]];
   const ncache = new Map();
   for (const [m, k, bl] of nrm) {
+    if (m && m.userData.baked) continue;
     if (!m || !m.map || !m.map.image || !m.map.image.getContext) { if (m && m.map && !m.bumpMap) { m.bumpMap = m.map; m.bumpScale = 0.02; } continue; }
     let tx = ncache.get(m.map); if (!tx) { tx = normalTex(m.map.image, k, bl); ncache.set(m.map, tx); }
     m.normalMap = tx; m.bumpMap = null; m.needsUpdate = true;
@@ -2227,13 +2558,13 @@ function enhanceMaterials() {
     m.roughnessMap = roughTex(m.map.image, base, amp); m.roughness = 1; m.needsUpdate = true;
   }
   const sm = smudgeTex();
-  for (const [m, r] of [[M.white, 0.55], [M.counter, 0.45], [M.mirror, 0.14], [M.chrome, 0.32], [M.ceramic, 0.3], [M.metal, 0.6]]) { m.roughnessMap = sm; m.roughness = r; m.needsUpdate = true; }
-  const env = new Map([[M.chrome, 0.9], [M.metal, 0.6], [M.mirror, 1.1], [M.marble, 0.55], [M.tile, 0.35], [M.tileUp, 0.3], [M.ktile, 0.45], [M.counter, 0.55], [M.white, 0.35],
+  for (const [m, r] of [[M.white, 0.55], [M.counter, 0.45], [M.mirror, 0.14], [M.chrome, 0.32], [M.ceramic, 0.3], [M.metal, 0.6]]) { if (m.userData.baked) continue; m.roughnessMap = sm; m.roughness = r; m.needsUpdate = true; }
+  const env = new Map([[M.chrome, 0.9], [M.metal, 0.6], [M.mirror, 1.1], [M.marble, 0.55], [M.marbleTrim, 0.5], [M.tile, 0.35], [M.tileUp, 0.3], [M.ktile, 0.45], [M.counter, 0.55], [M.white, 0.35],
     [M.puddle, 1.3], [M.carPaint, 0.9], [M.carGlass, 1.0], [M.brass, 0.6], [M.concrete, 0.3], [M.asphalt, 0.3], [M.wetConcrete, 0.32], [M.stucco, 0.18], [M.ceramic, 0.5], [M.plastic, 0.3], [M.gray, 0.5], [M.cup, 0.6], [M.headlight, 0.8]]);
   W.envMats = [];
   scene.traverse(o => {
     const list = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : [];
-    for (const m of list) if (m.isMeshStandardMaterial && m.userData.envBase == null) { m.userData.envBase = env.has(m) ? env.get(m) : 0.12; W.envMats.push(m); }
+    for (const m of list) { if (m.isMeshStandardMaterial && m.userData.envBase == null) { m.userData.envBase = env.has(m) ? env.get(m) : 0.12; W.envMats.push(m); } ssrPatch(m); ssrKeepAlpha(m); }
   });
 }
 /* ---- surface detail generated from the painted textures: normal maps (relief) and roughness maps (smudges, grout) ---- */
@@ -2456,6 +2787,10 @@ function wallDeco(axis, line, a, b, y0, h, th, mat) {
   for (const f of wallFaces(line, th)) {
     const face = line + f * th / 2;
     if (atFloor) aoPlane(axis, face + f * 0.004, mid, y0, len, mat === M.stucco ? 0.6 : 0.34, f, false);
+    if (atFloor && mat !== M.stucco) {
+      skirting(axis, face, f, mid, y0, len);
+      if (len > 1.4) (W.socketCands = W.socketCands || []).push({ axis, face, f, u: a + len * 0.3, y: y0 + 0.3, kind: 0 });
+    }
     if (atCeil) {
       if (axis === 'x') { sbox(len, 0.1, 0.04, mid, top - 0.1, face + f * 0.02, M.gypsum); sbox(len, 0.05, 0.09, mid, top - 0.05, face + f * 0.045, M.gypsum); sbox(len, 0.025, 0.06, mid, top - 0.14, face + f * 0.03, M.gypsum); }
       else { sbox(0.04, 0.1, len, face + f * 0.02, top - 0.1, mid, M.gypsum); sbox(0.09, 0.05, len, face + f * 0.045, top - 0.05, mid, M.gypsum); sbox(0.06, 0.025, len, face + f * 0.03, top - 0.14, mid, M.gypsum); }
@@ -2471,7 +2806,7 @@ function openingTrim(axis, line, a, b, y0, top, th, mat) {
     if (axis === 'x') { sbox(0.08, top + 0.04, 0.03, a - 0.04, y0, p, M.trim); sbox(0.08, top + 0.04, 0.03, b + 0.04, y0, p, M.trim); sbox(b - a + 0.16, 0.08, 0.03, mid, y0 + top, p, M.trim); }
     else { sbox(0.03, top + 0.04, 0.08, p, y0, a - 0.04, M.trim); sbox(0.03, top + 0.04, 0.08, p, y0, b + 0.04, M.trim); sbox(0.03, 0.08, b - a + 0.16, p, y0 + top, mid, M.trim); }
   }
-  if (axis === 'x') sbox(b - a, 0.012, th + 0.04, mid, y0, line, M.marble); else sbox(th + 0.04, 0.012, b - a, line, y0, mid, M.marble);
+  if (axis === 'x') sbox(b - a, 0.012, th + 0.04, mid, y0, line, M.marbleTrim, 1); else sbox(th + 0.04, 0.012, b - a, line, y0, mid, M.marbleTrim, 1);
 }
 /* ---- windows: iron grills outside (very common in Riyadh), sheer curtains inside ---- */
 function windowExtra(axis, line, c, yb, w, h, side, opts, off) {
@@ -2486,7 +2821,7 @@ function windowExtra(axis, line, c, yb, w, h, side, opts, off) {
     if (axis === 'x') { sbox(w + 0.36, 0.1, 0.12, c, yb - 0.2, line + side * (off + 0.05), M.beige); sbox(w + 0.36, 0.1, 0.08, c, yb + h + 0.06, line + side * (off + 0.03), M.beige); }
     else { sbox(0.12, 0.1, w + 0.36, line + side * (off + 0.05), yb - 0.2, c, M.beige); sbox(0.08, 0.1, w + 0.36, line + side * (off + 0.03), yb + h + 0.06, c, M.beige); }
   } else if (!opts.sill) {
-    if (axis === 'x') sbox(w + 0.2, 0.035, 0.12, c, yb - 0.08, line + side * (off + 0.05), M.marble); else sbox(0.12, 0.035, w + 0.2, line + side * (off + 0.05), yb - 0.08, c, M.marble);
+    if (axis === 'x') sbox(w + 0.2, 0.035, 0.12, c, yb - 0.08, line + side * (off + 0.05), M.marbleTrim, 1); else sbox(0.12, 0.035, w + 0.2, line + side * (off + 0.05), yb - 0.08, c, M.marbleTrim, 1);
   }
   if (opts.curtains) {
     const g = pleatGeo(w + 0.25, h + 0.35, Math.round((w + 0.25) / 0.075), 0.012);
@@ -4444,8 +4779,8 @@ function ambientEvent() {
 const QUAL = {
   low: { pool: 4, fx: false, ssao: 0, shadowK: 0, shMap: 512, flashSh: 0, pr: 1, rain: 450, msaa: 0, beam: false, fxaa: false },
   medium: { pool: 6, fx: true, ssao: 0, shadowK: 0, shMap: 512, flashSh: 0, pr: 1, rain: 900, msaa: 0, beam: false, fxaa: true },
-  high: { pool: 8, fx: true, ssao: 10, shadowK: 2, shMap: 512, flashSh: 1024, pr: 1.25, rain: 1500, msaa: 0, beam: true, fxaa: true },
-  ultra: { pool: 10, fx: true, ssao: 16, shadowK: 4, shMap: 1024, flashSh: 2048, pr: 2, rain: 2200, msaa: 4, beam: true, fxaa: false }
+  high: { pool: 8, fx: true, ssao: 10, shadowK: 2, shMap: 512, flashSh: 1024, pr: 1.25, rain: 1500, msaa: 0, beam: true, fxaa: true, ssr: 20 },
+  ultra: { pool: 10, fx: true, ssao: 16, shadowK: 4, shMap: 1024, flashSh: 2048, pr: 2, rain: 2200, msaa: 4, beam: true, fxaa: false, ssr: 32 }
 };
 function detectQuality() {
   try {
@@ -4570,7 +4905,8 @@ void main() {
   gl_FragColor = vec4(s / 12.0 * uScatter, 1.0);
 }`;
 const FX_COMP = FX_COMMON + `
-uniform sampler2D tScene, tAO, tBloom, tDepth;
+uniform sampler2D tScene, tAO, tBloom, tDepth, tSSR;
+uniform vec2 uSSRTexel; uniform float uSSR;
 uniform mat4 uInvProj;
 uniform float uExposure, uBloom, uAO, uCA, uVig, uSat, uTime, uGrain, uFlash, uFear, uLightning;
 uniform vec3 uFlashDir, uFlashCol;
@@ -4589,6 +4925,11 @@ void main() {
 #ifdef USE_AO
   float ao = texture2D(tAO, vUv).r;
   col *= mix(1.0, ao, uAO);
+#endif
+#ifdef USE_SSR
+  vec2 so = uSSRTexel * 0.75;   // reflections replace part of the surface colour (energy-conserving), softened by a small blur
+  vec4 rs = texture2D(tSSR, vUv) * 0.36 + (texture2D(tSSR, vUv + so) + texture2D(tSSR, vUv - so) + texture2D(tSSR, vUv + vec2(so.x, -so.y)) + texture2D(tSSR, vUv + vec2(-so.x, so.y))) * 0.16;
+  col = col * (1.0 - rs.a * uSSR) + rs.rgb * uSSR;
 #endif
   col += texture2D(tBloom, vUv).rgb * uBloom;
 #ifdef USE_BEAM
@@ -4642,6 +4983,109 @@ void main() {
   col += (hash12(gl_FragCoord.xy * 1.37 + 17.0) - 0.5) / 255.0;
   gl_FragColor = vec4(col, 1.0);
 }`;
+/* ---- screen-space reflections on polished floors, counters and wet ground ----
+   every opaque PBR material writes its smoothness into the alpha of the HDR buffer
+   (alpha = 1 - smoothness²), the SSR pass marches the reflected ray through the depth
+   buffer at half resolution and the composite adds what it found, weighted by Fresnel */
+const FX_SSR = FX_COMMON + `
+uniform sampler2D tDepth, tScene; uniform mat4 uProj, uInvProj; uniform vec3 uUp; uniform vec2 uRes; uniform float uMaxDist;
+varying vec2 vUv;
+vec3 vpos(vec2 uv) { float d = texture2D(tDepth, uv).x; vec4 v = uInvProj * vec4(uv * 2.0 - 1.0, d * 2.0 - 1.0, 1.0); return v.xyz / v.w; }
+vec2 proj(vec3 p) { vec4 c = uProj * vec4(p, 1.0); return c.xy / c.w * 0.5 + 0.5; }
+void main() {
+  float d0 = texture2D(tDepth, vUv).x;
+  float k = 1.0 - texture2D(tScene, vUv).a;
+  if (d0 >= 0.99999 || k < 0.02) { gl_FragColor = vec4(0.0); return; }
+  vec3 p = vpos(vUv);
+  vec2 px = 1.0 / uRes;
+  vec3 gx = vpos(vUv + vec2(px.x, 0.0)) - p, gy = vpos(vUv + vec2(0.0, px.y)) - p;
+  float level = abs(dot(normalize(cross(gx, gy)), uUp));
+  if (level < 0.92 || dot(-p, uUp) <= 0.0) { gl_FragColor = vec4(0.0); return; }   // level surfaces seen from above
+  vec3 v = normalize(p), r = reflect(v, uUp);
+  float F = 0.12 + 0.88 * pow(1.0 - max(dot(-v, uUp), 0.0), 4.0);   // polished stone reads a little stronger than F0 = 0.04
+  float jit = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+  float st = 0.035, t = st * (0.6 + jit), tPrev = 0.0, hit = 0.0;
+  for (int i = 0; i < STEPS; i++) {
+    vec3 q = p + r * t;
+    if (q.z > -0.06) break;
+    vec2 uv = proj(q);
+    if (uv.x <= 0.0 || uv.x >= 1.0 || uv.y <= 0.0 || uv.y >= 1.0) break;
+    float dz = vpos(uv).z - q.z;
+    if (dz > 0.0 && dz < 0.06 + t * 0.12) {
+      float a = tPrev, b = t;
+      for (int j = 0; j < 5; j++) { float m = 0.5 * (a + b); vec3 qm = p + r * m; if (vpos(proj(qm)).z - qm.z > 0.0) b = m; else a = m; }
+      t = b; hit = 1.0; break;
+    }
+    tPrev = t; st *= 1.15; t += st;
+  }
+  if (hit < 0.5) { gl_FragColor = vec4(0.0); return; }
+  vec2 huv = proj(p + r * t);
+  vec2 e = smoothstep(0.0, 0.07, huv) * smoothstep(1.0, 0.93, huv);
+  float w = min(0.85, 1.5 * F * k * e.x * e.y * (1.0 - smoothstep(uMaxDist * 0.55, uMaxDist, t)));
+  vec3 c = min(texture2D(tScene, huv).rgb, vec3(6.0));
+  gl_FragColor = vec4(c * w, w);
+}`;
+function ssrPatch(m) {
+  if (!m || !m.isMeshStandardMaterial || m.transparent || m.userData.ssrP) return;
+  m.userData.ssrP = true;
+  const prev = m.onBeforeCompile, key = m.customProgramCacheKey();
+  m.onBeforeCompile = function (sh, r) {
+    if (prev) prev.call(this, sh, r);
+    sh.fragmentShader = sh.fragmentShader.replace('gl_FragColor = vec4( outgoingLight, diffuseColor.a );',
+      'float ssrS = clamp(1.0 - roughnessFactor * 1.7, 0.0, 1.0);\n#ifdef CLEARCOAT\n\tssrS = max(ssrS, clearcoat * 0.7 * clamp(1.0 - clearcoatRoughness * 1.7, 0.0, 1.0));\n#endif\n\tgl_FragColor = vec4( outgoingLight, 1.0 - ssrS * ssrS );');
+  };
+  m.customProgramCacheKey = () => key + '|ssr1';
+  m.needsUpdate = true;
+}
+// see-through things must not disturb the smoothness stored in alpha (puddles make it glassy)
+function ssrKeepAlpha(m) {
+  if (!m || !m.transparent || m.userData.ssrA) return;
+  m.userData.ssrA = true;
+  if (m === M.puddle) { m.blending = THREE.CustomBlending; m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneMinusSrcAlphaFactor; m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneMinusSrcAlphaFactor; m.needsUpdate = true; return; }
+  if (m.premultipliedAlpha) return;
+  if (m.blending === THREE.NormalBlending) { m.blending = THREE.CustomBlending; m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneMinusSrcAlphaFactor; }
+  else if (m.blending === THREE.AdditiveBlending) { m.blending = THREE.CustomBlending; m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneFactor; }
+  else return;
+  m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneFactor; m.needsUpdate = true;
+}
+
+/* ---- wall furniture: porcelain skirting, sockets, light switches ---- */
+function skirting(axis, face, f, mid, y0, len) {
+  // strips cut from the floor tiles: shift the UVs into the body of a tile so no grout runs along the strip
+  const sm = y0 > 1 ? M.tileUp : M.tile, g = axis === 'x' ? boxGeo(len, 0.09, 0.012, 4.8) : boxGeo(0.012, 0.09, len, 4.8), uv = g.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) + 0.031, uv.getY(i) + 0.0625);
+  if (axis === 'x') addStatic(g, sm, mid, y0 + 0.045, face + f * 0.006); else addStatic(g, sm, face + f * 0.006, y0 + 0.045, mid);
+}
+function plateAt(axis, face, f, u, y, kind) {
+  // kind 0 = socket (two outlets), 1 = light switch (two rockers)
+  const ry = axis === 'x' ? (f > 0 ? 0 : Math.PI) : (f > 0 ? Math.PI / 2 : -Math.PI / 2);
+  const P = (geo, mat, du, dy, dn) => {
+    const n = face + f * dn;
+    if (axis === 'x') addStatic(geo, mat, u + du * (f > 0 ? 1 : -1), y + dy, n, 0, ry, 0); else addStatic(geo, mat, n, y + dy, u - du * (f > 0 ? 1 : -1), 0, ry, 0);
+  };
+  if (kind === 0) {
+    P(rboxGeo(0.146, 0.086, 0.009, 0.004), M.plastic, 0, 0, 0.0045);
+    for (const s of [-1, 1]) {
+      P(rboxGeo(0.05, 0.05, 0.003, 0.006), M.plasticOff, s * 0.036, 0, 0.0095);
+      for (const [px, py, pw, ph] of [[0, 0.012, 0.004, 0.009], [-0.011, -0.008, 0.007, 0.004], [0.011, -0.008, 0.007, 0.004]]) P(new THREE.BoxGeometry(pw, ph, 0.002), M.black, s * 0.036 + px, py, 0.0105);
+    }
+  } else {
+    P(rboxGeo(0.086, 0.086, 0.009, 0.004), M.plastic, 0, 0, 0.0045);
+    for (const s of [-1, 1]) P(rboxGeo(0.03, 0.056, 0.006, 0.003), M.plasticOff, s * 0.017, 0, 0.011);
+  }
+}
+// sockets are placed once every wall exists, so none ends up buried in a cupboard or a side wall
+function placeSockets() {
+  const v = new THREE.Vector3();
+  for (const s of W.socketCands || []) {
+    const out = 0.03;
+    if (s.axis === 'x') v.set(s.u, s.y, s.face + s.f * out); else v.set(s.face + s.f * out, s.y, s.u);
+    let blocked = false;
+    for (const b of W.blockBoxes) if (b.containsPoint(v)) { blocked = true; break; }
+    if (!blocked) plateAt(s.axis, s.face, s.f, s.u, s.y, s.kind);
+  }
+  W.socketCands = [];
+}
 function fxCapable() {
   if (FX.broken || !renderer.capabilities.isWebGL2) return false;
   const e = renderer.extensions;
@@ -4660,7 +5104,7 @@ function fxRT(w, h, type, depth, msaa) {
 }
 function fxDispose() {
   if (!FX.tri) return;
-  for (const k of ['rtScene', 'rtAO1', 'rtAO2', 'rtLDR']) if (FX[k]) { if (FX[k].depthTexture) FX[k].depthTexture.dispose(); FX[k].dispose(); FX[k] = null; }
+  for (const k of ['rtScene', 'rtAO1', 'rtAO2', 'rtLDR', 'rtSSR']) if (FX[k]) { if (FX[k].depthTexture) FX[k].depthTexture.dispose(); FX[k].dispose(); FX[k] = null; }
   if (FX.bloom) FX.bloom.forEach(r => r.dispose()); FX.bloom = null;
   for (const k in FX.m || {}) FX.m[k].dispose(); FX.m = null;
   FX.w = FX.h = 0;
@@ -4669,13 +5113,13 @@ function fxSetup(Q) {
   const was = FX.E;
   if (!Q) { FX.on = false; FX.Q = null; if (was) { fxDispose(); FX.E = null; } if (FX.dust) FX.dust.visible = false; return; }
   const msaa = Q.msaa && renderer.extensions.has('EXT_color_buffer_float') ? Q.msaa : 0;
-  const E = { ssao: Q.ssao, msaa, fxaa: Q.fxaa || !msaa, beam: Q.beam };
+  const E = { ssao: Q.ssao, msaa, fxaa: Q.fxaa || !msaa, beam: Q.beam, ssr: Q.ssr || 0 };
   if (!FX.tri) {
     FX.tri = new THREE.BufferGeometry(); FX.tri.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
     FX.quad = new THREE.Mesh(FX.tri); FX.quad.frustumCulled = false;
     FX.scene = new THREE.Scene(); FX.scene.add(FX.quad); FX.cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   }
-  if (!was || was.ssao !== E.ssao || was.msaa !== E.msaa || was.fxaa !== E.fxaa || was.beam !== E.beam) fxDispose();
+  if (!was || was.ssao !== E.ssao || was.msaa !== E.msaa || was.fxaa !== E.fxaa || was.beam !== E.beam || was.ssr !== E.ssr) fxDispose();
   FX.E = E; FX.Q = Q;
   const v = renderer.getDrawingBufferSize(new THREE.Vector2()), w = Math.max(2, v.x), h = Math.max(2, v.y);
   if (!FX.m) fxMaterials(E);
@@ -4696,24 +5140,26 @@ function fxMaterials(Q) {
     down: fxMat(FX_DOWN, { tSrc: u(null), uTexel: u(new THREE.Vector2()) }),
     up: fxMat(FX_UP, { tSrc: u(null), uTexel: u(new THREE.Vector2()), uScatter: u(0.85) }, null, THREE.AdditiveBlending),
     comp: fxMat(FX_COMP, {
-      tScene: u(null), tAO: u(null), tBloom: u(null), tDepth: u(null), uInvProj: u(new THREE.Matrix4()),
+      tScene: u(null), tAO: u(null), tBloom: u(null), tDepth: u(null), tSSR: u(null), uSSRTexel: u(new THREE.Vector2()), uSSR: u(1), uInvProj: u(new THREE.Matrix4()),
       uExposure: u(1), uBloom: u(0.06), uAO: u(0.85), uCA: u(0.0016), uVig: u(0.42), uSat: u(0.9), uTime: u(0), uGrain: u(0.035),
       uFlash: u(0), uFear: u(0), uLightning: u(0), uFlashDir: u(new THREE.Vector3(-0.058, 0.034, -0.998).normalize()), uFlashCol: u(new THREE.Color(1.0, 0.93, 0.8))
-    }, Object.assign(Q.ssao ? { USE_AO: 1 } : {}, Q.beam ? { USE_BEAM: 1 } : {}, Q.fxaa ? {} : { FINAL: 1 }))
+    }, Object.assign(Q.ssao ? { USE_AO: 1 } : {}, Q.beam ? { USE_BEAM: 1 } : {}, Q.ssr ? { USE_SSR: 1 } : {}, Q.fxaa ? {} : { FINAL: 1 }))
   };
   if (Q.ssao) {
     FX.m.ao = fxMat(FX_SSAO, { tDepth: u(null), uProj: u(new THREE.Matrix4()), uInvProj: u(new THREE.Matrix4()), uRes: u(new THREE.Vector2()), uRadius: u(0.55), uIntensity: u(0.38), uBias: u(0.012) }, { SAMPLES: Q.ssao });
     FX.m.blur = fxMat(FX_BLUR, { tAO: u(null), uDir: u(new THREE.Vector2()) });
   }
+  if (Q.ssr) FX.m.ssr = fxMat(FX_SSR, { tDepth: u(null), tScene: u(null), uProj: u(new THREE.Matrix4()), uInvProj: u(new THREE.Matrix4()), uUp: u(new THREE.Vector3()), uRes: u(new THREE.Vector2()), uMaxDist: u(7) }, { STEPS: Q.ssr });
   if (Q.fxaa) FX.m.fxaa = fxMat(FX_FXAA, { tSrc: u(null), uRes: u(new THREE.Vector2()), uTime: u(0), uGrain: u(0.035) });
 }
 function fxTargets(Q, w, h) {
-  for (const k of ['rtScene', 'rtAO1', 'rtAO2', 'rtLDR']) if (FX[k]) { if (FX[k].depthTexture) FX[k].depthTexture.dispose(); FX[k].dispose(); FX[k] = null; }
+  for (const k of ['rtScene', 'rtAO1', 'rtAO2', 'rtLDR', 'rtSSR']) if (FX[k]) { if (FX[k].depthTexture) FX[k].depthTexture.dispose(); FX[k].dispose(); FX[k] = null; }
   if (FX.bloom) FX.bloom.forEach(r => r.dispose());
   FX.w = w; FX.h = h;
   FX.rtScene = fxRT(w, h, THREE.HalfFloatType, true, Q.msaa);
   const hw = Math.max(1, w >> 1), hh = Math.max(1, h >> 1);
   if (Q.ssao) { FX.rtAO1 = fxRT(hw, hh, THREE.HalfFloatType); FX.rtAO2 = fxRT(hw, hh, THREE.HalfFloatType); }
+  if (Q.ssr) FX.rtSSR = fxRT(hw, hh, THREE.HalfFloatType);
   FX.bloom = [];
   for (let i = 0, bw = hw, bh = hh; i < 5; i++, bw = Math.max(1, bw >> 1), bh = Math.max(1, bh >> 1)) FX.bloom.push(fxRT(bw, bh, THREE.HalfFloatType));
   if (Q.fxaa) FX.rtLDR = fxRT(w, h, THREE.UnsignedByteType);
@@ -4732,6 +5178,12 @@ function fxRender() {
     b.tAO.value = FX.rtAO1.texture; b.uDir.value.set(1 / FX.rtAO1.width, 0); fxPass(m.blur, FX.rtAO2);
     b.tAO.value = FX.rtAO2.texture; b.uDir.value.set(0, 1 / FX.rtAO1.height); fxPass(m.blur, FX.rtAO1);
   }
+  if (Q.ssr) {
+    const s = m.ssr.uniforms;
+    s.tDepth.value = FX.rtScene.depthTexture; s.tScene.value = FX.rtScene.texture; s.uProj.value.copy(camera.projectionMatrix); s.uInvProj.value.copy(camera.projectionMatrixInverse);
+    s.uUp.value.set(0, 1, 0).transformDirection(camera.matrixWorldInverse); s.uRes.value.set(FX.w, FX.h);
+    fxPass(m.ssr, FX.rtSSR);
+  }
   const B = FX.bloom;
   m.pre.uniforms.tSrc.value = FX.rtScene.texture; m.pre.uniforms.uTexel.value.set(1 / FX.w, 1 / FX.h); fxPass(m.pre, B[0]);
   for (let i = 1; i < B.length; i++) { m.down.uniforms.tSrc.value = B[i - 1].texture; m.down.uniforms.uTexel.value.set(1 / B[i - 1].width, 1 / B[i - 1].height); fxPass(m.down, B[i]); }
@@ -4739,6 +5191,7 @@ function fxRender() {
   const c = m.comp.uniforms;
   c.tScene.value = FX.rtScene.texture; c.tBloom.value = B[0].texture; c.tDepth.value = FX.rtScene.depthTexture;
   if (Q.ssao) c.tAO.value = FX.rtAO1.texture;
+  if (Q.ssr) { c.tSSR.value = FX.rtSSR.texture; c.uSSRTexel.value.set(1 / FX.rtSSR.width, 1 / FX.rtSSR.height); }
   c.uInvProj.value.copy(camera.projectionMatrixInverse);
   c.uExposure.value = 0.95 * S.bright * 1.12; c.uTime.value = G.rt;
   c.uFear.value = clamp(G.fear, 0, 1); c.uCA.value = 0.0014 + G.fear * 0.006;
@@ -5032,7 +5485,7 @@ function boot() {
   const tg = new THREE.Object3D(); tg.position.set(0, -0.05, -2); camera.add(tg); flashlight.target = tg;
   flashlight.shadow.mapSize.set(512, 512); flashlight.shadow.bias = -0.002; flashlight.shadow.camera.near = 0.1; flashlight.shadow.camera.far = 17;
   buildTextures(); buildMaterials(); buildHouse(); installDoorHandlers();
-  buildEnvMap(); enhanceMaterials();
+  bakeAllMaterials(); buildEnvMap(); enhanceMaterials();
   applyGraphics(); setEnv('night');
   try { renderer.compile(scene, camera); } catch (e) { console.warn('precompile', e); }
   // film grain

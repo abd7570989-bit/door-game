@@ -1658,17 +1658,49 @@ function updatePool(cx, cy, cz, lvl, time) {
   }
 }
 
-/* ---------- figure (the man at the door) ---------- */
+/* ---------- figure (the man at the door): white thobe, red shmagh over a black igal, the face lost in its shadow ---------- */
 function makeFigure() {
   const g = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.3, 1.42, 12), M.figure); body.position.y = 0.71; g.add(body);
-  const sh = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 8), M.figure); sh.scale.set(1.15, 0.55, 0.75); sh.position.y = 1.42; g.add(sh);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 10), M.figure); head.position.y = 1.62; g.add(head);
-  const sm = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.26, 0.5, 12, 1, true), M.figureHead); sm.material.side = THREE.DoubleSide; sm.position.set(0, 1.5, 0.02); g.add(sm);
-  const top = new THREE.Mesh(new THREE.SphereGeometry(0.135, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), M.figureHead); top.position.y = 1.64; g.add(top);
-  const igal = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.018, 6, 18), M.black); igal.rotation.x = Math.PI / 2; igal.position.y = 1.7; g.add(igal);
+  if (!M.thobe) {
+    M.thobe = std({ color: 0xe6e4de, r: 0.88, sheen: 0xffffff });
+    const tx = T.shmagh.clone(); tx.wrapS = tx.wrapT = THREE.RepeatWrapping; tx.repeat.set(9, 5); tx.needsUpdate = true;
+    M.shmaghCloth = std({ map: tx, r: 0.95, side: THREE.DoubleSide, sheen: 0x8a2a2a });
+  }
+  const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); g.add(m); return m; };
+  const V = (r, y) => new THREE.Vector2(r, y);
+  // the thobe, ankle length, a little fuller at the hem; shoulders, sleeves, dark hands
+  const body = new THREE.LatheGeometry([V(0, 0.02), V(0.25, 0.02), V(0.245, 0.3), V(0.22, 0.8), V(0.205, 1.15), V(0.215, 1.3), V(0.19, 1.4), V(0.09, 1.47), V(0, 1.48)], 28);
+  body.scale(1, 1, 0.74); add(body, M.thobe);
+  const sh = add(new THREE.SphereGeometry(0.2, 20, 10), M.thobe, 0, 1.36, 0); sh.scale.set(1.28, 0.42, 0.72);
+  for (const s of [-1, 1]) {
+    const a = add(new THREE.CylinderGeometry(0.052, 0.075, 0.6, 12), M.thobe, s * 0.245, 1.07, 0.02); a.rotation.z = s * 0.07;
+    add(new THREE.SphereGeometry(0.042, 10, 8), M.figure, s * 0.265, 0.74, 0.03).scale.set(0.8, 1.3, 0.6);
+  }
+  add(new THREE.CylinderGeometry(0.066, 0.07, 0.065, 18, 1, true), M.thobe, 0, 1.475, 0.01);               // collar
+  add(new THREE.BoxGeometry(0.034, 0.24, 0.012), M.thobe, 0, 1.31, 0.148);                                   // placket
+  for (let i = 0; i < 3; i++) add(new THREE.SphereGeometry(0.0075, 8, 6), M.chrome, 0, 1.415 - i * 0.075, 0.156);
+  add(new THREE.SphereGeometry(0.105, 16, 12), M.figure, 0, 1.6, 0);                                         // the face you never see
+  // the shmagh: over the crown, open over the face, falling over the shoulders and down both sides of the chest
+  add(new THREE.SphereGeometry(0.137, 22, 10, 0, Math.PI * 2, 0, Math.PI / 2), M.shmaghCloth, 0, 1.63, 0);
+  const gap = 0.62, drape = new THREE.LatheGeometry([V(0.137, 1.635), V(0.142, 1.55), V(0.16, 1.47), V(0.25, 1.41), V(0.3, 1.33), V(0.31, 1.15), V(0.3, 0.97)], 30, gap, Math.PI * 2 - gap * 2);
+  const dp = drape.attributes.position;
+  for (let i = 0; i < dp.count; i++) {   // soft folds, deeper toward the hem
+    const x = dp.getX(i), y = dp.getY(i), z = dp.getZ(i), ph = Math.atan2(x, z), k = 1 + Math.sin(ph * 9) * 0.035 * Math.min(1, (1.5 - y) * 2);
+    dp.setXYZ(i, x * k, y, z * k * 0.8);
+  }
+  drape.computeVertexNormals(); add(drape, M.shmaghCloth);
+  M.igal = M.igal || std({ color: 0x0b0b0c, r: 0.85 });
+  for (const y of [1.714, 1.74]) { const ig = add(new THREE.TorusGeometry(0.121, 0.011, 8, 28), M.igal, 0, y, -0.012); ig.rotation.x = Math.PI / 2 + 0.13; }
   g.traverse(o => { o.castShadow = true; });
   g.visible = false; scene.add(g); return g;
+}
+// a man in a shmagh, cut out against a lit window
+function shmaghSilhouette(w, h) {
+  const s = new THREE.Shape(), X = x => x * w, Y = y => (y - 0.5) * h;
+  s.moveTo(X(-0.5), Y(0)); s.lineTo(X(0.5), Y(0)); s.lineTo(X(0.48), Y(0.38)); s.quadraticCurveTo(X(0.42), Y(0.6), X(0.22), Y(0.7));
+  s.lineTo(X(0.21), Y(0.86)); s.quadraticCurveTo(X(0.2), Y(1.0), X(0), Y(1.0)); s.quadraticCurveTo(X(-0.2), Y(1.0), X(-0.21), Y(0.86));
+  s.lineTo(X(-0.22), Y(0.7)); s.quadraticCurveTo(X(-0.42), Y(0.6), X(-0.48), Y(0.38)); s.closePath();
+  return new THREE.ShapeGeometry(s, 8);
 }
 
 /* ---------- rain ---------- */
@@ -2528,6 +2560,7 @@ function buildHouse() {
   addLight('policeB', 4.1, 1.6, 20.2, 0x2050ff, 2.2, 12, 0, { outdoor: true });
 
   /* ---- figures ---- */
+  for (const [o, w, h] of [[O.neighSil, 0.5, 0.78], [O.winSil, 0.56, 0.95]]) { o.geometry.dispose(); o.geometry = shmaghSilhouette(w, h); }
   O.figHall = makeFigure(); O.figPorch = makeFigure(); O.figPorch.position.set(0.05, 0, 9.25); O.figPorch.rotation.y = Math.PI;
 
   /* ---- colliders for props you used to walk straight through ---- */
@@ -4241,11 +4274,8 @@ function hdFigure() {
   const O = W.obj;
   if (!O.figScare) {
     O.figScare = makeFigure();
-    // seen up close: a real red shmagh, open at the front on a face you cannot make out — only the eyes catch the light
-    const sm = O.figScare.children[3], top = O.figScare.children[4], cloth = std({ map: T.shmagh, r: 1, side: THREE.DoubleSide });
-    sm.geometry.dispose(); sm.geometry = new THREE.CylinderGeometry(0.13, 0.26, 0.5, 18, 1, true, 0.62, Math.PI * 2 - 1.24); sm.material = cloth; top.material = cloth;
-    const eye = new THREE.MeshBasicMaterial({ color: 0xb8aa8c });                   // the torch catching his eyes
-    for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.008, 6, 4), eye); e.position.set(s * 0.036, 1.635, 0.112); e.castShadow = false; O.figScare.add(e); }
+    const eye = new THREE.MeshBasicMaterial({ color: 0x4f483f });                   // the torch catching his eyes
+    for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.008, 6, 4), eye); e.position.set(s * 0.034, 1.615, 0.098); e.castShadow = false; O.figScare.add(e); }
   }
   return O.figScare;
 }

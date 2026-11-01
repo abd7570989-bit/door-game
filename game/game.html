@@ -360,7 +360,7 @@ ar:{
   inPreview:'اللعبة مفتوحة الآن داخل معاينة (إطار داخل صفحة ثانية)، وهذا يمنع المتصفح من حبس الماوس مهما كان. الحل: حمّل الملف، ثم افتحه بالنقر المزدوج من مجلد التنزيلات حتى يفتح في Chrome أو Edge لحاله.', notPreview:'اللعبة مفتوحة مباشرة، لكن المتصفح رفض حبس الماوس. اضغط «حاول مرة أخرى» ثم انقر على الشاشة. إذا تكرر، جرّب Chrome أو Edge وأرسل لي السطر الصغير بالأسفل.', retry:'حاول مرة أخرى', dragPlay:'العب بالسحب', errDetail:'تفاصيل', previewWarn:'⚠ اللعبة مفتوحة داخل معاينة، فالماوس لن يُحبس. حمّل الملف وافتحه مباشرة.',
   secGfx:'الرسومات', secMouse:'الماوس', secAudio:'الصوت', secLang:'اللغة', sensX:'الحساسية الأفقية', sensY:'الحساسية الرأسية', invertY:'عكس الحركة الرأسية', smooth:'تنعيم حركة الكاميرا', mouseMode:'طريقة التحكم', mAuto:'إخفاء الماوس (موصى به)', mDrag:'سحب بالزر الأيسر', fov:'مجال الرؤية', resetMouse:'استعادة إعدادات الماوس الافتراضية', on:'تشغيل', off:'إيقاف', mouseNote:'إذا كانت الكاميرا سريعة جدًا خفّض الحساسية. «السحب» مفيد إذا كان المتصفح يمنع إخفاء الماوس.',
   noLock:'المتصفح هنا لا يسمح للعبة بإخفاء الماوس والتحكم به (يحدث هذا عند فتح اللعبة داخل المعاينة). الحل: حمّل الملف وافتحه بالنقر المزدوج في Chrome أو Edge.<br><br>مؤقتًا هنا: اضغط زر الماوس الأيسر واسحب للنظر، والأسهم ← → للالتفاف.', noLockT:'الماوس غير متاح هنا', startErr:'تعذّر بدء اللعبة', i_table:'الطاولة', v_place:'حط الاستكانة', placeKey:'E على طاولة — حط الاستكانة', placeHint:'خلصت الشاهي. ودّ الاستكانة لطاولة (المطبخ أو الصالة أو صينية المجلس) واضغط E.', producer:'إنتاج أبو علي', followUs:'تابعنا', i_pic:'صورة', dl_pour:[['f','تلقيمة… يا سلااام! هذا الشاهي اللي يعدّل الراس.']], sp_o:'رسالة آلية', m_dark:'الظلام شديد… أحتاج ضوءًا لأرى القواطع.', m_photo_normal:'صورة العائلة… العيد قبل ست سنوات.', m_no_msgs:'لا توجد رسائل جديدة.', j_items:'المخزون', it_housekey:'مفتاح البيت', it_flashlight:'مصباح يدوي', it_backkey:'المفتاح النحاسي (الباب الخلفي)', ph_new:'رسالة جديدة', sms_toast:'وصلتك رسالة — اضغط P', ending_names:{A:'أ',B:'ب',C:'ج',D:'د'},
-  sp_f:'فيصل', sp_s:'سعد', sp_c:'المتصل', sp_d:'خلف الباب', sp_m:'جهاز الرد',
+  sp_f:'فيصل', sp_s:'سعد', sp_c:'المتصل', sp_d:'خلف الباب', sp_m:'جهاز الرد', sp_w:'همس',
   /* dialogue */
   dl_call1:[['f','ألو، سعد؟ وصلت البيت.'],['s','هلا فصول. الحمد لله على السلامة. البيت له أسبوعين فاضي من سافروا أهلنا القصيم.'],['s','أنا طالع الدمام الليلة، عندي دوام بدري. نام بالبيت لين أرجع.'],['s','وانتبه… الحارة صار فيها سرقات. لا تفتح لأحد.'],['f','إن شاء الله. انتبه للطريق.'],['s','مع السلامة.']],
   dl_slam:[['f','…وش هذا؟ باب الحوش؟']],
@@ -389,6 +389,11 @@ ar:{
   dl_cigs:[['f','مساعد كان يدخن عند هالنافذة دايم…']],
   dl_wrongnum:[['f','غلط… خلني أتأكد من الرقم.']],
   dl_tv:[['f','نفس التلفزيون من أيام المتوسط.']],
+  hz_cat:[['f','قطاوة… بس قطاوة. لا تخوّف نفسك.']], hz_outside:[['f','…كأن أحد واقف عند الشباك برّا.']], hz_window:[['f','الدور الثاني… كيف أحد يطق على الشباك؟!']],
+  hz_tv:[['f','أنا ما شغّلته… والله ما شغّلته.']], hz_light:[['f','اللمبة… لا، مو الحين.']], hz_door:[['f','الباب… انقفل لحاله؟ ما فيه هوا يقفله كذا.']],
+  hz_who:[['f','مين هناك؟!']], hz_upstairs:[['f','فوق… أحد يركض فوق!']], hz_bism:[['f','بسم الله الرحمن الرحيم… أكيد أتخيّل. أكيد.']], hz_what:[['f','…وش اللي مرّ هناك؟']],
+  hz_phone:[['f','…أحد رفع السماعة الثانية؟']], hz_handle:[['f','يحاول يفتح الباب…']], hz_breath:[['f','…لا تلتفت. لا تلتفت.']], hz_steps:[['f','…هذي مو خطواتي.']],
+  hz_yard:[['f','الريح… بس الريح. امشِ، لا توقف.']], hz_w1:[['w','…فيصل']], hz_w2:[['w','…افتح الباب يا فيصل']], hz_w3:[['w','…أنا وراك']],
   /* endings */
   e_label:'النهاية {x} من ٤',
   eA_t:'النجاة', eA:['خرجت من الباب الخلفي إلى الزقاق، والمطر يخف. بعد عشر دقائق وصلت دورية، ووقف خلفها أبو ناصر الجار بثوبه المبلول.','اعتذر لك: هو الذي اتصل بلا رقم. رأى رجلًا يقفز جدار الحوش، وخاف أن يقول أكثر من ذلك على الهاتف.','قبضوا على الرجل عند الباب الأمامي. نجوت لأنك تأكدت قبل أن تفتح.','لكن الرسالة التي وصلتك من جوال سعد القديم… لم يجد لها أحد تفسيرًا.'],
@@ -519,7 +524,7 @@ en:{
   inPreview:'The game is running inside a preview (a frame inside another page), which stops the browser from capturing the mouse. Fix: download the file, then double-click it in your Downloads folder so it opens in Chrome or Edge on its own.', notPreview:'The game is open directly, but the browser refused mouse capture. Press “Try again”, then click the screen. If it keeps happening, try Chrome or Edge and send me the small line below.', retry:'Try again', dragPlay:'Play with drag', errDetail:'Details', previewWarn:'⚠ The game is running inside a preview, so the mouse cannot be captured. Download the file and open it directly.',
   secGfx:'Graphics', secMouse:'Mouse', secAudio:'Audio', secLang:'Language', sensX:'Horizontal sensitivity', sensY:'Vertical sensitivity', invertY:'Invert vertical look', smooth:'Camera smoothing', mouseMode:'Control mode', mAuto:'Capture mouse (recommended)', mDrag:'Drag with left button', fov:'Field of view', resetMouse:'Restore default mouse settings', on:'On', off:'Off', mouseNote:'If the camera feels too fast, lower the sensitivity. “Drag” helps when the browser blocks mouse capture.',
   noLock:'This page is not allowed to capture and hide the mouse (this happens when the game is opened inside a preview). Fix: download the file and double-click it to open in Chrome or Edge.<br><br>For now: hold the left mouse button and drag to look, and use the ← → arrow keys to turn.', noLockT:'Mouse capture unavailable here', startErr:'The game could not start', i_table:'Table', v_place:'Put the glass down', placeKey:'E on a table — put the glass down', placeHint:'Tea finished. Take the glass to a table (kitchen, living room, or the majlis tray) and press E.', producer:'A production by Abu Ali', followUs:'Follow us', i_pic:'Picture', dl_pour:[['f','Now that is a brew… ya salaam! Tea that sets your head straight.']], sp_o:'Recorded message', m_dark:"It's too dark… I need light to see the breakers.", m_photo_normal:'The family photo… Eid, six years ago.', m_no_msgs:'No new messages.', j_items:'Inventory', it_housekey:'House key', it_flashlight:'Flashlight', it_backkey:'Brass key (back door)', ph_new:'New message', sms_toast:'You have a new message — press P', ending_names:{A:'A',B:'B',C:'C',D:'D'},
-  sp_f:'Faisal', sp_s:'Saad', sp_c:'Caller', sp_d:'Behind the door', sp_m:'Machine',
+  sp_f:'Faisal', sp_s:'Saad', sp_c:'Caller', sp_d:'Behind the door', sp_m:'Machine', sp_w:'Whisper',
   dl_call1:[['f','Hello, Saad? I made it to the house.'],['s','Hey Fasool. Glad you got here safe. The house has been empty two weeks, since the family went to Qassim.'],['s',"I'm driving to Dammam tonight, early shift. Sleep at the house till I'm back."],['s',"And be careful… there've been break-ins around here. Don't open the door for anyone."],['f','Sure. Drive safe.'],['s','Bye.']],
   dl_slam:[['f','…What was that? The courtyard gate?']],
   dl_caller:[['c','…Faisal?'],['f',"Yes. Who's this?"],['c','That kettle in the kitchen… a work of art.'],['c',"But you weren't the last one to drink from it."],['c','And your bag… why did you leave it in the majlis?'],['f','Who are you? How do you know that?'],["c","Your brother isn't coming tonight. And don't go out into the courtyard."],['f','Hello? …Hello?']],
@@ -547,6 +552,11 @@ en:{
   dl_cigs:[['f','Musaed always smoked by this window…']],
   dl_wrongnum:[['f','Wrong… let me check the number.']],
   dl_tv:[['f','The same TV from my middle-school days.']],
+  hz_cat:[['f','Cats… just cats. Calm down.']], hz_outside:[['f','…like someone was standing right outside the window.']], hz_window:[['f','Second floor… how is anyone knocking on that window?!']],
+  hz_tv:[['f',"I didn't turn it on… I swear I didn't."]], hz_light:[['f','The bulb… no, not now.']], hz_door:[['f','The door… slammed by itself? No draught does that.']],
+  hz_who:[['f',"Who's there?!"]], hz_upstairs:[['f','Upstairs… someone is running upstairs!']], hz_bism:[['f',"Bismillah… I'm imagining it. I have to be."]], hz_what:[['f','…what just went past over there?']],
+  hz_phone:[['f','…did someone just pick up the other phone?']], hz_handle:[['f',"He's trying the handle…"]], hz_breath:[['f',"…don't turn around. Don't."]], hz_steps:[['f',"…those weren't my footsteps."]],
+  hz_yard:[['f','The wind… only the wind. Keep going.']], hz_w1:[['w','…Faisal']], hz_w2:[['w','…open the door, Faisal']], hz_w3:[['w',"…I'm right behind you"]],
   e_label:'Ending {x} of 4',
   eA_t:'Escape', eA:['You slip out the back door into the alley as the rain eases. Ten minutes later a patrol car arrives, and behind it stands Abu Nasser from next door, his thobe soaked.','He apologises: he was the caller with no number. He saw a man climb the courtyard wall and was afraid to say more on the phone.','They arrest the man at the front door. You survived because you checked before you opened.',"But the message from Saad's old phone… nobody ever explains it."],
   eB_t:'The Wrong Person', eB:['You open the door.','Rain, cold, and a man in a red shemagh who looks nothing like Saad. Then the entrance light goes out.','In the morning Saad finds the door open, the house silent, and a cold cup of tea on the table.','He calls you again and again. Nobody answers.'],
@@ -804,6 +814,70 @@ const Sound = (function () {
       for (let i = 0; i < (n || 3); i++) { const s = tt + i * 2.1; noiseBurst(o, s, 0.9, 'bandpass', 750, 1.2, 0.5, 0.5); noiseBurst(o, s + 1.0, 1.0, 'bandpass', 560, 1.2, 0.2, 0.4); }
     },
     heartbeat(n) { const tt = ctx.currentTime, o = out(null, 0.6); for (let i = 0; i < (n || 4); i++) { const s = tt + i * 0.8; tone(o, s, 'sine', 58, 40, 0.14, 0.003, 0.9); tone(o, s + 0.22, 'sine', 50, 38, 0.16, 0.003, 0.6); } },
+    // ---- scares (all synthesised, like everything else) ----
+    scareHit(v) {   // the jump-scare sting: a sub thump, an impact and a screech of detuned strings that dies fast
+      const tt = ctx.currentTime, o = out(null, 0.62 * (v == null ? 1 : v));
+      tone(o, tt, 'sine', 64, 28, 1.2, 0.003, 1.0); noiseBurst(o, tt, 0.4, 'lowpass', 2200, 0.7, 0.002, 0.9);
+      const bp = filt('bandpass', 1500, 1.1); bp.connect(o);
+      [698, 740, 1047, 1109, 1480, 1568].forEach((f, i) => {
+        const os = tone(bp, tt, 'sawtooth', f * 1.02, f * (i % 2 ? 1.04 : 0.96), 1.5, 0.006, 0.12);
+        const lfo = ctx.createOscillator(); lfo.frequency.value = 6 + i * 1.3; const lg = gain(f * 0.015); lfo.connect(lg); lg.connect(os.frequency); lfo.start(tt); lfo.stop(tt + 1.6);
+      });
+      noiseBurst(o, tt + 0.01, 1.3, 'bandpass', 3400, 1.4, 0.008, 0.28);
+    },
+    shriek(pos) {   // cats fighting in the rain: a rising, wavering yowl, then a hiss
+      const tt = ctx.currentTime, o = out(pos, 0.6), bp = filt('bandpass', 1300, 2.2), bp2 = filt('bandpass', 2600, 3); bp.connect(o); bp2.connect(o);
+      const os = ctx.createOscillator(); os.type = 'sawtooth';
+      os.frequency.setValueAtTime(420, tt); os.frequency.exponentialRampToValueAtTime(880, tt + 0.5); os.frequency.exponentialRampToValueAtTime(610, tt + 1.1); os.frequency.exponentialRampToValueAtTime(980, tt + 1.5); os.frequency.exponentialRampToValueAtTime(380, tt + 2.0);
+      const lfo = ctx.createOscillator(); lfo.frequency.value = 9; const lg = gain(40); lfo.connect(lg); lg.connect(os.frequency);
+      const e = envGain(bp, tt, 0.08, 0.55, 1.9), e2 = envGain(bp2, tt, 0.08, 0.25, 1.9); os.connect(e); os.connect(e2);
+      os.start(tt); os.stop(tt + 2.1); lfo.start(tt); lfo.stop(tt + 2.1);
+      noiseBurst(o, tt + 2.0, 0.6, 'highpass', 3000, 0.6, 0.02, 0.35);
+    },
+    whisperName(pos) {   // «فيصل», breathed rather than spoken
+      const tt = ctx.currentTime, o = out(pos, 0.42);
+      const seg = (t0, dur, fs, peak) => { const n = ctx.createBufferSource(); n.buffer = noiseBuf; const e = envGain(o, t0, 0.035, peak, dur); fs.forEach(([f, q, g]) => { const b = filt('bandpass', f, q), gg = gain(g); n.connect(b); b.connect(gg); gg.connect(e); }); n.start(t0, Math.random()); n.stop(t0 + dur + 0.1); };
+      seg(tt, 0.12, [[6500, 1.2, 1]], 0.35); seg(tt + 0.1, 0.26, [[650, 6, 1], [1900, 8, 0.8], [2700, 9, 0.5]], 0.55);
+      seg(tt + 0.38, 0.16, [[7000, 1.5, 1]], 0.45); seg(tt + 0.52, 0.4, [[750, 6, 1], [1150, 7, 0.7], [2500, 9, 0.3]], 0.5);
+    },
+    slam(pos) {   // a door thrown shut, the frame rattling
+      const tt = ctx.currentTime, o = out(pos, 1.0);
+      tone(o, tt, 'sine', 85, 38, 0.45, 0.002, 1.0); noiseBurst(o, tt, 0.12, 'lowpass', 1400, 0.7, 0.001, 0.9); noiseBurst(o, tt + 0.005, 0.05, 'highpass', 2800, 0.7, 0.001, 0.5);
+      for (let i = 0; i < 4; i++) tone(o, tt + 0.03 + i * 0.045, 'triangle', rnd(300, 600), null, 0.05, 0.001, 0.08);
+    },
+    running(from, to, n) {   // somebody running, heavy-footed
+      n = n || 9;
+      for (let i = 0; i < n; i++) setTimeout(() => {
+        if (!ctx) return; const k = n > 1 ? i / (n - 1) : 0, pos = { x: from.x + (to.x - from.x) * k, y: from.y, z: from.z + (to.z - from.z) * k };
+        const tt = ctx.currentTime, o = out(pos, 1.0), lp = filt('lowpass', 420); lp.connect(o); tone(lp, tt, 'sine', 95, 42, 0.12, 0.002, 1.0); noiseBurst(lp, tt, 0.09, 'lowpass', 700, 0.7, 0.002, 0.9);
+      }, i * 270 + rnd(-25, 25));
+    },
+    rattle(pos) {   // someone trying the door handle
+      const tt = ctx.currentTime, o = out(pos, 0.65);
+      for (let i = 0; i < 9; i++) { const s = tt + i * 0.13 + rnd(0, 0.05); noiseBurst(o, s, 0.025, 'bandpass', rnd(2200, 3600), 3, 0.001, 0.55); tone(o, s, 'triangle', rnd(900, 1500), null, 0.04, 0.001, 0.12); }
+      tone(o, tt + 1.25, 'sine', 120, 70, 0.1, 0.002, 0.5);
+    },
+    glassKnock(pos) {   // knuckles on a window pane
+      const tt = ctx.currentTime, o = out(pos, 0.85);
+      for (let i = 0; i < 3; i++) { const s = tt + i * 0.42; noiseBurst(o, s, 0.03, 'bandpass', 1800, 1.5, 0.001, 0.8); tone(o, s, 'sine', 1150 + i * 20, 1100, 0.18, 0.001, 0.18); tone(o, s, 'sine', 2950, null, 0.12, 0.001, 0.08); tone(o, s, 'sine', 140, 80, 0.06, 0.001, 0.4); }
+    },
+    bulbPop(pos) { const tt = ctx.currentTime, o = out(pos, 0.85); noiseBurst(o, tt, 0.04, 'highpass', 1500, 0.7, 0.001, 0.9); tone(o, tt, 'sine', 160, 60, 0.08, 0.001, 0.5); for (let i = 0; i < 6; i++) tone(o, tt + 0.05 + rnd(0, 0.5), 'sine', rnd(4000, 7500), null, 0.08, 0.001, 0.12); },
+    buzz(pos, dur) { const tt = ctx.currentTime, o = out(pos, 0.3), d = dur || 1.5, os = tone(o, tt, 'sawtooth', 100, null, d, 0.05, 0.25); const am = ctx.createOscillator(); am.frequency.value = 13; const ag = gain(30); am.connect(ag); ag.connect(os.frequency); am.start(tt); am.stop(tt + d + 0.1); noiseBurst(o, tt, d, 'bandpass', 2400, 2, 0.05, 0.12); },
+    bellTing(pos) { const tt = ctx.currentTime, o = out(pos, 0.5); tone(o, tt, 'sine', 2480, null, 1.3, 0.002, 0.3); tone(o, tt, 'sine', 3310, null, 0.9, 0.002, 0.18); tone(o, tt, 'sine', 1240, null, 0.6, 0.002, 0.08); },
+    staticBurst(pos, dur) { const tt = ctx.currentTime, o = out(pos, 1.0), d = dur || 2.5; noiseBurst(o, tt, d, 'bandpass', 3000, 0.35, 0.005, 0.75); tone(o, tt, 'sine', 15700, null, d, 0.005, 0.03); tone(o, tt, 'sine', 60, 50, 0.3, 0.002, 0.5); },
+    thud(pos) { const tt = ctx.currentTime, o = out(pos, 1.0), lp = filt('lowpass', 300); lp.connect(o); tone(lp, tt, 'sine', 70, 30, 0.5, 0.002, 1.0); noiseBurst(lp, tt, 0.25, 'lowpass', 500, 0.7, 0.002, 0.9); },
+    metalBang(pos) { const tt = ctx.currentTime, o = out(pos, 1.0); [180, 267, 412, 590, 870].forEach((f, i) => tone(o, tt, i % 2 ? 'square' : 'triangle', f, f * 0.97, 1.1 - i * 0.15, 0.002, 0.14)); tone(o, tt, 'sine', 80, 40, 0.4, 0.002, 0.9); noiseBurst(o, tt, 0.2, 'bandpass', 1500, 0.6, 0.002, 0.7); },
+    gust(pos) { const tt = ctx.currentTime, o = out(pos, 0.7), bp = filt('bandpass', 380, 0.8); bp.frequency.linearRampToValueAtTime(900, tt + 0.7); bp.frequency.linearRampToValueAtTime(300, tt + 1.6); bp.connect(o); noiseBurst(bp, tt, 1.5, 'lowpass', 2000, 0.5, 0.35, 0.8); },
+    creakSlow(pos) {   // a door swinging slowly on dry hinges
+      const tt = ctx.currentTime, o = out(pos, 0.32), osc = ctx.createOscillator(); osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(70, tt); osc.frequency.linearRampToValueAtTime(110, tt + 1.4); osc.frequency.linearRampToValueAtTime(55, tt + 3.0);
+      const bp = filt('bandpass', 700, 12); bp.frequency.linearRampToValueAtTime(1100, tt + 3.0);
+      const e = envGain(o, tt, 0.5, 0.7, 2.6); osc.connect(bp); bp.connect(e); osc.start(tt); osc.stop(tt + 3.2);
+    },
+    breathNear(pos, n) {   // slow breathing, close, at one point in the room
+      const tt = ctx.currentTime, o = out(pos, 0.45);
+      for (let i = 0; i < (n || 3); i++) { const s = tt + i * 1.9; noiseBurst(o, s, 0.8, 'bandpass', 620, 1.6, 0.45, 0.55); noiseBurst(o, s + 0.95, 0.7, 'bandpass', 480, 1.6, 0.15, 0.45); }
+    },
     stinger() {
       const tt = ctx.currentTime, o = out(null, 0.5), lp = filt('lowpass', 3500); lp.frequency.exponentialRampToValueAtTime(260, tt + 3);
       lp.connect(o); [196, 207.6, 293.7, 415.3, 587].forEach(f => tone(lp, tt, 'sawtooth', f, f * 0.97, 3, 0.02, 0.12));
@@ -833,6 +907,7 @@ const Sound = (function () {
     },
     // unintelligible murmur that marks who is "speaking" — no fake voice acting
     voice(who, dur) {
+      if (who === 'w') return;   // whispers carry their own sound
       const tt = ctx.currentTime;
       const cfg = { s: [128, 900, 'phone'], c: [92, 650, 'phone'], d: [104, 420, 'muffled'], f: [138, 1000, 'near'], m: [128, 900, 'tape'] }[who] || [120, 900, 'near'];
       const o = out(null, cfg[2] === 'near' ? 0.05 : 0.09);
@@ -865,9 +940,12 @@ const Sound = (function () {
     catch (e) { console.warn('media audio', e); return false; }
   }
   function muffle(name, freq) { const l = loops[name]; if (ctx && l && l.lp) l.lp.frequency.setTargetAtTime(freq, ctx.currentTime, 0.3); }
+  function duck(v, tc) { if (ctx) amb.gain.setTargetAtTime(v, ctx.currentTime, tc || 0.25); }   // hush the house (rain, hum, fridge) before a scare
+
+  function heal(playing) { if (!ctx) return; if (ctx.state !== 'running' && !document.hidden) { try { ctx.resume(); } catch (e) { } } if (playing && master.gain.value < 0.02 && S.master > 0.01) master.gain.setTargetAtTime(S.master, ctx.currentTime, 0.2); }
   function resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }
   function suspendAll(on) { if (!ctx) return; master.gain.setTargetAtTime(on ? 0 : S.master, ctx.currentTime, 0.1); }
-  return { init, attachMedia, muffle, applyVolumes, setLoop, update, play, setDrone, resume, suspendAll, get ready() { return !!ctx; } };
+  return { init, attachMedia, muffle, applyVolumes, setLoop, update, play, setDrone, resume, suspendAll, duck, heal, get ready() { return !!ctx; } };
 })();
 function showError(key, detail) {
   $('loading').classList.add('hidden'); $('errorScreen').classList.remove('hidden');
@@ -1248,10 +1326,11 @@ void surf(vec2 uv, out vec3 col, out float h, out float r) {
   // polished granite: interlocking mineral grains
   granite: `
 void surf(vec2 uv, out vec3 col, out float h, out float r) {
-  vec3 a = cells(uv, vec2(110.0)), b = cells(uv + 0.5, vec2(48.0));
+  vec3 a = cells(uv, vec2(72.0)), b = cells(uv + 0.5, vec2(30.0));
   float k = fract(a.z * 7.31 + b.z * 0.2);
-  vec3 c = k < 0.42 ? vec3(0.05, 0.05, 0.055) : k < 0.74 ? vec3(0.3, 0.29, 0.28) : k < 0.92 ? vec3(0.72, 0.7, 0.66) : vec3(0.47, 0.27, 0.2);
-  c *= 0.85 + 0.3 * fract(a.z * 13.7);
+  vec3 c = k < 0.4 ? vec3(0.07, 0.07, 0.075) : k < 0.7 ? vec3(0.2, 0.195, 0.19) : k < 0.9 ? vec3(0.42, 0.41, 0.39) : vec3(0.36, 0.22, 0.17);
+  c *= 0.88 + 0.24 * fract(a.z * 13.7);
+  c = mix(c, vec3(0.16, 0.155, 0.15), 0.25 + 0.15 * fbm(uv, vec2(6.0), 3, 0.5));
   c *= 1.0 - smoothstep(0.05, 0.0, a.y - a.x) * 0.5;
   col = c;
   h = 0.5 + (fract(a.z * 3.1) - 0.5) * 0.04;
@@ -1377,6 +1456,7 @@ function bakeAllMaterials() {
     applyBake(M.curtain, bake(B.weave('vec2(140.0)', '0.6'), small, small, { design: T.curtain, k: 3 }));
     applyBake(M.blanket, bake(B.weave('vec2(110.0)', '1.0'), small, small, { design: T.blanket, k: 4 }));
     applyBake(M.pillowFab, bake(B.weave('vec2(180.0)', '0.8'), small, small, { design: T.damask, k: 3 }));
+    for (const [m, s, c] of (M.variants || [])) applyBake(m, { map: M[s].map, normalMap: M[s].normalMap, roughnessMap: M[s].roughnessMap }, { color: c });
     if (M.cloth && T.tablecloth) applyBake(M.cloth, bake(B.weave('vec2(220.0)', '0.5'), small, small, { design: T.tablecloth, k: 2 }), { r: 0.75 });
   } catch (e) { console.warn('bake failed', e); }
   renderer.setRenderTarget(null);
@@ -1473,6 +1553,7 @@ function wall(axis, line, a, b, lv, openings, mat, thick, y0o, ho) {
 function windowDeco(axis, line, c, yb, w, h, side, opts) {
   opts = opts || {};
   const off = (opts.thick || 0.15) / 2 + 0.012, gm = opts.glassMat || M.glass;
+  (W.windows = W.windows || []).push({ axis, line, c, yb, w, h, side, off, gm });
   windowExtra(axis, line, c, yb, w, h, side, opts, off);
   if (axis === 'x') {
     const z = line + side * off;
@@ -1519,7 +1600,7 @@ function setDoor(d, open, instant) { d.open = open; d.target = open ? 1.55 : 0; 
 function updateDoors(dt) {
   for (const d of W.doorList) {
     if (Math.abs(d.ang - d.target) < 0.001) continue;
-    let next = d.ang + (d.target - d.ang) * Math.min(1, dt * 5);
+    let next = d.ang + (d.target - d.ang) * Math.min(1, dt * (d.spd || 5));
     if (Math.abs(next - d.target) < 0.002) next = d.target;
     if (!doorClear(d, next)) continue;          // someone/something is in the way: the leaf waits
     d.ang = next; d.pivot.rotation.y = d.ang * d.sign; d.col.on = d.ang < 0.35;
@@ -1594,7 +1675,7 @@ function makeFigure() {
 function buildRain(n) {
   if (W.rain) { scene.remove(W.rain.mesh); W.rain.mesh.geometry.dispose(); }
   const pos = new Float32Array(n * 6), sp = new Float32Array(n);
-  for (let i = 0; i < n; i++) { const x = rnd(-13, 13), z = rnd(8.2, 25.5), y = rnd(0, 9); pos.set([x, y, z, x + 0.03, y - 0.38, z + 0.02], i * 6); sp[i] = rnd(9, 12); }
+  for (let i = 0; i < n; i++) { const q = rainSpot(_rq), x = q[0], z = q[1], y = rnd(0, 9); pos.set([x, y, z, x + 0.03, y - 0.38, z + 0.02], i * 6); sp[i] = rnd(9, 12); }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   const m = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xa8bbd0, transparent: true, opacity: 0.32 }));
   m.frustumCulled = false; scene.add(m); W.rain = { mesh: m, pos, sp, n };
@@ -1604,7 +1685,7 @@ function updateRain(dt, k) {
   const p = R.pos;
   for (let i = 0; i < R.n; i++) {
     const o = i * 6; let y = p[o + 1] - R.sp[i] * dt;
-    if (y < 0) { y += 9; const x = rnd(-13, 13), z = rnd(8.2, 25.5); p[o] = x; p[o + 2] = z; p[o + 3] = x + 0.03; p[o + 5] = z + 0.02; }
+    if (y < 0) { y += 9; const q = rainSpot(_rq), x = q[0], z = q[1]; p[o] = x; p[o + 2] = z; p[o + 3] = x + 0.03; p[o + 5] = z + 0.02; }
     p[o + 1] = y; p[o + 4] = y - 0.38;
   }
   R.mesh.geometry.attributes.position.needsUpdate = true; R.mesh.material.opacity = 0.32 * k;
@@ -2207,15 +2288,10 @@ function buildHouse() {
 
   /* ---- courtyard & street ---- */
   sbox(20.5, 0.1, 8, 0, -0.1, 12.1, M.wetConcrete, 3);
-  sbox(30, 0.1, 10.5, 0, -0.16, 21.2, M.asphalt, 4);
-  sbox(30, 0.12, 1.4, 0, -0.1, 16.9, M.wetConcrete, 2);
   wall('x', 16, -10, 10, 0, [[-1.5, 1.5, 2.6]], M.stucco, 0.3, 0, 2.7);
   wall('z', -10.1, 8, 16, 0, [], M.stucco, 0.3, 0, 2.7); wall('z', 10.1, 8, 16, 0, [], M.stucco, 0.3, 0, 2.7);
   sbox(0.4, 2.9, 0.4, -1.7, 0, 16, M.stucco); sbox(0.4, 2.9, 0.4, 1.7, 0, 16, M.stucco);
-  col(-14.3, 16, -14, 27, 0); col(14, 16, 14.3, 27, 0); col(-14, 26.2, 14, 26.5, 0);
   // neighbour house across the street
-  sbox(28, 7.5, 0.4, 0, -0.1, 26.4, M.stucco, 3);
-  sbox(1.6, 2.4, 0.1, 4, 0, 26.15, M.gate, 1.6);
   O.neighWinMat = std({ color: 0x000000, emissive: 0xffc27a, ei: 0.7, r: 0.5 });
   const nw = mesh(new THREE.PlaneGeometry(1.4, 1.1), O.neighWinMat, -5, 4.2, 26.18); nw.rotation.y = Math.PI;
   O.neighSil = mesh(new THREE.PlaneGeometry(0.42, 0.75), std({ color: 0x050505, r: 1 }), -5.1, 4.05, 26.16); O.neighSil.rotation.y = Math.PI; O.neighSil.visible = false;
@@ -2295,14 +2371,14 @@ function buildHouse() {
 
   /* ---- KITCHEN ---- */
   const kz = 7.575;
-  for (const [a, b] of [[2.6, 5.55], [6.45, 8.6]]) { solid(b - a, 0.88, 0.6, (a + b) / 2, 0, kz, M.woodLight, 1); sbox(b - a + 0.02, 0.04, 0.64, (a + b) / 2, 0.88, kz - 0.02, M.counter); }
+  for (const [a, b] of [[2.6, 5.55], [6.45, 8.6]]) { solid(b - a, 0.88, 0.6, (a + b) / 2, 0, kz, M.woodLight, 1); sbox(b - a + 0.02, 0.04, 0.64, (a + b) / 2, 0.88, kz - 0.02, M.counter, 0.9); }
   sbox(3.0, 0.65, 0.36, 4.05, 1.55, 7.69, M.woodLight, 1); sbox(2.15, 0.65, 0.36, 7.55, 1.55, 7.69, M.woodLight, 1);
   sbox(2.74, 0.62, 0.02, 3.97, 0.92, 7.86, M.ktile, 1.2); sbox(1.32, 0.22, 0.02, 6.0, 0.92, 7.86, M.ktile, 1.2); sbox(1.94, 0.62, 0.02, 7.63, 0.92, 7.86, M.ktile, 1.2); sbox(0.02, 0.62, 0.99, 9.86, 0.92, 3.495, M.ktile, 1.2); sbox(0.02, 0.2, 1.22, 9.86, 0.92, 4.6, M.ktile, 1.2); sbox(0.02, 0.62, 1.59, 9.86, 0.92, 6.005, M.ktile, 1.2);
   solid(0.8, 0.88, 0.62, 6.0, 0, 7.55, M.white); sbox(0.78, 0.02, 0.6, 6.0, 0.88, 7.55, M.black);
   sbox(0.9, 0.35, 0.5, 6.0, 1.75, 7.6, M.metal); sbox(0.4, 0.8, 0.3, 6.0, 2.1, 7.7, M.metal);
   solid(0.95, 1.85, 0.66, 9.35, 0, 7.5, M.white);
   hitbox(0.95, 1.8, 0.2, 9.35, 0.95, 7.15, { label: () => t('i_fridge'), verb: () => t('v_open'), use: () => Game.msg('m_fridge') });
-  solid(0.6, 0.88, 3.8, 9.57, 0, 4.9, M.woodLight, 1); sbox(0.64, 0.04, 3.82, 9.55, 0.88, 4.9, M.counter);
+  solid(0.6, 0.88, 3.8, 9.57, 0, 4.9, M.woodLight, 1); sbox(0.64, 0.04, 3.82, 9.55, 0.88, 4.9, M.counter, 0.9);
   windowDeco('z', 10, 4.6, 1.2, 1.1, 0.9, -1, { thick: 0.25, sill: true });
   windowDeco('x', 8, 6.0, 1.2, 1.2, 1.0, -1, { thick: 0.25 });
   blockBox(5.0, 0.76, 4.4, 1.2, 0.04, 0.8); tableV3(5.0, 4.4, 1.2, 0.8, 0.78, M.woodLight, { turned: true }); addStatic(clothGeo(0.6, 0.4, 0.22, [1, 1, 1, 1], 0.22, 40), M.cloth, 5.0, 0.784, 4.4);
@@ -2463,8 +2539,9 @@ function buildHouse() {
   col(-3.66, -7.63, -3.44, -7.17, 1);     // Saad's bedside cabinet
   col(-7.72, 0.9, -7.38, 1.1, 1);         // my backpack
 
+  outsideMaterials(); buildYardV4(); buildStreetV4();
   buildDetails();
-  placeSockets();
+  placeSockets(); zubairiPairs(); lightningLightsV4(); hdFigure();
   flushStatic();
 }
 const lightById = id => W.lights.find(l => l.id === id);
@@ -2620,17 +2697,17 @@ function smudgeTex() {
 /* ---- window glass: rain running down it, droplets refracting a blurred night outside ---- */
 function makeRainGlass() {
   return new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uFlash: { value: 0 }, uDay: { value: 0 } },
-    vertexShader: `varying vec2 vP; varying float vH;
+    uniforms: { uTime: { value: 0 }, uFlash: { value: 0 }, uDay: { value: 0 }, uSilA: { value: 0 }, uSilPos: { value: new THREE.Vector3() }, uSilWin: { value: new THREE.Vector3() }, uSilN: { value: new THREE.Vector3(0, 0, 1) } },
+    vertexShader: `varying vec2 vP; varying float vH; varying vec3 vW; varying vec3 vN;
       void main() {
         vec4 wp = modelMatrix * vec4(position, 1.0);
         vec3 n = normalize(mat3(modelMatrix) * normal);
         vP = abs(n.x) > 0.5 ? vec2(wp.z * sign(n.x), wp.y) : vec2(-wp.x * sign(n.z), wp.y);
-        vH = wp.y;
+        vH = wp.y; vW = wp.xyz; vN = n;
         gl_Position = projectionMatrix * viewMatrix * wp;
       }`,
-    fragmentShader: `uniform float uTime, uFlash, uDay;
-      varying vec2 vP; varying float vH;
+    fragmentShader: `uniform float uTime, uFlash, uDay, uSilA; uniform vec3 uSilPos, uSilWin, uSilN;
+      varying vec2 vP; varying float vH; varying vec3 vW; varying vec3 vN;
       float N21(vec2 p) { p = fract(p * vec2(233.34, 851.73)); p += dot(p, p + 23.45); return fract(p.x * p.y); }
       vec3 beads(vec2 p, float sc, float keep) {        // droplets clinging to the glass
         vec2 q = p * sc, id = floor(q), st = fract(q) - 0.5;
@@ -2674,6 +2751,19 @@ function makeRainGlass() {
         float rim = clamp(dot(normalize(a.xy + b.xy + r.xy + 1e-4), vec2(-0.6, 0.8)), 0.0, 1.0) * wet;
         col += vec3(0.05, 0.055, 0.065) * rim * rim * (1.0 - uDay * 0.5);              // a glint on every drop
         col += vec3(0.62, 0.68, 0.85) * uFlash * (0.35 + wet * 0.9);                  // lightning
+        if (uSilA > 0.001 && dot(normalize(vN), uSilN) > 0.9 && distance(vW, uSilWin) < 2.0) {   // a man standing outside: dark against the flash, smeared by the drops
+          vec3 rd = vW - cameraPosition; float den = dot(rd, uSilN);
+          if (abs(den) > 1e-4) {
+            float k = dot(uSilPos - cameraPosition, uSilN) / den;
+            vec3 hp = cameraPosition + rd * k, sd = normalize(cross(vec3(0.0, 1.0, 0.0), uSilN));
+            vec2 q = vec2(dot(hp - uSilPos, sd), hp.y - uSilPos.y) + off * 1.4;
+            float head = length((q - vec2(0.0, 1.63)) * vec2(1.0, 0.82)) - 0.13;
+            float sh = length((q - vec2(0.0, 1.36)) * vec2(0.85, 2.4)) - 0.27;
+            float body = max(abs(q.x) - (0.2 + 0.07 * clamp((1.4 - q.y) / 1.4, 0.0, 1.0)), abs(q.y - 0.7) - 0.7);
+            float m = smoothstep(0.035, -0.02, min(min(head, sh), body)) * step(1.0, k);
+            col = mix(col, col * 0.06, m * uSilA);
+          }
+        }
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
         #include <encodings_fragment>
@@ -2889,7 +2979,6 @@ function buildDetails() {
   for (const sx of [-1, 1]) sbox(0.12, 0.08, 0.08, cx + sx * 0.95, 0.98, cz - 0.85, M.carPaint);
   col(cx - 0.92, cz - 2.35, cx + 0.92, cz + 2.35, 0); contact(cx, cz, 2.3, 5.0);
   // street: curb, neighbours' walls and houses, pickup, bin, dark second lamp
-  sbox(30, 0.16, 0.18, 0, -0.1, 17.6, M.curb, 0.5);
   for (const sx of [-1, 1]) {
     sbox(3.8, 2.7, 0.3, sx * 12.15, 0, 16, M.stucco, 2); col(sx > 0 ? 10.25 : -14, 15.85, sx > 0 ? 14 : -10.25, 16.15, 0);
     sbox(3.6, 6.8, 7.6, sx * 12.2, 0, 11.9, M.stucco, 3);
@@ -2903,12 +2992,10 @@ function buildDetails() {
   R(0.7, 1.0, 0.7, 0.06, 11.2, 0, 17.0, M.binGreen); col(10.85, 16.65, 11.55, 17.35, 0);
   scyl(0.07, 0.1, 5.0, -9.5, 0, 25.8, M.metal, 8); sbox(1.0, 0.08, 0.08, -9.1, 4.9, 25.8, M.metal); col(-9.6, 25.7, -9.4, 25.9, 0);
   const dk = new THREE.MeshBasicMaterial({ color: 0x0b0e14 });
-  for (const [x, y] of [[5, 1.2], [9, 1.2], [-9, 4.0], [9, 4.0]]) { addStatic(new THREE.PlaneGeometry(1.2, 1.1), dk, x, y + 0.55, 26.17, 0, Math.PI, 0); windowExtra('x', 26.4, x, y, 1.2, 1.1, -1, { forceExt: true }, 0.2); }
-  for (let x = -13.8; x <= 13.8; x += 0.55) addStatic(new THREE.ConeGeometry(0.2, 0.34, 4), M.stucco, x, 7.57, 26.4, 0, Math.PI / 4, 0);
   /* ===== DISTANT CITY, MINARET, SKY ===== */
   const bld = (x, z, w, d, h) => sbox(w, h, d, x, -0.2, z, M.city, 6);
-  for (let i = 0; i < 14; i++) bld(-40 + i * 6 + rnd(-1, 1), rnd(36, 50), rnd(4, 7), rnd(4, 7), rnd(5, 15));
-  for (let i = 0; i < 10; i++) { bld(-34 - rnd(0, 6), -24 + i * 6, rnd(4, 7), rnd(4, 7), rnd(5, 12)); bld(34 + rnd(0, 6), -24 + i * 6, rnd(4, 7), rnd(4, 7), rnd(5, 12)); }
+  for (let i = 0; i < 22; i++) bld(-80 + i * 7.5 + rnd(-1, 1), rnd(52, 64), rnd(4, 7), rnd(4, 7), rnd(5, 15));
+  for (let i = 0; i < 10; i++) { bld(-76 - rnd(0, 6), -24 + i * 6, rnd(4, 7), rnd(4, 7), rnd(5, 12)); bld(76 + rnd(0, 6), -24 + i * 6, rnd(4, 7), rnd(4, 7), rnd(5, 12)); }
   for (let i = 0; i < 12; i++) bld(-36 + i * 6.5, rnd(-38, -30), rnd(4, 7), rnd(4, 7), rnd(5, 13));
   const mz = 46, mx = -19;
   scyl(1.0, 1.25, 24, mx, 0, mz, M.citySolid, 12); addStatic(new THREE.TorusGeometry(1.45, 0.22, 6, 16), M.citySolid, mx, 19, mz, Math.PI / 2, 0, 0); scyl(0.7, 0.7, 4, mx, 24, mz, M.citySolid, 10); addStatic(new THREE.ConeGeometry(0.75, 2.4, 10), M.citySolid, mx, 29.2, mz);
@@ -2923,7 +3010,6 @@ function buildDetails() {
   sbox(0.7, 0.04, 0.03, -1.6, 1.75, 7.86, M.woodDark);
   R(0.3, 0.55, 0.02, 0.008, -1.82, 1.2, 7.84, M.white); addStatic(new THREE.TorusGeometry(0.09, 0.012, 6, 16), M.black, -1.82, 1.72, 7.82);
   R(0.28, 0.5, 0.02, 0.008, -1.42, 1.25, 7.84, std({ map: T.shmagh, r: 1 }));
-  for (const [x, z, m] of [[-2.32, 7.45, M.black], [-2.18, 7.5, M.black], [-2.0, 7.4, M.wood], [-1.88, 7.44, M.wood]]) R(0.1, 0.06, 0.27, 0.025, x, 0, z, m, rnd(-0.3, 0.3));
   frameArt('z', 1.925, -1, 3.4, 1.65, 0.6, 0.8, M.art);
   contact(-2.75, 6.9, 0.6, 1.4);
   /* ===== MAJLIS ===== */
@@ -2946,12 +3032,12 @@ function buildDetails() {
   const spice = [std({ color: 0xa8461c, r: 0.3 }), std({ color: 0xd8a62a, r: 0.3 }), std({ color: 0x4f6b2a, r: 0.3 })];
   for (let i = 0; i < 6; i++) scyl(0.03, 0.03, 0.1, 3.4 + i * 0.08, 0.9, 7.78, spice[i % 3], 8);
   sbox(0.5, 0.3, 0.36, 2.95, 0.9, 7.62, M.white); sbox(0.32, 0.22, 0.01, 2.9, 0.94, 7.435, M.carGlass);
-  sbox(0.35, 0.02, 0.45, 9.55, 0.9, 5.6, M.chrome); for (let i = 0; i < 6; i++) addStatic(new THREE.CylinderGeometry(0.11, 0.11, 0.012, 18), M.ceramic, 9.55, 1.03, 5.42 + i * 0.07, 0, 0, Math.PI / 2);
+  dishRackV4(9.55, 5.6);
   R(0.32, 1.0, 0.32, 0.02, 2.45, 0, 2.45, M.white); scyl(0.14, 0.14, 0.45, 2.45, 1.0, 2.45, M.plasticBlue, 16); col(2.28, 2.28, 2.62, 2.62, 0);
   sbox(0.03, 0.04, 0.03, 2.38, 0.8, 2.62, M.red); sbox(0.03, 0.04, 0.03, 2.52, 0.8, 2.62, std({ color: 0x1e4fa3 }));
   frameArt('x', 2.075, 1, 7.2, 1.6, 0.35, 0.5, M.calendar);
   scyl(0.15, 0.13, 0.42, 2.35, 0, 7.0, M.plastic, 12); col(2.2, 6.85, 2.5, 7.15, 0);
-  R(0.32, 0.1, 0.16, 0.04, 5.35, 0.78, 4.5, M.bread); scyl(0.12, 0.08, 0.05, 4.65, 0.78, 4.6, M.ceramic, 14);
+  breadBagV4(4.78, 4.2, 0.35); scyl(0.12, 0.08, 0.05, 4.65, 0.78, 4.6, M.ceramic, 14);
   contact(4.05, 7.57, 3.1, 0.75); contact(7.55, 7.57, 2.3, 0.75); contact(6.0, 7.55, 0.9, 0.75); contact(9.35, 7.5, 1.05, 0.75); contact(9.57, 4.9, 0.7, 3.9); contact(5.0, 4.4, 1.5, 1.1); contact(2.45, 2.45, 0.45, 0.45);
   /* ===== HALLWAY ===== */
   R(0.6, 0.85, 0.56, 0.03, 5.95, 0, -7.56, M.white); addStatic(new THREE.TorusGeometry(0.17, 0.03, 8, 20), M.chrome, 5.95, 0.48, -7.27); addStatic(new THREE.CircleGeometry(0.15, 20), M.carGlass, 5.95, 0.48, -7.275);
@@ -3022,7 +3108,7 @@ function updateDetails(dt) {
   worldSteam(dt);
   T.night.offset.y = (T.night.offset.y + dt * 0.03) % 1;
   if (O.lampShade) O.lampShade.material.emissiveIntensity = (f.lights && !f.powerCut) ? 0.35 : 0;
-  const outdoor = cp.z > 8.1;
+  const outdoor = cp.z > 8.1 || cp.x > 10.15;
   let envK = outdoor ? 0.55 : (f.powerCut ? 0.12 : (f.lights ? 1 : 0.3));
   if (G.env === 'dawn') envK = 1.3; if (G.forceDark) envK = 0.05;
   if (Math.abs((W.envK || 0) - envK) > 0.01) { W.envK = lerp(W.envK || envK, envK, Math.min(1, dt * 3)); for (const m of W.envMats || []) m.envMapIntensity = m.userData.envBase * W.envK; }
@@ -3650,7 +3736,7 @@ function updateTvClip() {
   const playing = want && TVC.ready && !v.paused;
   // walls between you and the TV: quieter and duller the further you are from the living room
   let room = 1, muf = 20000;
-  if (P.z > 8.05) { room = 0.04; muf = 450; }
+  if (P.z > 8.05 || P.x > 10.15) { room = 0.04; muf = 450; }
   else if (P.level === 1) { room = 0.08; muf = 400; }
   else if (P.x < 2 && P.z < 2) { room = 1; muf = 20000; }
   else if (P.x > -3 && P.x < 2) { room = 0.45; muf = 2200; }
@@ -3670,6 +3756,801 @@ function drawTvClip(time) {
   T.tv.needsUpdate = true; tvAmbient(); return true;
 }
 /* =====================================================================
+   OUTSIDE — the back yard behind the back door, and the whole street:
+   neighbours' houses on both sides (boundary walls, gates, windows,
+   parapets, tanks, dishes), street lamps, parked cars and the clutter
+   of a Riyadh neighbourhood at night
+   ===================================================================== */
+function outsideMaterials() {
+  M.extCream = std({ map: T.plaster, r: 0.92 }); M.extGrey = std({ map: T.plaster, r: 0.92 });
+  M.extPink = std({ map: T.stucco, r: 1 }); M.extSand = std({ map: T.stucco, r: 1 });
+  // painted renders share the baked plaster / stucco maps, each with its own colour (see bakeAllMaterials)
+  M.variants = [[M.extCream, 'plaster', 0xfbf4e8], [M.extGrey, 'plaster', 0xcfd1d2], [M.extPink, 'stucco', 0xf9dccc], [M.extSand, 'stucco', 0xd6c3a7]];
+  M.winDark = std({ color: 0x0a0d12, r: 0.1, m: 0.35 });
+  M.winWarm = std({ color: 0x000000, emissive: 0xffb866, ei: 0.75, r: 0.5 });
+  M.winDim = std({ color: 0x000000, emissive: 0xc8823e, ei: 0.3, r: 0.5 });
+  M.winTV = std({ color: 0x000000, emissive: 0x86a6e8, ei: 0.42, r: 0.5 });
+  M.curtainLit = std({ color: 0x000000, emissive: 0x7a4a22, ei: 0.55, r: 1 });
+  M.gateBrown = std({ color: 0x4a3426, r: 0.5, m: 0.45 }); M.gateWhite = std({ color: 0xd0ccc0, r: 0.45, m: 0.35 }); M.gateBlack = std({ color: 0x1c1d1f, r: 0.45, m: 0.5 });
+  M.ground = std({ color: 0x2a251e, r: 1 });
+  M.plasticW = std({ color: 0xe9e7e0, r: 0.5 });
+  M.laundry = std({ color: 0xece9e1, r: 0.95, side: THREE.DoubleSide });
+  M.laundry2 = std({ color: 0x8f98a6, r: 0.95, side: THREE.DoubleSide });
+  M.tankM = std({ color: 0xe2ddd0, r: 0.55 });
+  M.barrier = std({ color: 0xd9581c, r: 0.55 }); M.barrierW = std({ color: 0xe8e6df, r: 0.55 });
+  M.sand = std({ color: 0x6f5a42, r: 1 });
+  M.dumpster = std({ color: 0x2f5a3a, r: 0.55, m: 0.4 });
+  M.elecBox = std({ color: 0x8c9590, r: 0.5, m: 0.3 });
+  M.gasCyl = std({ color: 0x8a3c22, r: 0.45, m: 0.4 });
+  M.leafDark = std({ color: 0x1d2c1a, r: 0.9 });
+  M.dish = std({ color: 0xd9d6cf, r: 0.5, m: 0.2 }); M.bucket = std({ color: 0x2f6fb0, r: 0.4 });
+}
+
+/* ---- pieces ---- */
+// a window in an outside wall: glass (dark, or lit from inside), white frame, sill, lintel and the usual iron grill
+function facadeWin(axis, line, side, c, yb, w, h, glass, curtained) {
+  const f = line + side * 0.012, rot = axis === 'x' ? (side > 0 ? 0 : Math.PI) : (side > 0 ? Math.PI / 2 : -Math.PI / 2);
+  const at = (u, y, n) => axis === 'x' ? [u, y, line + side * n] : [line + side * n, y, u];
+  const P = (geo, mat, u, y, n) => { const p = at(u, y, n); addStatic(geo, mat, p[0], p[1], p[2], 0, rot, 0); };
+  if (glass) P(new THREE.PlaneGeometry(w, h), glass, c, yb + h / 2, 0.012);
+  if (curtained) for (const s of [-1, 1]) P(new THREE.PlaneGeometry(w * 0.3, h), M.curtainLit, c + s * w * 0.36, yb + h / 2, 0.016);
+  P(new THREE.BoxGeometry(w + 0.14, 0.07, 0.1), M.white, c, yb - 0.035, 0.03); P(new THREE.BoxGeometry(w + 0.14, 0.07, 0.08), M.white, c, yb + h + 0.035, 0.03);
+  for (const s of [-1, 1]) P(new THREE.BoxGeometry(0.07, h, 0.08), M.white, c + s * (w / 2 + 0.035), yb + h / 2, 0.03);
+  P(new THREE.BoxGeometry(0.05, h, 0.05), M.white, c, yb + h / 2, 0.03);
+  windowExtra(axis, line, c, yb, w, h, side, { forceExt: true }, 0.0);
+}
+// a steel gate in a boundary wall (closed): pillars, leaf panels with a raised frame and bars
+function gateV4(axis, line, side, c, w, h, mat) {
+  const at = (u, y, n) => axis === 'x' ? [u, y, line + side * n] : [line + side * n, y, u];
+  const B = (bw, bh, bd, u, y, n) => { const p = at(u, y, n); if (axis === 'x') sbox(bw, bh, bd, p[0], y, p[2], mat); else sbox(bd, bh, bw, p[0], y, p[2], mat); };
+  B(w, h, 0.06, c, 0, 0.16);
+  const leaves = w > 2 ? 2 : 1, lw = w / leaves;
+  for (let i = 0; i < leaves; i++) {
+    const lc = c - w / 2 + lw * (i + 0.5);
+    B(lw - 0.12, 0.06, 0.03, lc, h * 0.48, 0.2); B(lw - 0.12, 0.06, 0.03, lc, h - 0.12, 0.2); B(lw - 0.12, 0.06, 0.03, lc, 0.1, 0.2);
+    for (const s of [-1, 1]) B(0.06, h - 0.2, 0.03, lc + s * (lw / 2 - 0.06), 0.1, 0.2);
+    for (let k = 1; k < 5; k++) B(0.025, h * 0.38, 0.02, lc - lw / 2 + k * lw / 5, h * 0.55, 0.205);
+  }
+  for (const s of [-1, 1]) { const p = at(c + s * (w / 2 + 0.2), 0, 0.12); if (axis === 'x') sbox(0.4, 3.05, 0.4, p[0], -0.05, p[2], M.beige); else sbox(0.4, 3.05, 0.4, p[0], -0.05, p[2], M.beige); }
+}
+function wallRunV4(z, x0, x1, mat, h) {
+  h = h || 2.9; const len = x1 - x0, cx = (x0 + x1) / 2;
+  sbox(len, h, 0.25, cx, -0.05, z, mat, 2); sbox(len + 0.04, 0.08, 0.34, cx, h - 0.1, z, M.beige);
+}
+function crenels(axis, line, a, b, y) { for (let u = a + 0.28; u <= b - 0.27; u += 0.55) addStatic(new THREE.ConeGeometry(0.2, 0.34, 4), M.stucco, axis === 'x' ? u : line, y, axis === 'x' ? line : u, 0, Math.PI / 4, 0); }
+function tankV4(x, y, z, r) { scyl(r, r, r * 2.1, x, y, z, M.tankM, 18); scyl(r * 0.35, r * 0.35, 0.08, x, y + r * 2.1, z, M.tankM, 12); for (const s of [-1, 1]) sbox(0.08, 0.22, r * 2.2, x + s * r * 0.6, y - 0.22, z, M.concrete); }
+function dishV4(x, y, z, ry) {
+  scyl(0.03, 0.03, 0.9, x, y, z, M.metal, 6);
+  const d = latheG([[0, 0], [0.18, 0.02], [0.34, 0.07], [0.45, 0.14], [0.44, 0.15], [0, 0.03]], 20, 1);
+  d.rotateX(-1.1); addStatic(d, M.dish, x, y + 0.95, z, 0, ry, 0);
+}
+function acBoxV4(axis, line, side, u, y) {
+  const at = (n) => axis === 'x' ? [u, line + side * n] : [line + side * n, u];
+  const p = at(0.28), q = at(0.565), rot = axis === 'x' ? (side > 0 ? 0 : Math.PI) : (side > 0 ? Math.PI / 2 : -Math.PI / 2);
+  if (axis === 'x') sbox(0.72, 0.46, 0.56, p[0], y, p[1], M.beige); else sbox(0.56, 0.46, 0.72, p[0], y, p[1], M.beige);
+  addStatic(new THREE.PlaneGeometry(0.6, 0.34), M.grill, q[0], y + 0.23, q[1], 0, rot, 0);
+}
+// the body of a two-storey villa; `side` is where its facade looks (+1 toward +z, -1 toward -z)
+function villaV4(o) {
+  const s = o.side, cx = (o.x0 + o.x1) / 2, w = o.x1 - o.x0, H = o.h || 7, d = o.depth || 9;
+  const zc = o.face - s * d / 2;
+  sbox(w, H, d, cx, -0.1, zc, o.mat, 3);
+  sbox(w + 0.06, 0.14, 0.12, cx, 3.2, o.face + s * 0.06, M.beige);                  // floor band
+  sbox(w + 0.1, 0.14, 0.18, cx, H - 0.24, o.face + s * 0.09, M.beige);             // parapet coping
+  crenels('x', o.face - s * 0.1, o.x0, o.x1, H + 0.07);
+  for (const [x, fl, kind] of o.wins || []) {
+    const glass = [M.winDark, M.winWarm, M.winDim, M.winTV, M.winWarm][kind || 0];
+    facadeWin('x', o.face, s, x, fl ? 4.05 : 1.05, 1.3, 1.15, glass, kind === 4);
+  }
+  for (const [x, y] of o.acs || []) acBoxV4('x', o.face, s, x, y);
+  const roof = H - 0.1;
+  if (o.tank != null) tankV4(o.tank, roof + 0.22, zc - s * 1.2, 0.62);
+  if (o.dish != null) dishV4(o.dish, roof, o.face - s * 1.4, s > 0 ? 0 : Math.PI);
+  if (o.room != null) { sbox(2.6, 2.5, 3.0, o.room, roof, zc + s * 0.5, o.mat, 3); sbox(2.7, 0.1, 3.1, o.room, roof + 2.5, zc + s * 0.5, M.beige); }
+}
+// parked cars: a sedan or a big SUV, nose along +x when ry = 0
+function carV4(x, z, ry, kind, paint) {
+  const P = PL(x, z, ry), suv = kind === 'suv';
+  const L = suv ? 4.9 : 4.6, Wd = suv ? 1.94 : 1.78, H = suv ? 0.9 : 0.66, y0 = suv ? 0.42 : 0.33;
+  P(rboxGeo(L, H, Wd, 0.13), paint, 0, y0 + H / 2, 0);
+  const cl = suv ? 2.95 : 2.35, chh = suv ? 0.72 : 0.56, co = suv ? -0.35 : -0.2;
+  P(rboxGeo(cl, chh, Wd - 0.12, 0.12), M.carGlass, co, y0 + H + chh / 2 - 0.04, 0);
+  P(rboxGeo(cl - 0.3, 0.07, Wd - 0.18, 0.035), paint, co, y0 + H + chh - 0.04, 0);
+  for (const k of [-0.5, 0, 0.5]) P(new THREE.BoxGeometry(0.06, chh - 0.06, Wd - 0.1), paint, co + k * (cl - 0.25), y0 + H + chh / 2 - 0.05, 0);   // roof pillars
+  for (const [wx, wz] of [[L * 0.32, Wd / 2 - 0.13], [L * 0.32, -Wd / 2 + 0.13], [-L * 0.32, Wd / 2 - 0.13], [-L * 0.32, -Wd / 2 + 0.13]]) {
+    P(new THREE.CylinderGeometry(0.34, 0.34, 0.24, 18), M.rubber, wx, 0.34, wz, Math.PI / 2, 0, 0);
+    P(new THREE.CylinderGeometry(0.2, 0.2, 0.25, 12), M.chrome, wx, 0.34, wz, Math.PI / 2, 0, 0);
+  }
+  for (const sz of [-1, 1]) {
+    P(new THREE.BoxGeometry(0.05, 0.12, 0.34), M.headlight, L / 2 - 0.01, y0 + H * 0.62, sz * (Wd / 2 - 0.28));
+    P(new THREE.BoxGeometry(0.05, 0.12, 0.3), M.taillight, -L / 2 + 0.01, y0 + H * 0.65, sz * (Wd / 2 - 0.26));
+  }
+  P(new THREE.BoxGeometry(0.06, 0.12, 1.1), M.chrome, L / 2 + 0.005, y0 + H * 0.35, 0);
+  const c = Math.abs(Math.cos(ry)), sn = Math.abs(Math.sin(ry)), hx = (L * c + Wd * sn) / 2, hz = (L * sn + Wd * c) / 2;
+  col(x - hx, z - hz, x + hx, z + hz, 0); contact(x, z, L + 0.3, Wd + 0.3, -0.06, ry);
+}
+function treeV4(x, z, s) {
+  scyl(0.08 * s, 0.13 * s, 2.3 * s, x, -0.06, z, M.woodDark, 8);
+  for (let i = 0; i < 8; i++) {
+    const g = new THREE.IcosahedronGeometry(rnd(0.55, 0.95) * s, 1), p = g.attributes.position;
+    for (let k = 0; k < p.count; k++) p.setXYZ(k, p.getX(k) * rnd(0.85, 1.15), p.getY(k) * rnd(0.75, 1.05), p.getZ(k) * rnd(0.85, 1.15));
+    g.computeVertexNormals(); addStatic(g, M.leafDark, x + rnd(-0.75, 0.75) * s, (2.3 + rnd(0.1, 1.3)) * s, z + rnd(-0.75, 0.75) * s);
+  }
+  col(x - 0.16, z - 0.16, x + 0.16, z + 0.16, 0);
+}
+// a sodium street lamp; the light joins the pool like every other lamp (the nearest ones are lit for real)
+function lampV4(id, x, z, dir, opts) {
+  opts = opts || {};
+  scyl(0.07, 0.1, 5.2, x, -0.06, z, M.metal, 8); sbox(1.2, 0.08, 0.08, x + dir * 0.5, 5.1, z, M.metal); scyl(0.18, 0.12, 0.15, x + dir * 1.05, 4.95, z, M.metal, 10);
+  col(x - 0.12, z - 0.12, x + 0.12, z + 0.12, 0);
+  if (opts.dead) return null;
+  const L0 = addLight(id, x + dir * 1.05, 4.8, z, 0xffa24a, opts.i || 1.45, 14, 0, { outdoor: true });
+  L0.street = true; L0.flick = opts.flicker || 0;
+  if (L0.glow) { L0.glow.scale.set(3.2, 3.2, 1); L0.glowBase = 0.55; }
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(2.1, 4.8, 18, 1, true), new THREE.MeshBasicMaterial({ color: 0xffa24a, transparent: true, opacity: 0.045, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+  cone.position.set(x + dir * 1.05, 2.45, z); scene.add(cone); L0.cone = cone;
+  return L0;
+}
+function barrierRowV4(x, z0, z1) {
+  let i = 0;
+  for (let z = z0; z <= z1; z += 1.25, i++) {
+    R(0.42, 0.8, 1.15, 0.06, x, -0.06, z, i % 2 ? M.barrierW : M.barrier);
+    sbox(0.44, 0.07, 1.17, x, 0.5, z, i % 2 ? M.barrier : M.barrierW);
+  }
+  col(x - 0.3, z0 - 0.7, x + 0.3, z1 + 0.7, 0);
+}
+
+/* ---- the back yard ---- */
+function buildYardV4() {
+  const O = W.obj;
+  sbox(5.6, 0.1, 16.7, 12.925, -0.1, -0.25, M.wetConcrete, 3);                 // x 10.125..15.725, z -8.6..8.1
+  // boundary walls (3 m) with the steel door to the alley in the east wall
+  sbox(0.25, 3.0, 1.6, 15.6, -0.05, -7.8, M.stucco, 2); sbox(0.25, 3.0, 14.1, 15.6, -0.05, 1.05, M.stucco, 2); sbox(0.25, 0.8, 1.0, 15.6, 2.2, -6.5, M.stucco, 2);
+  sbox(5.6, 3.0, 0.25, 12.925, -0.05, -8.475, M.stucco, 2); sbox(5.48, 3.0, 0.25, 12.99, -0.05, 7.975, M.stucco, 2);
+  sbox(0.34, 0.08, 16.8, 15.6, 2.92, -0.25, M.beige); sbox(5.6, 0.08, 0.34, 12.925, 2.92, -8.475, M.beige); sbox(5.48, 0.08, 0.34, 12.99, 2.92, 7.975, M.beige);
+  col(15.475, -8.6, 15.725, 8.1, 0); col(10.1, -8.6, 15.725, -8.35, 0); col(10.25, 7.85, 15.725, 8.1, 0);
+  // the house seen from the yard: rendered east wall, floor band, the back door's frame, canopy and lamp
+  sbox(0.06, 6.75, 1.15, 10.155, -0.05, -7.575, M.stucco, 2); sbox(0.06, 6.75, 14.15, 10.155, -0.05, 1.075, M.stucco, 2); sbox(0.06, 4.5, 1.0, 10.155, 2.2, -6.5, M.stucco, 2);
+  sbox(0.2, 0.12, 16.3, 10.2, 3.05, 0, M.beige);
+  for (const z of [-7.04, -5.96]) sbox(0.06, 2.24, 0.08, 10.2, 0, z, M.beige);
+  sbox(0.07, 0.1, 1.16, 10.2, 2.2, -6.5, M.beige); sbox(0.62, 0.08, 1.5, 10.45, 2.52, -6.5, M.beige);
+  sbox(0.5, 0.05, 1.3, 10.4, 0, -6.5, M.concrete, 1);
+  sbox(0.06, 0.12, 0.12, 10.22, 2.28, -6.5, M.metal);
+  O.yardFix = mesh(new THREE.SphereGeometry(0.07, 12, 10), std({ color: 0xffffff, emissive: 0xffc890, ei: 1 }), 10.32, 2.24, -6.5); O.yardFix.castShadow = false;
+  for (let i = 0; i < 4; i++) { const a = i / 4 * Math.PI * 2; addStatic(new THREE.BoxGeometry(0.008, 0.16, 0.008), M.black, 10.32 + Math.cos(a) * 0.08, 2.24, -6.5 + Math.sin(a) * 0.08); }
+  const yl = addLight('yard', 10.55, 2.25, -6.5, 0xffc890, 0.9, 7.5, 0, { outdoor: true }); if (yl.glow) { yl.glow.scale.set(1.2, 1.2, 1); yl.glowBase = 0.55; }
+  // the alley door: steel, shut, and loose enough to bang in the wind
+  const pv = new THREE.Group(); pv.position.set(15.44, 0, -7.0);
+  const leaf = new THREE.Mesh(new THREE.BoxGeometry(0.05, 2.18, 0.98), M.gate); leaf.position.set(0, 1.09, 0.49); leaf.castShadow = true; leaf.receiveShadow = true; pv.add(leaf);
+  const bolt = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.05, 0.22), M.metal); bolt.position.set(-0.04, 1.05, 0.86); pv.add(bolt);
+  scene.add(pv); O.alleyDoor = { pivot: pv, ang: 0, vel: 0 };
+  // water tank on its plinth, its pipe running to the house
+  sbox(1.7, 0.25, 1.7, 14.6, 0, 6.85, M.concrete); scyl(0.72, 0.72, 1.55, 14.6, 0.25, 6.85, M.tankM, 22); scyl(0.26, 0.26, 0.08, 14.6, 1.8, 6.85, M.tankM, 14);
+  addStatic(new THREE.CylinderGeometry(0.028, 0.028, 4.4, 8), M.white, 12.45, 0.16, 6.85, 0, 0, Math.PI / 2);
+  col(13.75, 6.0, 15.475, 7.85, 0); contact(14.6, 6.85, 2.0, 2.0);
+  // washing machine under a corrugated shade, the gas bottle beside it
+  R(0.62, 0.86, 0.6, 0.03, 10.75, 0, 7.4, M.plasticW); addStatic(new THREE.CircleGeometry(0.17, 20), M.black, 10.75, 0.55, 7.098, 0, Math.PI, 0);
+  sbox(0.5, 0.1, 0.04, 10.75, 0.72, 7.1, M.grill);
+  for (const x of [10.35, 12.05]) scyl(0.03, 0.03, 2.35, x, 0, 6.75, M.metal, 6);
+  addStatic(new THREE.BoxGeometry(2.0, 0.035, 1.5), M.metal, 11.2, 2.36, 7.35, 0.12, 0, 0);
+  scyl(0.16, 0.16, 0.55, 11.55, 0, 7.5, M.gasCyl, 14); scyl(0.05, 0.05, 0.08, 11.55, 0.55, 7.5, M.chrome, 8);
+  col(10.4, 7.05, 11.8, 7.85, 0);
+  // split-AC compressors on the wall, the electricity meter by the door
+  for (const [z, y] of [[-2.6, 0.08], [2.2, 0.08], [-3.6, 3.65], [1.4, 3.65]]) {
+    sbox(0.32, 0.56, 0.82, 10.34, y, z, M.plasticW); addStatic(new THREE.CircleGeometry(0.21, 20), M.grill, 10.502, y + 0.28, z, 0, Math.PI / 2, 0);
+    if (y > 1) for (const s of [-1, 1]) sbox(0.4, 0.04, 0.04, 10.33, y - 0.04, z + s * 0.3, M.metal);
+  }
+  col(10.125, -3.05, 10.52, -2.15, 0); col(10.125, 1.75, 10.52, 2.65, 0);
+  sbox(0.16, 0.48, 0.38, 10.26, 1.25, -4.7, M.elecBox); addStatic(new THREE.PlaneGeometry(0.16, 0.12), M.lcd, 10.342, 1.55, -4.7, 0, Math.PI / 2, 0);
+  // the clothes line, laundry left out in the rain
+  for (const z of [-3.7, 3.7]) { scyl(0.03, 0.03, 2.0, 13.0, 0, z, M.metal, 6); sbox(0.95, 0.04, 0.05, 13.0, 1.95, z, M.metal); col(12.93, z - 0.07, 13.07, z + 0.07, 0); }
+  for (const x of [12.6, 13.4]) addStatic(new THREE.CylinderGeometry(0.006, 0.006, 7.4, 4), M.black, x, 1.975, 0, Math.PI / 2, 0, 0);
+  O.laundry = [];
+  const hang = (x, z, kind) => {
+    const g = new THREE.Group(); g.position.set(x, 1.97, z);
+    if (kind === 'thobe') {
+      const body = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 1.32, 3, 8), M.laundry); body.position.y = -0.68; body.rotation.y = Math.PI / 2;
+      const arms = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.2, 4, 1), M.laundry); arms.position.y = -0.14; arms.rotation.y = Math.PI / 2;
+      g.add(body, arms);
+    } else if (kind === 'shmagh') {
+      const c = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.55, 2, 2), std({ map: T.shmagh, r: 1, side: THREE.DoubleSide })); c.position.y = -0.3; c.rotation.y = Math.PI / 2; g.add(c);
+    } else { const c = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.9, 2, 4), M.laundry2); c.position.y = -0.46; c.rotation.y = Math.PI / 2; g.add(c); }
+    g.traverse(o => { o.castShadow = true; o.receiveShadow = true; });
+    scene.add(g); O.laundry.push({ g, ph: Math.random() * 6, k: kind === 'thobe' ? 1 : 0.7 });
+  };
+  hang(12.6, -2.3, 'thobe'); hang(12.6, 0.5, 'thobe'); hang(13.4, -0.9, 'thobe'); hang(13.4, 1.9, 'towel'); hang(12.6, 2.7, 'shmagh');
+  // plastic chairs stacked in the corner, a ladder on the back wall, a lemon tree in a planter
+  for (let i = 0; i < 4; i++) { R(0.48, 0.05, 0.46, 0.02, 15.05, 0.42 + i * 0.07, -2.2, M.plasticW); R(0.46, 0.5, 0.05, 0.02, 15.05, 0.47 + i * 0.07, -2.0 + i * 0.012, M.plasticW); }
+  for (const [dx, dz] of [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]]) scyl(0.02, 0.025, 0.44, 15.05 + dx, 0, -2.2 + dz, M.plasticW, 6);
+  col(14.75, -2.5, 15.475, -1.85, 0);
+  for (const s of [-1, 1]) addStatic(new THREE.BoxGeometry(0.05, 2.7, 0.05), M.alu, 12.25 + s * 0.22, 1.32, -8.15, -0.18, 0, 0);
+  for (let i = 0; i < 8; i++) addStatic(new THREE.BoxGeometry(0.44, 0.03, 0.04), M.alu, 12.25, 0.2 + i * 0.32, -8.04 - i * 0.058);
+  col(11.95, -8.35, 12.55, -7.75, 0);
+  sbox(0.85, 0.5, 0.85, 14.85, 0, -4.6, M.concrete); sbox(0.75, 0.03, 0.75, 14.85, 0.47, -4.6, M.soil);
+  scyl(0.04, 0.06, 1.0, 14.85, 0.5, -4.6, M.woodDark, 6);
+  for (let i = 0; i < 6; i++) { const g = new THREE.IcosahedronGeometry(rnd(0.28, 0.42), 1); addStatic(g, M.leafDark, 14.85 + rnd(-0.3, 0.3), 1.45 + rnd(0, 0.5), -4.6 + rnd(-0.3, 0.3)); }
+  for (let i = 0; i < 7; i++) addStatic(new THREE.SphereGeometry(0.04, 8, 6), M.fruitOrange || M.brass, 14.85 + rnd(-0.4, 0.4), 1.3 + rnd(0, 0.6), -4.6 + rnd(-0.4, 0.4));
+  col(14.4, -5.05, 15.475, -4.15, 0);
+  // bits and pieces: broom and bucket by the door, a drain, puddles
+  addStatic(new THREE.CylinderGeometry(0.014, 0.014, 1.3, 6), M.woodDark, 10.38, 0.66, -5.45, 0, 0, -0.12); sbox(0.08, 0.16, 0.3, 10.3, 0, -5.45, M.black);
+  scyl(0.15, 0.12, 0.3, 11.1, 0, -5.1, M.bucket, 14); col(10.95, -5.25, 11.25, -4.95, 0);
+  sbox(0.36, 0.012, 0.36, 12.9, 0.0, 0.2, M.grill);
+  for (const [x, z, sc] of [[12.1, -1.4, 0.95], [14.2, 2.4, 0.8], [11.4, -6.0, 0.6], [13.6, -6.4, 0.7]]) { const g = new THREE.CircleGeometry(sc, 18); g.scale(1, 0.62, 1); g.rotateX(-Math.PI / 2); g.rotateY(Math.random() * 3); addStatic(g, M.puddle, x, 0.006, z); }
+  contact(15.05, -2.2, 0.7, 0.7); contact(14.85, -4.6, 1.1, 1.1); contact(10.75, 7.4, 0.9, 0.8);
+  // the neighbours' walls that tower over the yard: the house beside it and the one behind
+  facadeWin('x', 8.1, -1, 12.0, 4.2, 0.9, 0.8, M.winDark); acBoxV4('x', 8.1, -1, 13.2, 3.4);
+  sbox(17, 6.8, 12.5, 8.5, -0.1, -15.5, M.extGrey, 3); sbox(17.1, 0.14, 0.2, 8.5, 6.5, -9.25, M.beige); crenels('x', -9.35, 0, 17, 6.85);
+  facadeWin('x', -9.25, 1, 12.2, 4.0, 1.1, 1.0, M.winDim, true); facadeWin('x', -9.25, 1, 14.8, 4.0, 1.1, 1.0, M.winDark); facadeWin('x', -9.25, 1, 4.6, 4.0, 1.1, 1.0, M.winDark);
+  tankV4(11, 6.92, -12.5, 0.6);
+}
+
+/* ---- the street, both sides, to where it fades into the rain ---- */
+function buildStreetV4() {
+  const O = W.obj;
+  sbox(170, 0.05, 160, 0, -0.27, 10, M.ground);
+  sbox(140, 0.1, 10.5, 0, -0.16, 21.2, M.asphalt, 4);
+  sbox(140, 0.12, 1.4, 0, -0.1, 16.9, M.wetConcrete, 2); sbox(140, 0.12, 1.4, 0, -0.1, 25.7, M.wetConcrete, 2);
+  sbox(140, 0.16, 0.18, 0, -0.1, 17.6, M.curb, 0.5); sbox(140, 0.16, 0.18, 0, -0.1, 25.0, M.curb, 0.5);
+  for (const [x, z, s] of [[-17, 21.6, 1.6], [12, 22.8, 1.3], [27, 19.8, 2.0], [-30, 23.5, 1.4], [33, 23, 1.1]]) { const g = new THREE.CircleGeometry(s, 18); g.scale(1, 0.6, 1); g.rotateX(-Math.PI / 2); g.rotateY(Math.random() * 3); addStatic(g, M.puddle, x, -0.055, z); }
+  /* opposite side (facades look toward -z) — one continuous boundary wall, gates in it, the houses behind */
+  wallRunV4(26.45, -70, -27.2, M.extGrey); wallRunV4(26.45, -27.2, -10.4, M.extPink); wallRunV4(26.45, -10.4, 0.4, M.stucco);
+  wallRunV4(26.45, 0.4, 12.8, M.stucco); wallRunV4(26.45, 12.8, 28.7, M.extGrey); wallRunV4(26.45, 28.7, 70, M.stucco);
+  // Abu Nasser's house stands right on the street: its lit upstairs window is the one with the silhouette
+  villaV4({ side: -1, x0: -10.2, x1: -0.4, face: 26.2, depth: 8, h: 7.4, mat: M.stucco, wins: [[-8.4, 0, 0], [-6.0, 0, 2], [-8.4, 1, 0], [-1.8, 1, 0]], acs: [[-1.8, 1.0], [-7.2, 5.4]], tank: -2.2, dish: -8.6 });
+  facadeWin('x', 26.2, -1, -5, 3.65, 1.4, 1.1, null);
+  sbox(1.7, 2.45, 0.08, -3.4, 0, 26.14, M.woodDark); sbox(0.05, 2.2, 0.03, -3.4, 0.1, 26.09, M.black); sbox(1.95, 0.12, 0.7, -3.4, 2.55, 25.85, M.beige);
+  for (const s of [-1, 1]) scyl(0.012, 0.012, 0.16, -3.4 + s * 0.12, 1.0, 26.07, M.brass, 6, Math.PI / 2, 0);
+  gateV4('x', 26.45, -1, 4, 1.6, 2.45, M.gate); gateV4('x', 26.45, -1, 9.6, 3.2, 2.5, M.gateWhite);
+  villaV4({ side: -1, x0: 1.0, x1: 12.2, face: 29.8, depth: 9, h: 7.2, mat: M.extCream, wins: [[2.6, 1, 0], [5.4, 1, 4], [8.2, 1, 0], [10.6, 1, 3]], acs: [[3.9, 5.5]], tank: 3.0, dish: 6.2, room: 10.6 });
+  gateV4('x', 26.45, -1, -13.2, 1.3, 2.4, M.gateBrown); gateV4('x', 26.45, -1, -18.6, 3.4, 2.5, M.gateBrown);
+  villaV4({ side: -1, x0: -26.2, x1: -11.2, face: 30.6, depth: 9.5, h: 6.9, mat: M.extSand, wins: [[-24.4, 1, 0], [-21.2, 1, 1], [-17.6, 1, 0], [-14.0, 1, 2]], tank: -16, room: -24.2 });
+  scyl(0.16, 0.22, 5.4, -24.6, -0.06, 28.3, M.woodDark, 10); palmFronds(-24.6, 5.3, 28.3);
+  gateV4('x', 26.45, -1, 15.2, 1.3, 2.4, M.gateBlack); gateV4('x', 26.45, -1, 20.4, 3.4, 2.5, M.gateBlack);
+  villaV4({ side: -1, x0: 13.6, x1: 28.0, face: 30.2, depth: 9, h: 7.0, mat: M.stucco, wins: [[15.6, 1, 2], [19.2, 1, 0], [22.6, 1, 0], [26.0, 1, 1]], acs: [[17.4, 5.4]], tank: 24.5, dish: 16.4 });
+  treeV4(24.6, 28.0, 1.1);
+  gateV4('x', 26.45, -1, 31.6, 1.3, 2.4, M.gate); gateV4('x', 26.45, -1, 36.8, 3.4, 2.5, M.gateWhite);
+  villaV4({ side: -1, x0: 29.3, x1: 46.5, face: 30.4, depth: 9, h: 6.7, mat: M.extCream, wins: [[31.8, 1, 0], [35.4, 1, 0], [39.2, 1, 3], [43.4, 1, 0]], tank: 41 });
+  gateV4('x', 26.45, -1, -30.2, 1.3, 2.4, M.gateWhite); gateV4('x', 26.45, -1, -35.6, 3.4, 2.5, M.gate);
+  villaV4({ side: -1, x0: -45.5, x1: -27.8, face: 30.4, depth: 9, h: 7.0, mat: M.stucco, wins: [[-43.2, 1, 0], [-39.6, 1, 2], [-35.8, 1, 0], [-31.4, 1, 0]], dish: -38 });
+  for (const [x0, x1, m, lit] of [[47, 60, M.extSand, 52], [60.4, 72, M.extGrey, 0], [-60, -46, M.extPink, -52], [-72, -60.4, M.extCream, 0]]) {
+    villaV4({ side: -1, x0, x1, face: 30.4, depth: 9, h: 6.8, mat: m, wins: lit ? [[lit, 1, 1]] : [] });
+    gateV4('x', 26.45, -1, x0 + 3, 1.3, 2.4, M.gateBrown);
+  }
+  /* our side (facades look toward +z) */
+  wallRunV4(16.0, 16.3, 70, M.extCream); wallRunV4(16.0, -70, -14.0, M.extGrey);
+  gateV4('x', 16.0, 1, 15.15, 2.2, 2.5, M.gateBlack);                                   // the alley mouth beside the east neighbour, shut
+  for (const s of [-1, 1]) facadeWin('x', 15.7, 1, s * 12.2, 4.1, 1.1, 1.0, s > 0 ? M.winDark : M.winDim);
+  gateV4('x', 16.0, 1, 18.6, 1.3, 2.4, M.gateBrown); gateV4('x', 16.0, 1, 23.4, 3.4, 2.5, M.gateWhite);
+  villaV4({ side: 1, x0: 17.2, x1: 31.0, face: 13.4, depth: 16, h: 7.0, mat: M.extSand, wins: [[18.8, 1, 1], [22.0, 1, 0], [25.6, 1, 0], [29.0, 1, 2]], acs: [[20.4, 5.3]], tank: 27, dish: 24 });
+  for (const [z, kind] of [[0.2, 0], [4.4, 4], [9.6, 0]]) facadeWin('z', 17.2, -1, z, 4.05, 1.2, 1.1, [M.winDark, M.winWarm, M.winDim, M.winTV, M.winWarm][kind], kind === 4);
+  acBoxV4('z', 17.2, -1, 2.3, 4.6);
+  gateV4('x', 16.0, 1, -16.4, 1.3, 2.4, M.gateBlack); gateV4('x', 16.0, 1, -21.6, 3.4, 2.5, M.gate);
+  villaV4({ side: 1, x0: -31.0, x1: -14.6, face: 13.4, depth: 9, h: 6.8, mat: M.stucco, wins: [[-16.8, 1, 0], [-20.4, 1, 2], [-24.2, 1, 1], [-28.2, 1, 0]], tank: -27, room: -18 });
+  for (const [x0, x1, m, lit] of [[31.6, 47, M.extPink, 39], [47.4, 62, M.extCream, 0], [62.4, 72, M.stucco, 0], [-47, -31.6, M.extCream, 0], [-62, -47.4, M.extSand, -55], [-72, -62.4, M.extGrey, 0]]) {
+    villaV4({ side: 1, x0, x1, face: 13.4, depth: 9, h: 6.8, mat: m, wins: lit ? [[lit, 1, 1]] : [] });
+    gateV4('x', 16.0, 1, x0 + 2.6, 1.3, 2.4, M.gateBrown);
+  }
+  col(14.0, 15.85, 40, 16.15, 0); col(-40, 15.85, -14.0, 16.15, 0);
+  /* lamps (one of them dying), cars, a skip, trees, utility boxes, and road works closing both ends */
+  lampV4('street2', -24, 17.2, 1); lampV4('street3', 31, 17.2, -1, { flicker: 0.55 });
+  lampV4('street4', 20.5, 25.8, -1); lampV4('street5', -35, 25.8, 1, { i: 1.25 });
+  carV4(-19, 18.6, 0.02, 'sedan', std({ color: 0xe6e6e2, r: 0.32, m: 0.45 }));
+  carV4(24.2, 18.7, -0.03, 'suv', std({ color: 0xc8b89a, r: 0.35, m: 0.45 }));
+  carV4(13.6, 24.0, Math.PI + 0.03, 'sedan', std({ color: 0x9da3a8, r: 0.3, m: 0.55 }));
+  carV4(-26, 23.9, Math.PI - 0.02, 'suv', std({ color: 0x17191c, r: 0.25, m: 0.55 }));
+  carV4(32.4, 24.0, Math.PI, 'sedan', std({ color: 0x5a1f1d, r: 0.55, m: 0.3 }));
+  R(1.9, 1.15, 1.1, 0.05, 15.2, -0.06, 17.15, M.dumpster); addStatic(new THREE.BoxGeometry(1.95, 0.05, 1.15), M.dumpster, 15.2, 1.16, 17.0, -0.18, 0, 0);
+  for (const s of [-1, 1]) sbox(0.08, 0.08, 1.15, 15.2 + s * 0.9, 0.05, 17.15, M.rubber);
+  col(14.2, 16.55, 16.2, 17.75, 0); contact(15.2, 17.15, 2.1, 1.3, -0.04);
+  for (const [x, z] of [[-12.6, 16.5], [7.2, 25.9]]) { R(0.9, 1.2, 0.42, 0.03, x, -0.04, z, M.elecBox); col(x - 0.5, z - 0.26, x + 0.5, z + 0.26, 0); }
+  treeV4(-27.6, 16.95, 1.0); treeV4(28.2, 16.95, 0.95); treeV4(-17.5, 25.8, 1.05); treeV4(37.0, 25.8, 0.9);
+  for (const sx of [-1, 1]) {
+    const x = sx * 38.6; barrierRowV4(x, 18.2, 24.6);
+    const g = new THREE.SphereGeometry(1.6, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2); g.scale(1.3, 0.55, 2.2); addStatic(g, M.sand, x + sx * 2.2, -0.08, 21.4);
+    sbox(1.2, 0.03, 6.6, x + sx * 1.0, -0.1, 21.4, M.black);
+  }
+  col(38.3, 16, 38.9, 26.5, 0); col(-38.9, 16, -38.3, 26.5, 0);
+  col(-38.9, 26.2, 38.9, 26.6, 0);
+}
+
+/* ---- per-frame: laundry in the wind, the alley door straining on its bolt ---- */
+function updateOutside(dt) {
+  const O = W.obj; if (!O.laundry) return;
+  const near = P.x > 6 || camera.position.x > 6;
+  if (near) for (const l of O.laundry) {
+    const gust = 0.5 + 0.5 * Math.sin(G.rt * 0.7 + l.ph) * Math.sin(G.rt * 0.23), w = (HD.gust || 0);
+    l.g.rotation.z = (Math.sin(G.rt * 2.3 + l.ph) * 0.12 + gust * 0.18 + w * 0.6) * l.k;
+    l.g.rotation.x = Math.sin(G.rt * 1.7 + l.ph * 2) * 0.05 * l.k;
+  }
+  const a = O.alleyDoor;
+  if (a) { a.vel += (-a.ang * 40 - a.vel * 4) * dt; a.ang += a.vel * dt; a.pivot.rotation.y = a.ang; }
+}
+// rain falls around whoever is looking, outdoors only (never inside the house or the neighbours' roofs)
+function rainSpot(out) {
+  const cx = camera ? camera.position.x : 0, cz = camera ? camera.position.z : 20;
+  for (let k = 0; k < 6; k++) {
+    const x = cx + rnd(-14, 14), z = cz + rnd(-11, 11);
+    if (x > -10.3 && x < 10.3 && z > -8.3 && z < 8.3) continue;          // our house
+    if (Math.abs(x) > 10.3 && Math.abs(x) < 14.1 && z > 8.0 && z < 15.8) continue;   // the neighbours' blocks either side
+    out[0] = x; out[1] = z; return out;
+  }
+  out[0] = rnd(-9, 9); out[1] = rnd(8.6, 25); return out;
+}
+
+const _rq = [0, 0];
+/* ---- the entrance: two pairs of Saudi «zubairi» sandals — green and embroidered, and black ---- */
+const SOLE_OUT = [[0.042, -0.135, 0.046, -0.08, 0.042, -0.03], [0.040, 0.02, 0.056, 0.06, 0.054, 0.095], [0.050, 0.135, 0.015, 0.142, -0.005, 0.14],
+  [-0.04, 0.137, -0.05, 0.1, -0.047, 0.07], [-0.044, 0.03, -0.038, 0.0, -0.04, -0.04], [-0.044, -0.09, -0.04, -0.135, 0, -0.135]];
+function solePath(g, w, h, k) {
+  const X = x => (x * k / 0.11 + 0.5) * w, Y = y => (0.5 - y * k / 0.28) * h;
+  g.beginPath(); g.moveTo(X(0), Y(-0.135));
+  for (const q of SOLE_OUT) g.bezierCurveTo(X(q[0]), Y(q[1]), X(q[2]), Y(q[3]), X(q[4]), Y(q[5]));
+  g.closePath();
+}
+function soleTex(base, stitch) {
+  return mkTex(cv(128, 320, (g, w, h) => {
+    g.fillStyle = base; g.fillRect(0, 0, w, h);
+    g.save(); solePath(g, w, h, 1); g.clip(); const gr = g.createRadialGradient(w / 2, h * 0.35, 10, w / 2, h * 0.5, h * 0.6); gr.addColorStop(0, 'rgba(255,255,255,0.06)'); gr.addColorStop(1, 'rgba(0,0,0,0.25)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); g.restore();
+    g.strokeStyle = stitch; g.lineWidth = 2.2; g.setLineDash([5, 4]); solePath(g, w, h, 0.84); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = 'rgba(0,0,0,0.35)'; g.lineWidth = 3; solePath(g, w, h, 0.97); g.stroke();
+    grainy(g, w, h, 2000, 0.06);
+  }));
+}
+function zubairiTex(kind) {
+  return mkTex(cv(256, 128, (g, w, h) => {
+    const green = kind === 'green';
+    g.fillStyle = green ? '#1e3a2a' : '#131416'; g.fillRect(0, 0, w, h);
+    const lg = g.createLinearGradient(0, 0, 0, h); lg.addColorStop(0, 'rgba(255,255,255,0.1)'); lg.addColorStop(1, 'rgba(0,0,0,0.3)'); g.fillStyle = lg; g.fillRect(0, 0, w, h);
+    if (green) {
+      g.lineWidth = 3.2; g.strokeStyle = '#c42f26'; g.beginPath(); g.ellipse(w * 0.5, h * 0.5, w * 0.31, h * 0.25, 0, 0, 7); g.stroke();
+      g.strokeStyle = '#d8902a'; g.setLineDash([5, 4]); g.lineWidth = 2;
+      g.beginPath(); g.ellipse(w * 0.5, h * 0.5, w * 0.38, h * 0.33, 0, 0, 7); g.stroke(); g.beginPath(); g.ellipse(w * 0.5, h * 0.5, w * 0.24, h * 0.17, 0, 0, 7); g.stroke(); g.setLineDash([]);
+      g.strokeStyle = '#d63a2c'; g.lineWidth = 2; g.beginPath(); g.moveTo(w * 0.22, h * 0.5); g.lineTo(w * 0.78, h * 0.5); g.stroke();
+      g.fillStyle = '#ece6d6'; for (let i = 0; i < 6; i++) { g.beginPath(); g.arc(w * 0.45 + (i % 3) * 9, h * 0.34 + Math.floor(i / 3) * 7, 2.2, 0, 7); g.fill(); }
+      g.fillStyle = '#d9a034'; for (let i = 0; i < 5; i++) g.fillRect(w * 0.39 + i * 11, h * 0.64, 7, 11);
+      g.fillStyle = '#e8e2cf'; for (const s of [-1, 1]) { g.beginPath(); g.moveTo(w * (0.5 + s * 0.28), h * 0.5); g.lineTo(w * (0.5 + s * 0.24), h * 0.45); g.lineTo(w * (0.5 + s * 0.24), h * 0.55); g.fill(); }
+      g.strokeStyle = '#d8902a'; g.setLineDash([4, 3]); g.lineWidth = 2; g.strokeRect(5, 6, w - 10, h - 12); g.setLineDash([]);
+    } else {
+      g.strokeStyle = '#a19d94'; g.lineWidth = 2; g.setLineDash([5, 3]);
+      g.beginPath(); g.moveTo(w * 0.08, h * 0.82); g.quadraticCurveTo(w * 0.5, h * 0.04, w * 0.92, h * 0.82); g.stroke(); g.setLineDash([]);
+      g.beginPath(); g.moveTo(w * 0.3, h * 0.52); g.lineTo(w * 0.7, h * 0.52); g.stroke();
+      for (const s of [-1, 1]) { const x = w * (0.5 + s * 0.2); g.beginPath(); g.moveTo(x, h * 0.42); g.lineTo(x + s * 10, h * 0.52); g.lineTo(x, h * 0.62); g.stroke(); }
+      g.fillStyle = '#2c2d30'; for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(w * 0.39 + i * 13, h * 0.7, 5, 0, 7); g.fill(); }
+      g.strokeStyle = '#6c6a66'; g.setLineDash([4, 3]); g.strokeRect(5, 6, w - 10, h - 12); g.setLineDash([]);
+    }
+    grainy(g, w, h, 1500, 0.06);
+  }));
+}
+function zubairi(x, z, ry, m, mt) {   // m = +1 / -1 for the two feet of a pair
+  const P = PL(x, z, ry);
+  const s = new THREE.Shape(); s.moveTo(0, -0.135);
+  for (const q of SOLE_OUT) s.bezierCurveTo(m * q[0], q[1], m * q[2], q[3], m * q[4], q[5]);
+  const g = new THREE.ExtrudeGeometry(s, { depth: 0.013, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.003, bevelSegments: 2, curveSegments: 10 });
+  g.rotateX(Math.PI / 2); g.translate(0, 0.017, 0);
+  const pa = g.attributes.position, ua = g.attributes.uv;
+  for (let i = 0; i < pa.count; i++) ua.setXY(i, m * pa.getX(i) / 0.11 + 0.5, pa.getZ(i) / 0.28 + 0.5);
+  P(g, mt.sole, 0, 0.005, 0);
+  const arch = (R, len, t0, tl, sy) => { const a = new THREE.CylinderGeometry(R, R, len, 18, 1, true, t0, tl); a.rotateX(Math.PI / 2); a.scale(1, sy, 1); return a; };
+  // the back strap (plain leather), then the wide embroidered band folding into its pointed wing, then the toe ring
+  P(arch(0.05, 0.036, Math.PI / 2 - 0.2, Math.PI + 0.4, 0.95), mt.inner, 0.002 * m, 0.022, -0.045);
+  P(arch(0.057, 0.13, Math.PI / 2 - 0.25, Math.PI + 0.5, 1.08), mt.band, 0.002 * m, 0.022, 0.025);
+  // the wing: a pointed leather flap folded over the outer side, the embroidered part you see from above
+  const wing = new THREE.CylinderGeometry(0.066, 0.066, 0.16, 16, 4, true, m > 0 ? Math.PI * 0.92 : Math.PI * 0.58, Math.PI * 0.5), wp = wing.attributes.position;
+  for (let i = 0; i < wp.count; i++) { const y = wp.getY(i) / 0.08; wp.setX(i, wp.getX(i) * (1 - 0.35 * y * y)); wp.setZ(i, wp.getZ(i) * (1 - 0.35 * y * y)); }   // pinched to a point at both ends
+  wing.computeVertexNormals(); wing.rotateX(Math.PI / 2); wing.scale(1, 1.3, 1); P(wing, mt.band, 0.006 * m, 0.024, 0.022, 0, 0, m * 0.1);
+  const ring = new THREE.TorusGeometry(0.021, 0.0085, 8, 18); P(ring, mt.band, -m * 0.022, 0.045, 0.1);
+}
+function zubairiPairs() {
+  const green = { sole: std({ map: soleTex('#5a2b1a', '#efe6d4'), r: 0.55 }), band: std({ map: zubairiTex('green'), r: 0.42, cc: 0.25, ccr: 0.3, side: THREE.DoubleSide }), inner: std({ color: 0xc9952f, r: 0.42, cc: 0.25, ccr: 0.3, side: THREE.DoubleSide }) };
+  const black = { sole: std({ map: soleTex('#141415', '#55524d'), r: 0.55 }), band: std({ map: zubairiTex('black'), r: 0.38, cc: 0.35, ccr: 0.25, side: THREE.DoubleSide }), inner: std({ color: 0x151517, r: 0.38, cc: 0.35, ccr: 0.25, side: THREE.DoubleSide }) };
+  zubairi(-2.3, 7.43, 0.12, -1, green); zubairi(-2.17, 7.47, -0.04, 1, green);
+  zubairi(-1.96, 7.37, -0.22, -1, black); zubairi(-1.83, 7.42, 0.1, 1, black);
+}
+
+/* ---- kitchen fixes: a proper dish rack, a bag of samoli that sits beside the fruit bowl ---- */
+function dishRackV4(x, z) {
+  sbox(0.36, 0.015, 0.46, x, 0.9, z, M.steel);
+  for (const s of [-1, 1]) addStatic(new THREE.CylinderGeometry(0.004, 0.004, 0.44, 6), M.chrome, x + s * 0.15, 0.935, z, Math.PI / 2, 0, 0);
+  for (let i = 0; i < 8; i++) for (const s of [-1, 1]) addStatic(new THREE.CylinderGeometry(0.0028, 0.0028, 0.085, 5), M.chrome, x + s * 0.075, 0.957, z - 0.2 + i * 0.057);
+  for (let i = 0; i < 5; i++) {
+    const plate = latheG([[0, 0], [0.065, 0], [0.07, 0.004], [0.098, 0.012], [0.11, 0.017], [0.108, 0.02], [0.096, 0.015], [0.068, 0.007], [0, 0.007]], 32, 1);
+    addStatic(plate, M.ceramic, x, 1.028, z - 0.15 + i * 0.075, Math.PI / 2 - 0.14, 0, 0);
+  }
+}
+function breadBagV4(x, z, ry) {
+  M.breadBag = M.breadBag || std({ color: 0xf6f4ee, r: 0.12, transparent: true, opacity: 0.32 });
+  const P = PL(x, z, ry);
+  for (const [lx, s] of [[-0.055, 1], [0.06, 0.94]]) P(cushionGeo(0.13 * s, 0.048, 0.2 * s, 0.022, 0.014, 0.002, 0.5), M.bread2, lx, 0.812, 0);
+  P(cushionGeo(0.3, 0.068, 0.25, 0.03, 0.01, 0.003, 0.5), M.breadBag, 0, 0.82, 0);
+}
+
+/* ---- lightning comes in through every window: a cold flash from the sky outside each pane ---- */
+function lightningLightsV4() {
+  W.flashLights = [];
+  for (const win of hdWindows()) {
+    const c = win.center, p = new THREE.Vector3(c.x + win.o.x * 2.4, c.y + 1.3, c.z + win.o.z * 2.4);
+    const L0 = { id: 'lf' + W.flashLights.length, pos: p, color: new THREE.Color(0xc7d6ff), intensity: 3.4, dist: 9.5, lv: win.lv, on: false, group: 'flash', flicker: 0, outdoor: true, fix: null, mul: 1, wflash: true };
+    W.lights.push(L0); W.flashLights.push(L0);
+  }
+}
+function hdLightning() {
+  const lf = G.lightFlash, on = G.env === 'night' && (lf > 0.22 || (lf < 0.12 && lf > 0.05));
+  for (const L0 of W.flashLights || []) L0.on = on;
+}
+function hdCamera(dt) {
+  HD.shake = Math.max(0, HD.shake - dt * 0.09);
+  HD.fovKick = Math.max(0, HD.fovKick - dt * 8);
+  if (G.cine || G.state !== 'play') return;
+  const want = S.fov - HD.fovKick;
+  if (Math.abs(camera.fov - want) > 0.01) { camera.fov = want; camera.updateProjectionMatrix(); }
+}
+
+/* =====================================================================
+   HORROR DIRECTOR — jump scares spread through every chapter. It picks
+   among the scares that fit where you are and what the story is doing,
+   builds tension first (silence, a stuttering bulb, footsteps, breath),
+   keeps a cool-down between them and never exceeds a scare's allowance,
+   so no two nights play out the same way
+   ===================================================================== */
+const HD = { t: 0, lastBig: -40, lastAny: -20, gapBig: 60, gapMinor: 26, chk: 0, busy: false, shake: 0, fovKick: 0, flashMul: 1, flickT: 0, flickOff: 0, offT: 0,
+  gust: 0, echo: null, behind: null, cross: null, tvStatic: 0, lastStep: -9, lightsOff: [], silT: 0, said: {} };
+const scN = id => (F().sc && F().sc[id]) || 0;
+function scMark(id) { const f = F(); if (!f.sc) f.sc = {}; f.sc[id] = (f.sc[id] || 0) + 1; }
+function hdReset() { Object.assign(HD, { lastBig: HD.t - 20, lastAny: HD.t, busy: false, shake: 0, fovKick: 0, flickT: 0, offT: 0, echo: null, behind: null, cross: null, tvStatic: 0, said: {} }); HD.lightsOff.length = 0; hdHide(); hdSil(null); hdDuck(1, 0.1); }
+const hdFwd = () => ({ x: -Math.sin(P.yaw), z: -Math.cos(P.yaw) });
+const hdIn = () => P.x > -9.85 && P.x < 9.85 && P.z > -7.85 && P.z < 7.85;
+// nothing solid within r of (x, z) on this floor (walls, furniture, door leaves, the stairwell upstairs)
+function hdFree(x, z, lv, r) {
+  if (x < -9.75 || x > 9.75 || z < -7.75 || z > 7.75) return false;
+  if (lv === 1 && x > 0.2 && x < 1.9 && z > -5.3 && z < 0.9) return false;
+  if (lv === 0 && x > 0.2 && x < 1.9 && z > -5.3 && z < 0.9) return false;
+  for (const c of W.cols) { if (!c.on || (c.lv !== 2 && c.lv !== lv)) continue; if (x > c.x1 - r && x < c.x2 + r && z > c.z1 - r && z < c.z2 + r) return false; }
+  for (const d of W.doorList) if (d.seg.lv === lv && doorPush(d, d.ang, x, z, r, _cq)) return false;
+  return true;
+}
+function hdClear(x0, z0, x1, z1, lv) {
+  const n = Math.ceil(Math.hypot(x1 - x0, z1 - z0) / 0.2);
+  for (let i = 1; i < n; i++) { const k = i / n; if (!hdFree(x0 + (x1 - x0) * k, z0 + (z1 - z0) * k, lv, 0.04)) return false; }
+  return true;
+}
+// a clear spot `dist` metres away, `off` radians from where you are looking (0 ahead, π behind)
+function hdSpot(dist, off, lv) {
+  const a = P.yaw + off, dx = -Math.sin(a), dz = -Math.cos(a);
+  for (let d = dist; d >= dist * 0.65; d -= 0.2) {
+    const x = P.x + dx * d, z = P.z + dz * d;
+    if (hdFree(x, z, lv, 0.34) && hdClear(P.x, P.z, x, z, lv)) return { x, z, d };
+  }
+  return null;
+}
+function hdCos(x, z) { const f = hdFwd(), dx = x - P.x, dz = z - P.z, d = Math.hypot(dx, dz) || 1; return (f.x * dx + f.z * dz) / d; }
+function hdReact(key) { if (HD.said[key]) return; HD.said[key] = true; say(t(key)); }
+function hdEar(side, d) { const a = P.yaw, rx = Math.cos(a), rz = -Math.sin(a); return { x: P.x + rx * side * (d || 0.5), y: P.y + 1.55, z: P.z + rz * side * (d || 0.5) }; }
+function hdBack(d) { const f = hdFwd(); return { x: P.x - f.x * d, y: P.y + 1.2, z: P.z - f.z * d }; }
+function hdJolt(k) { HD.shake = Math.max(HD.shake, 0.045 * k); HD.fovKick = Math.max(HD.fovKick, 7 * k); fear(Math.min(1, 0.5 + 0.5 * k)); }
+function hdRoomLight(maxD) {
+  let best = null, bd = maxD || 5;
+  for (const L0 of W.lights) { if (L0.outdoor || !L0.on || L0.id === 'tvglow' || L0.lv !== P.level || L0.mul < 0.5) continue; const d = Math.hypot(L0.pos.x - P.x, L0.pos.z - P.z); if (d < bd) { bd = d; best = L0; } }
+  return best;
+}
+function hdLightOut(L0, sec) { if (!L0) return; HD.lightsOff.push({ L: L0, t: sec, fl: L0.flicker }); L0.mul = 0; L0.flicker = 0; markShadow(); }
+function hdFlick(sec, off) { HD.flickT = sec; HD.flickOff = off || 0; }
+function hdDuck(v, tc) { Sound.duck(v, tc); HD.duckedAt = v < 0.99 ? HD.t : 0; }
+
+/* ---- the man in the red shmagh, kept for the scares (same figure as the story's) ---- */
+function hdFigure() {
+  const O = W.obj;
+  if (!O.figScare) {
+    O.figScare = makeFigure();
+    // seen up close: a real red shmagh, open at the front on a face you cannot make out — only the eyes catch the light
+    const sm = O.figScare.children[3], top = O.figScare.children[4], cloth = std({ map: T.shmagh, r: 1, side: THREE.DoubleSide });
+    sm.geometry.dispose(); sm.geometry = new THREE.CylinderGeometry(0.13, 0.26, 0.5, 18, 1, true, 0.62, Math.PI * 2 - 1.24); sm.material = cloth; top.material = cloth;
+    const eye = new THREE.MeshBasicMaterial({ color: 0xb8aa8c });                   // the torch catching his eyes
+    for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.008, 6, 4), eye); e.position.set(s * 0.036, 1.635, 0.112); e.castShadow = false; O.figScare.add(e); }
+  }
+  return O.figScare;
+}
+function hdShow(x, z, y, face) { const g = hdFigure(); g.position.set(x, y || 0, z); g.rotation.y = face != null ? face : Math.atan2(P.x - x, P.z - z); g.visible = true; markShadow(x, (y || 0) + 1, z); return g; }
+function hdHide() { const g = W.obj && W.obj.figScare; if (g && g.visible) { g.visible = false; markShadow(g.position.x, g.position.y + 1, g.position.z); } }
+// a silhouette standing outside a window, seen through the rain on the glass (the panes are painted, not see-through)
+function hdSil(p, win) {
+  for (const gm of W.glassMats) {
+    const u = gm.uniforms; if (!u || !u.uSilA) continue;
+    u.uSilA.value = p ? 1 : 0;
+    if (p) { u.uSilPos.value.set(p.x, p.y, p.z); u.uSilWin.value.copy(win.center); u.uSilN.value.copy(win.n); }
+  }
+}
+function hdWindows() {
+  if (W.hdWins) return W.hdWins;
+  W.hdWins = [];
+  for (const w of W.windows || []) {
+    if (w.gm !== M.glass) continue;
+    const ext = w.axis === 'x' ? Math.abs(w.line) >= 7.9 : Math.abs(w.line) >= 9.9;
+    if (!ext) continue;
+    const off = w.off, out = Math.sign(w.line), lv = w.yb > 3 ? 1 : 0;
+    const center = w.axis === 'x' ? new THREE.Vector3(w.c, w.yb + w.h / 2, w.line + w.side * off) : new THREE.Vector3(w.line + w.side * off, w.yb + w.h / 2, w.c);
+    const n = w.axis === 'x' ? new THREE.Vector3(0, 0, w.side) : new THREE.Vector3(w.side, 0, 0);
+    const o = w.axis === 'x' ? { x: 0, z: out } : { x: out, z: 0 };
+    W.hdWins.push({ center, n, o, lv, w, inner: w.side === -out });
+  }
+  return W.hdWins;
+}
+function hdWindowInView() {
+  for (const win of hdWindows()) {
+    if (win.lv !== P.level || !win.inner) continue;
+    const c = win.center, d = Math.hypot(c.x - P.x, c.z - P.z);
+    if (d < 1.4 || d > 7.5 || hdCos(c.x, c.z) < 0.93) continue;
+    if (!hdSeen(c)) continue;
+    return win;
+  }
+  return null;
+}
+function hdSeen(target) {   // nothing tall (walls, cupboards) between your eyes and the point
+  const eye = new THREE.Vector3(P.x, P.y + 1.6, P.z), dir = target.clone().sub(eye), len = dir.length(), ray = new THREE.Ray(eye, dir.normalize()), hit = new THREE.Vector3();
+  for (const b of W.blockBoxes) { if (b.containsPoint(eye)) continue; const p = ray.intersectBox(b, hit); if (p && eye.distanceTo(p) < len - 0.3) return false; }
+  return true;
+}
+function hdOpenDoor(lv, minD) {
+  const ok = ['majlis', 'bath', 'broRoom', 'heroRoom', 'office'];
+  for (const id of ok) {
+    const d = W.doors[id]; if (!d || !d.open || d.ang < 1.2 || (d.o.lv || 0) !== lv) continue;
+    const dist = Math.hypot(d.seg.px - P.x, d.seg.pz - P.z);
+    if (dist >= (minD || 2.6) && dist < 10) return d;
+  }
+  return null;
+}
+function hdTvStaticDraw() {
+  const c = T.tvCanvas, g = c.getContext('2d'), w = c.width, h = c.height;
+  if (!HD.tvImg) HD.tvImg = g.createImageData(w, h);
+  const d = HD.tvImg.data;
+  for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255 | 0; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
+  g.putImageData(HD.tvImg, 0, 0); T.tv.needsUpdate = true;
+}
+
+/* ---- the scares ---- */
+const SC = {
+  // ch 1–2: a cat fight in the courtyard, then something heavy falls over out there
+  cat() { const p = { x: clamp(P.x + rnd(-3, 3), -8, 8), y: 0.4, z: 10.8 }; Sound.play('shriek', p); fear(0.45); HD.shake = Math.max(HD.shake, 0.012); after(2.0, () => Sound.play('clatter', p)); after(3.4, () => hdReact('hz_cat')); },
+  // lightning, and for one flash a man is standing right outside the window
+  winfig(knock) {
+    const win = hdWindowInView(); if (!win) return false;
+    const p = { x: win.center.x + win.o.x * 0.95 + rnd(-0.25, 0.25) * Math.abs(win.o.z), y: win.lv ? win.w.yb - 1.05 : 0, z: win.center.z + win.o.z * 0.95 + rnd(-0.25, 0.25) * Math.abs(win.o.x) };
+    const go = () => { G.lightFlash = 0.35; hdSil(p, win); HD.silT = 0.42; Sound.play('scareHit', 0.55); hdJolt(0.7); after(0.9, () => Sound.play('thunder')); after(1.7, () => { G.lightFlash = 0.3; }); after(3.0, () => hdReact(win.lv ? 'hz_window' : 'hz_outside')); };
+    if (knock) { Sound.play('glassKnock', { x: win.center.x, y: win.center.y, z: win.center.z }); fear(0.35); after(2.2, go); } else go();
+    return true;
+  },
+  // the TV comes on by itself, full of static, then dies
+  tv() {
+    hdDuck(0.15, 0.4); fear(0.2);
+    after(1.6, () => {
+      hdDuck(1, 0.3); HD.tvStatic = 3.4; W.obj.tvScreen.material = M.tv; lightById('tvglow').on = true;
+      Sound.play('staticBurst', { x: -4, y: 1, z: -7.3 }, 3.4); Sound.play('scareHit', 0.4); hdJolt(0.55);
+      after(4.2, () => hdReact('hz_tv'));
+    });
+  },
+  // the bulb above you buzzes, stutters… and pops; the room goes dark for a while
+  bulb(L0) {
+    L0 = L0 || hdRoomLight(); if (!L0) return false;
+    L0.flicker = 0.75; Sound.play('buzz', L0.pos, 1.8);
+    after(1.9, () => { Sound.play('bulbPop', L0.pos); hdLightOut(L0, rnd(7, 10)); hdJolt(0.45); after(1.8, () => hdReact('hz_light')); if (G.ch >= 3 && Math.random() < 0.6) after(3.2, () => SC.whisper()); });
+    return true;
+  },
+  // a door you left open swings and slams on its own
+  slam() {
+    const d = hdOpenDoor(P.level); if (!d) return false;
+    Sound.play('gust', { x: d.seg.px, y: P.y + 1.2, z: d.seg.pz }); HD.gust = 1;
+    after(0.6, () => { d.spd = 11; setDoor(d, false); });
+    after(0.95, () => { d.spd = 0; Sound.play('slam', { x: d.seg.px, y: levelY(d.seg.lv) + 1.1, z: d.seg.pz }); hdJolt(0.65); const L0 = hdRoomLight(7); if (L0) { L0.flicker = 0.6; after(1.0, () => { L0.flicker = 0; }); } });
+    after(2.4, () => hdReact('hz_door'));
+    return true;
+  },
+  // in the majlis: the door creaks slowly shut behind you… then three knocks on the other side
+  creep() {
+    const d = W.doors.majlis; if (!d || !d.open) return false;
+    d.spd = 0.9; setDoor(d, false); Sound.play('creakSlow', { x: d.seg.px, y: 1.1, z: d.seg.pz });
+    after(3.6, () => { d.spd = 0; Sound.play('knock', { x: -2.9, y: 1.2, z: 5 }, true); hdJolt(0.5); after(1.6, () => hdReact('hz_who')); });
+    return true;
+  },
+  // someone runs across the floor right above you, and something heavy drops
+  running() {
+    const a = P.yaw, rx = Math.cos(a), rz = -Math.sin(a), y = 3.5;
+    const from = { x: clamp(P.x - rx * 4, -9, 9), y, z: clamp(P.z - rz * 4, -7, 7) }, to = { x: clamp(P.x + rx * 4, -9, 9), y, z: clamp(P.z + rz * 4, -7, 7) };
+    hdDuck(0.2, 0.5);
+    after(1.4, () => { hdDuck(1, 0.4); Sound.play('running', from, to, 10); fear(0.6); HD.shake = Math.max(HD.shake, 0.01); });
+    after(4.3, () => { Sound.play('thud', to); hdJolt(0.45); after(1.2, () => hdReact('hz_upstairs')); });
+  },
+  // breathing right behind you — turn around and he is there
+  behind() {
+    const s = hdSpot(1.25, Math.PI, P.level); if (!s) return false;
+    hdDuck(0.12, 0.6); Sound.play('breathNear', { x: s.x, y: P.y + 1.55, z: s.z }, 3); Sound.play('heartbeat', 5); fear(0.35);
+    hdShow(s.x, s.z, P.y);
+    HD.behind = { x: s.x, z: s.z, t: 0, armed: true };
+    return true;
+  },
+  // the torch dies… and when it comes back he is standing in the beam
+  beam() {
+    hdFlick(1.1, 0.7); Sound.play('click'); fear(0.25);
+    after(1.25, () => { const s = hdSpot(3.4, 0, P.level); if (s) { HD.beamAt = s; hdShow(s.x, s.z, P.y); } });
+    after(1.85, () => { if (!HD.beamAt) return; Sound.play('scareHit', 1); hdJolt(1); after(0.42, () => { hdFlick(0.3, 0.25); }); after(0.8, () => { hdHide(); HD.beamAt = null; }); after(2.4, () => hdReact('hz_who')); });
+  },
+  // a man crosses the end of the room, fast, and is gone
+  cross() {
+    const f = hdFwd(), rx = -f.z, rz = f.x;
+    for (const d of [6.0, 5.2, 4.4]) {
+      const cx = P.x + f.x * d, cz = P.z + f.z * d, a = { x: cx - rx * 1.1, z: cz - rz * 1.1 }, b = { x: cx + rx * 1.1, z: cz + rz * 1.1 };
+      if (hdFree(cx, cz, P.level, 0.3) && hdFree(a.x, a.z, P.level, 0.25) && hdFree(b.x, b.z, P.level, 0.25) && hdClear(P.x, P.z, cx, cz, P.level) && hdClear(a.x, a.z, b.x, b.z, P.level)) {
+        const dir = Math.random() < 0.5 ? 1 : -1, s0 = dir > 0 ? a : b, s1 = dir > 0 ? b : a;
+        HD.cross = { s0, s1, t: 0, dur: 0.55 }; hdShow(s0.x, s0.z, P.y, Math.atan2(s1.x - s0.x, s1.z - s0.z));
+        Sound.play('running', { x: s0.x, y: P.y + 0.3, z: s0.z }, { x: s1.x, y: P.y + 0.3, z: s1.z }, 3); Sound.play('scareHit', 0.35); fear(0.7); HD.shake = Math.max(HD.shake, 0.02);
+        after(2.2, () => hdReact('hz_what'));
+        return true;
+      }
+    }
+    return false;
+  },
+  // upstairs: three knocks on the glass… and lightning shows someone outside, on the second floor
+  winknock() { return SC.winfig(true); },
+  // everything goes quiet: no rain, no fridge, no hum. Then a bang somewhere in the house
+  silence() {
+    hdDuck(0.0, 1.2); fear(0.3);
+    after(2.5, () => Sound.play('heartbeat', 4));
+    after(6.0, () => { hdDuck(1, 0.15); const p = { x: clamp(P.x + rnd(-5, 5), -9, 9), y: P.y + 1.2, z: clamp(P.z + rnd(-5, 5), -7, 7) }; Sound.play(Math.random() < 0.5 ? 'slam' : 'thud', p); hdJolt(0.7); after(1.6, () => hdReact('hz_bism')); });
+  },
+  // footsteps that copy yours, a few metres behind; stop and they take one more step
+  echo() { HD.echo = { n: 5 + (Math.random() * 4 | 0), last: G.time }; },
+  whisper() {
+    const side = Math.random() < 0.5 ? -1 : 1, keys = G.ch >= 5 ? ['hz_w1', 'hz_w3'] : G.ch === 4 ? ['hz_w1', 'hz_w2'] : ['hz_w1'];
+    Sound.play('whisperName', hdEar(side, 0.45)); fear(0.4); say(t(keys[Math.random() * keys.length | 0]));
+    after(1.4, () => Sound.play('heartbeat', 3));
+  },
+  // the landline gives one ting — as if someone lifted the extension upstairs
+  ting() { Sound.play('bellTing', { x: -2.48, y: 0.7, z: -3.5 }); fear(0.2); after(2.4, () => Sound.play('breathNear', { x: -2.48, y: 0.9, z: -3.5 }, 2)); after(3.2, () => hdReact('hz_phone')); },
+  handle() { const p = Math.random() < 0.6 ? { x: 0, y: 1.1, z: 8.1 } : { x: 10.1, y: 1.1, z: -6.5 }; Sound.play('rattle', p); fear(0.45); after(1.9, () => hdReact('hz_handle')); },
+  circle() {
+    const spots = [{ x: -6.5, y: 1.6, z: 8.3 }, { x: 6, y: 1.7, z: 8.3 }, { x: 10.3, y: 1.4, z: -6.5 }, { x: -10.3, y: 1.5, z: 3 }, { x: -4, y: 1.6, z: -8.3 }, { x: 10.3, y: 1.6, z: 4.6 }];
+    let best = null, bd = 0;
+    for (const s of spots) { const d = Math.hypot(s.x - P.x, s.z - P.z); if (d > 3 && d < 12 && d > bd * (0.6 + Math.random() * 0.8)) { best = s; bd = d; } }
+    if (!best) return false;
+    Sound.play(Math.random() < 0.5 ? 'glassKnock' : 'knock', best, true); fear(0.3);
+    return true;
+  },
+  breath() { const side = Math.random() < 0.5 ? -1 : 1, p = hdEar(side, 1.6); Sound.play('breathNear', p, 3); fear(0.3); after(4.5, () => hdReact('hz_breath')); },
+  thud() { Sound.play('thud', { x: clamp(P.x + rnd(-3, 3), -9, 9), y: P.level ? 0.5 : 3.6, z: clamp(P.z + rnd(-3, 3), -7, 7) }); fear(0.3); after(0.7, () => Sound.play('floorCreak', { x: P.x + rnd(-2, 2), y: 3.5, z: P.z + rnd(-2, 2) })); }
+};
+/* when each scare may happen: chapters, allowance, where you must be, and how likely it is picked */
+const SCARES = [
+  { id: 'cat', big: false, max: 1, ch: [1, 2], w: 1, when: () => P.level === 0 && P.z > 1 && P.z < 8 },
+  { id: 'thud', big: false, max: 2, ch: [1, 2, 3, 4], w: 1, when: () => hdIn() },
+  { id: 'echo', big: false, max: 3, ch: [2, 3, 4, 5], w: 2, when: () => hdIn() && G.time - HD.lastStep < 0.4 && !HD.echo },
+  { id: 'whisper', big: false, max: 3, ch: [2, 3, 4, 5], w: 1.4, when: () => hdIn() },
+  { id: 'ting', big: false, max: 2, ch: [2, 3, 4], w: 1, when: () => hdIn() && !F().powerCut && !G.inCall },
+  { id: 'breath', big: false, max: 2, ch: [3, 4, 5], w: 1, when: () => hdIn() },
+  { id: 'handle', big: false, max: 2, ch: [4], w: 2, when: () => F().knocking && hdIn() },
+  { id: 'circle', big: false, max: 3, ch: [4], w: 2, when: () => F().knocking && hdIn() },
+  { id: 'winfig', big: true, max: 1, ch: [1, 2, 3], w: 3, when: () => P.level === 0 && hdWindowInView() },
+  { id: 'tv', big: true, max: 1, ch: [2, 4], w: 2, when: () => !F().powerCut && !F().tv && P.level === 0 && P.x < 0.3 && P.z < 2 },
+  { id: 'bulb', big: true, max: 2, ch: [2, 4, 5], w: 2, when: () => !F().powerCut && F().lights && !!hdRoomLight() },
+  { id: 'slam', big: true, max: 2, ch: [2, 3, 4, 5], w: 2, when: () => hdIn() && !!hdOpenDoor(P.level) },
+  { id: 'running', big: true, max: 2, ch: [3, 4], w: 2, when: () => P.level === 0 && hdIn() && (G.ch > 3 || F().panelFixed) },
+  { id: 'behind', big: true, max: 2, ch: [3, 4, 5], w: 2.4, when: () => hdIn() && !!hdSpot(1.25, Math.PI, P.level) },
+  { id: 'cross', big: true, max: 2, ch: [2, 3, 5], w: 2, when: () => hdIn() },
+  { id: 'winknock', big: true, max: 1, ch: [3, 4], w: 2.5, when: () => P.level === 1 && hdWindowInView() },
+  { id: 'silence', big: true, max: 1, ch: [2, 3, 4, 5], w: 1, when: () => hdIn() },
+  // story beats: these fire as soon as their moment comes (still never twice)
+  { id: 'b_creep', beat: true, big: true, max: 1, ch: [2], when: () => mid() === 'book' && P.level === 0 && P.x < -4.2 && P.z > 2.3 && W.doors.majlis.open, run: () => SC.creep() },
+  { id: 'b_kwin', beat: true, big: true, max: 1, ch: [3], when: () => mid() === 'flash' && P.level === 0 && P.x > 2.4 && P.z > 3 && !!hdWindowInView(), run: () => SC.winfig(true) },
+  { id: 'b_beam', beat: true, big: true, max: 1, ch: [3], when: () => mid() === 'panel' && G.flashOn && F().flash && P.level === 0 && P.z < -1 && G.time - HD.lastStep < 0.5 && !!hdSpot(3.4, 0, 0), run: () => SC.beam() },
+  { id: 'b_store', beat: true, big: true, max: 1, ch: [4, 5], when: () => F().storageOpen && P.level === 0 && P.x > 2.4 && P.x < 5.8 && P.z > -4.6 && P.z < 1.6 && lightById('storage').on, run: () => SC.bulb(lightById('storage')) },
+  { id: 'b_key', beat: true, big: true, max: 1, ch: [5], when: () => F().hasKey && mid() === 'review' && !UI.modalOpen && !!hdSpot(1.25, Math.PI, P.level), run: () => SC.behind() }
+];
+function hdPick(big) {
+  const c = G.ch, list = [];
+  let tot = 0;
+  for (const s of SCARES) {
+    if (s.beat || s.big !== big || !s.ch.includes(c) || scN(s.id) >= s.max) continue;
+    let ok = false; try { ok = !!s.when(); } catch (e) { ok = false; }
+    if (ok) { list.push(s); tot += s.w; }
+  }
+  if (!list.length) return null;
+  let r = Math.random() * tot;
+  for (const s of list) { r -= s.w; if (r <= 0) return s; }
+  return list[list.length - 1];
+}
+function hdRun(s) {
+  let ok;
+  try { ok = s.run ? s.run() : SC[s.id](); } catch (e) { reportErr(e); ok = false; }
+  if (ok === false) return false;
+  scMark(s.id); HD.lastAny = HD.t;
+  if (s.big) { HD.lastBig = HD.t; HD.gapBig = rnd(50, 85); } else HD.gapMinor = rnd(20, 34);
+  return true;
+}
+function hdRunId(id) { const s = SCARES.find(q => q.id === id); return s ? hdRun(s) : false; }
+
+/* ---- per frame ---- */
+function horrorTick(dt) {
+  hdFx(dt);
+  HD.healT = (HD.healT || 0) - dt;
+  if (HD.healT <= 0) { HD.healT = 1.5; Sound.heal(G.state === 'play' && !UI.modalOpen); if (HD.duckedAt && HD.t - HD.duckedAt > 14 && !HD.behind) hdDuck(1, 0.5); }
+  if (G.backEsc && !G.backEsc.done && G.state === 'play') { G.backEsc.t += dt; if ((P.x > 10.55 && P.level === 0) || G.backEsc.t > 25) { G.backEsc.done = true; hdYardExit(); } }
+  if (G.state !== 'play' || G.cine || G.ended || UI.modalOpen || G.backEsc) return;
+  HD.t += dt; HD.chk -= dt;
+  if (HD.chk > 0) return;
+  HD.chk = 0.5;
+  if (G.mTime < 6 || HD.behind || HD.cross || HD.echo) return;
+  const calm = !Dlg.cur && !G.inCall && !G.ringing && !G.pour && !G.seat;
+  // story beats first
+  if (HD.t - HD.lastAny > 6 && calm) for (const s of SCARES) {
+    if (!s.beat || !s.ch.includes(G.ch) || scN(s.id) >= s.max) continue;
+    let ok = false; try { ok = !!s.when(); } catch (e) { ok = false; }
+    if (ok && hdRun(s)) return;
+  }
+  if (!calm) return;
+  if (HD.t - HD.lastBig > HD.gapBig && HD.t - HD.lastAny > 12) { const s = hdPick(true); if (s && hdRun(s)) return; }
+  if (HD.t - HD.lastAny > HD.gapMinor) { const s = hdPick(false); if (s) hdRun(s); else HD.lastAny = HD.t - HD.gapMinor + 4; }
+}
+function hdFx(dt) {
+  if (HD.flickT > 0) { HD.flickT -= dt; HD.flashMul = Math.random() < 0.42 ? 0.04 : 0.55 + Math.random() * 0.6; if (HD.flickT <= 0) { HD.offT = HD.flickOff; HD.flickOff = 0; } }
+  else if (HD.offT > 0) { HD.offT -= dt; HD.flashMul = 0; }
+  else HD.flashMul = 1;
+  for (let i = HD.lightsOff.length - 1; i >= 0; i--) {
+    const o = HD.lightsOff[i]; o.t -= dt;
+    if (o.t <= 0) { o.L.mul = 1; o.L.flicker = o.fl; HD.lightsOff.splice(i, 1); markShadow(); }
+    else o.L.mul = o.t < 0.9 ? (Math.random() < 0.5 ? 0.1 : 1) : 0;
+  }
+  if (HD.silT > 0) { HD.silT -= dt; if (HD.silT <= 0) hdSil(null); }
+  if (HD.tvStatic > 0) {
+    HD.tvStatic -= dt; hdTvStaticDraw(); lightById('tvglow').mul = 0.4 + Math.random() * 0.9;
+    if (HD.tvStatic <= 0) { lightById('tvglow').mul = 1; applyWorld(); }
+  }
+  HD.gust = Math.max(0, HD.gust - dt * 0.8);
+  if (HD.behind) {
+    const b = HD.behind; b.t += dt;
+    const g = W.obj.figScare;
+    if (g && g.visible) g.rotation.y = Math.atan2(P.x - b.x, P.z - b.z);
+    if (b.armed && hdCos(b.x, b.z) > 0.86) {                    // you turned round
+      b.armed = false; hdDuck(1, 0.1); Sound.play('scareHit', 1); hdJolt(1);
+      const L0 = hdRoomLight(6);
+      after(0.26, () => { hdFlick(0.08, 0.3); if (L0) hdLightOut(L0, 0.6); });
+      after(0.34, () => { hdHide(); HD.behind = null; });
+      after(1.7, () => hdReact('hz_bism'));
+    } else if (b.armed && (b.t > 7 || Math.hypot(P.x - b.x, P.z - b.z) > 3.2)) {
+      b.armed = false; hdHide(); HD.behind = null; hdDuck(1, 0.8); SC.whisper();
+    }
+  }
+  if (HD.cross) {
+    const c = HD.cross; c.t += dt; const k = Math.min(1, c.t / c.dur), g = W.obj.figScare;
+    if (g) g.position.set(c.s0.x + (c.s1.x - c.s0.x) * k, P.y, c.s0.z + (c.s1.z - c.s0.z) * k);
+    markShadow(g.position.x, g.position.y + 1, g.position.z);
+    if (k >= 1) { hdHide(); HD.cross = null; }
+  }
+  if (HD.echo) {
+    const e = HD.echo;
+    if (hdCos(hdBack(2).x, hdBack(2).z) > 0.5) { HD.echo = null; return; }   // you looked back: silence
+    if (G.time - HD.lastStep > 0.9 && G.time - e.last > 0.9) {                 // you stopped… it takes one more step
+      const p = hdBack(2.4); Sound.play('step', { x: p.x, y: P.y + 0.3, z: p.z }, surfaceAt(), true); HD.echo = null; fear(0.5); after(1.3, () => hdReact('hz_steps'));
+    }
+  }
+}
+// called from the player's own footstep
+function hdStep() {
+  HD.lastStep = G.time;
+  const e = HD.echo; if (!e) return;
+  if (e.n-- <= 0) { HD.echo = null; return; }
+  e.last = G.time;
+  const surf = surfaceAt();
+  after(0.33 + rnd(0, 0.07), () => { const p = hdBack(2.5); Sound.play('step', { x: p.x, y: P.y + 0.3, z: p.z }, surf, true); });
+}
+// stepping out of the back door into the yard: the last fright before the end
+function hdYardExit() {
+  const L0 = lightById('yard');
+  G.lightFlash = 0.35; after(0.8, () => Sound.play('thunder'));
+  if (L0) { L0.flicker = 1; after(1.4, () => { L0.flicker = 0.15; }); }
+  HD.gust = 1.4; Sound.play('gust', { x: 13, y: 1.5, z: -2 });
+  after(1.3, () => { Sound.play('metalBang', { x: 15.6, y: 1.2, z: -6.5 }); const a = W.obj.alleyDoor; if (a) a.vel = -2.2; hdJolt(0.8); });
+  after(2.5, () => hdReact('hz_yard'));
+  after(4.2, decideEnding);
+}
+
+/* =====================================================================
    GAME STATE
    ===================================================================== */
 const OPTIONAL = ['receipt', 'news', 'notebook', 'cigs'];
@@ -3688,7 +4569,7 @@ const freshFlags = () => ({
   answered: false, rec1Heard: false, machineNew: false, gateLocked: false, footprints: false,
   powerCut: false, panelFixed: false, flash: false, figureSeen: false,
   smsArrived: false, smsRead: false, knocking: false, rec2: false, paper: false, decided: false, verified: false, calledSaad4: false, asked: false,
-  storageOpen: false, hasKey: false, reviewed: false, neighborCalled: false
+  storageOpen: false, hasKey: false, reviewed: false, neighborCalled: false, sc: {}
 });
 const G = {
   state: 'loading', ch: 1, mi: 0, flags: freshFlags(), clues: [], puzzles: { p1: false, p2: false, p3: false }, inv: [],
@@ -3761,6 +4642,7 @@ function complete(id) {
 function progress() { const m = MISSIONS[G.mi]; if (m && m.done && m.done()) complete(m.id); else refreshHUD(); }
 function chapterStart() {
   showChapterCard(G.ch); applyWorld();
+  HD.lastBig = HD.t - Math.max(0, HD.gapBig - 30);   // the first big scare of a chapter waits ~30 s
   after(1.2, () => save(false));
 }
 
@@ -3784,9 +4666,10 @@ function loadSave() {
 function resetState() {
   timers.length = 0; Dlg.queue = []; Dlg.pending = []; Dlg.cur = null; Dlg.onEnd = null; $('subtitle').innerHTML = '';
   Object.assign(G, { ch: 1, mi: 0, flags: freshFlags(), clues: [], puzzles: { p1: false, p2: false, p3: false }, inv: ['housekey'], time: 0, mTime: 0, playTime: 0,
-    flashOn: false, ringing: false, knockT: 0, knockN: 0, pour: null, sip: null, ambT: 35, lightT: 12, fear: 0, cine: false, cineCam: null, camTween: null, ended: false, inCall: false, seat: null });
+    flashOn: false, ringing: false, knockT: 0, knockN: 0, pour: null, sip: null, ambT: 35, lightT: 12, fear: 0, cine: false, cineCam: null, camTween: null, ended: false, inCall: false, seat: null, backEsc: null });
   for (const p of W.props) p.sat = false;
   Object.assign(P, { x: 0, y: 0, z: 19.5, yaw: 0, pitch: 0, bob: 0, bobAmp: 0, stepAcc: 0, level: 0 });
+  hdReset();
 }
 
 /* =====================================================================
@@ -3806,6 +4689,8 @@ function applyWorld() {
   const porch = power && ch < 4 && G.env === 'night';
   lightById('porch').on = porch; O.porchFix.material.emissiveIntensity = porch ? 1 : 0;
   lightById('street').on = true; lightById('neighbor').on = true;
+  for (const L0 of W.lights) if (L0.street) { L0.on = true; L0.flicker = L0.flick || 0; }
+  const yd = lightById('yard'); if (yd) { yd.on = power; yd.flicker = ch >= 5 ? 0.12 : 0; } if (O.yardFix) O.yardFix.material.emissiveIntensity = power ? 1 : 0;
   lightById('policeR').on = false; lightById('policeB').on = false;
   if (ch === 3) { lightById('up1').flicker = 0.25; lightById('up2').flicker = 0.25; }
   if (ch >= 5) lightById('storage').flicker = 0.2;
@@ -3844,7 +4729,7 @@ function setEnv(kind) {
    DIALOGUE / SUBTITLES / TOASTS
    ===================================================================== */
 const Dlg = { queue: [], cur: null, t: 0, onEnd: null, pending: [] };
-const SPK = { f: '#d7cbb4', s: '#9cc3e6', c: '#e8826f', d: '#e2a95c', m: '#a9c49a', o: '#b9b9b9' };
+const SPK = { f: '#d7cbb4', s: '#9cc3e6', c: '#e8826f', d: '#e2a95c', m: '#a9c49a', o: '#b9b9b9', w: '#8d99a8' };
 function say(lines, onEnd) {
   if (!Array.isArray(lines) || !lines.length) { if (onEnd) onEnd(); return; }
   if (Dlg.cur || Dlg.queue.length) { Dlg.pending.push({ lines, onEnd }); return; }
@@ -4146,7 +5031,7 @@ function installDoorHandlers() {
     return false;
   };
   D.back.handler = () => {
-    if (F().hasKey) { Sound.play('keys', { x: 10, y: 1.1, z: -6.5 }); D.back.locked = false; setDoor(D.back, true); Sound.play('creak', { x: 10, y: 1.1, z: -6.5 }); after(0.8, decideEnding); return true; }
+    if (F().hasKey) { if (!G.backEsc) { Sound.play('keys', { x: 10, y: 1.1, z: -6.5 }); D.back.locked = false; setDoor(D.back, true); Sound.play('creak', { x: 10, y: 1.1, z: -6.5 }); G.backEsc = { t: 0, done: false }; } return true; }   // the ending comes once you step out into the yard
     msg('m_back_locked'); return true;
   };
   D.storage.handler = () => { if (!F().storageOpen) { msg('m_storage_locked'); return true; } return false; };
@@ -4519,7 +5404,7 @@ function collide(nx, nz, lv, r) {
 }
 function floorAt(x, z, y) { if (x > 0.3 && x < 1.8 && z > -5.2 && z < 0.8) return clamp((0.8 - z) / 6, 0, 1) * 3.2; return y > 1.6 ? 3.2 : 0; }
 function surfaceAt() {
-  if (P.z > 8.05) return 'wet';
+  if (P.z > 8.05 || P.x > 10.15) return 'wet';
   if (P.x > 0.3 && P.x < 1.8 && P.z > -5.2 && P.z < 0.8) return 'tile';
   if (P.level === 0 && ((P.x < -3.3 && P.z > 2.4) || (P.x < -1.7 && P.x > -8.9 && P.z < -1.2 && P.z > -7.4))) return 'carpet';
   if (P.level === 1 && P.x > -2.4 && P.x < -0.8) return 'carpet';
@@ -4542,7 +5427,7 @@ function updatePlayer(dt) {
   P.bobAmp = lerp(P.bobAmp, moved > 0.0004 ? (running ? 1.4 : 1) : 0, Math.min(1, dt * 8));
   if (moved > 0.0004) {
     P.bob += moved * (running ? 6.2 : 7.4); P.stepAcc += moved;
-    if (P.stepAcc > (running ? 0.8 : 0.62)) { P.stepAcc = 0; Sound.play('step', null, surfaceAt(), false); }
+    if (P.stepAcc > (running ? 0.8 : 0.62)) { P.stepAcc = 0; Sound.play('step', null, surfaceAt(), false); hdStep(); }
   }
 }
 
@@ -4779,7 +5664,7 @@ function ambientEvent() {
 const QUAL = {
   low: { pool: 4, fx: false, ssao: 0, shadowK: 0, shMap: 512, flashSh: 0, pr: 1, rain: 450, msaa: 0, beam: false, fxaa: false },
   medium: { pool: 6, fx: true, ssao: 0, shadowK: 0, shMap: 512, flashSh: 0, pr: 1, rain: 900, msaa: 0, beam: false, fxaa: true },
-  high: { pool: 8, fx: true, ssao: 10, shadowK: 2, shMap: 512, flashSh: 1024, pr: 1.25, rain: 1500, msaa: 0, beam: true, fxaa: true, ssr: 20 },
+  high: { pool: 8, fx: true, ssao: 10, shadowK: 2, shMap: 1024, flashSh: 1024, pr: 1.25, rain: 1500, msaa: 0, beam: true, fxaa: true, ssr: 20 },
   ultra: { pool: 10, fx: true, ssao: 16, shadowK: 4, shMap: 1024, flashSh: 2048, pr: 2, rain: 2200, msaa: 4, beam: true, fxaa: false, ssr: 32 }
 };
 function detectQuality() {
@@ -5294,7 +6179,7 @@ function tick(dt) {
   document.body.classList.toggle('playing', document.pointerLockElement === canvas);
   const playing = G.state === 'play' && !UI.modalOpen;
   const advancing = playing || G.state === 'cine';
-  if (advancing) { G.time += dt; runTimers(); updateDialog(dt); worldEvents(dt); }
+  if (advancing) { G.time += dt; runTimers(); updateDialog(dt); worldEvents(dt); horrorTick(dt); }
   if (playing && !G.cine) {
     if (UI.pdx || UI.pdy) {
       const a = S.smooth > 0 ? 1 - Math.pow(S.smooth, dt * 60) : 1;
@@ -5315,12 +6200,13 @@ function tick(dt) {
     const c = G.cineCam; camera.position.set(c.x, c.y, c.z); camera.rotation.set(c.pitch, c.yaw, 0);
   } else if (G.seat) seatCamera();
   else {
-    const sh = G.fear * 0.012;
+    const sh = G.fear * 0.012 + HD.shake;
     camera.position.set(P.x + rnd(-sh, sh), P.y + 1.6 + Math.sin(P.bob) * 0.028 * P.bobAmp + rnd(-sh, sh), P.z);
     camera.rotation.set(P.pitch + Math.abs(Math.cos(P.bob)) * 0.004 * P.bobAmp, P.yaw, Math.sin(P.bob * 0.5) * 0.004 * P.bobAmp);
   }
+  hdCamera(dt);
   // environment
-  const cp = camera.position, outdoor = cp.z > 8.1, f = G.flags;
+  const cp = camera.position, outdoor = cp.z > 8.1 || cp.x > 10.15, f = G.flags;
   const lvl = cp.y > 3.0 ? 1 : 0;
   let amb = outdoor ? 0.34 : (f.powerCut ? 0.075 : (f.lights ? 0.26 : 0.12));
   if (G.env === 'dawn') amb = 0.55;
@@ -5330,7 +6216,7 @@ function tick(dt) {
   if (W.hemiGround) hemi.groundColor.lerp((!outdoor && f.lights && !f.powerCut && !G.forceDark && G.env === 'night') ? W.bounce : W.hemiGround, Math.min(1, dt * 3));
   for (const gm of W.glassMats) if (!gm.uniforms) gm.emissiveIntensity = 0.55 + (G.lightFlash > 0 ? 2.5 : 0);
   scene.fog.density = lerp(scene.fog.density, outdoor ? 0.032 : 0.02, Math.min(1, dt * 2));
-  flashlight.intensity = (G.flashOn && f.flash && !G.cine) ? 2.6 : 0;
+  flashlight.intensity = (G.flashOn && f.flash && !G.cine) ? 2.6 * HD.flashMul : 0;
   if (G.police) { const on = Math.sin(G.rt * 9) > 0; lightById('policeR').mul = on ? 1 : 0.1; lightById('policeB').mul = on ? 0.1 : 1; W.obj.carBar.material.color.setHex(on ? 0xff2020 : 0x2050ff); }
   W.shadowRefresh = false;
   if (W.shadowDirty && (FX.frame & 1) === 0) {
@@ -5338,10 +6224,11 @@ function tick(dt) {
     const t0 = W.refreshPts; W.refreshPts = W.dirtyPts; W.dirtyPts = t0; W.dirtyPts.length = 0;
   }
   flashlight.shadow.autoUpdate = flashlight.castShadow && flashlight.intensity > 0;
+  hdLightning();
   updatePool(cp.x, cp.y, cp.z, lvl, G.rt);
   updateFxWorld();
   updateRain(dt, G.env === 'dawn' ? 0.4 : 1);
-  updateDetails(dt); updateTea(dt); updateTvClip();
+  updateDetails(dt); updateTea(dt); updateTvClip(); updateOutside(dt);
   // animated props
   const O = W.obj;
   if (O.flame.visible) O.flame.scale.set(1, 0.8 + Math.random() * 0.5, 1);
@@ -5446,6 +6333,7 @@ function bindInput() {
   $('clickResume').addEventListener('click', () => { $('clickResume').classList.add('hidden'); UI.noLock = false; relock(); });
   window.addEventListener('resize', () => applyGraphics());
   document.addEventListener('pointerdown', () => { Sound.init(); Sound.resume(); unlockMedia(); }, { capture: true });
+  document.addEventListener('keydown', () => { if (Sound.ready) Sound.resume(); }, { capture: true });
   document.addEventListener('touchend', () => { Sound.init(); Sound.resume(); unlockMedia(); }, { capture: true, passive: true });
   // menu
   $('btnContinue').onclick = () => { try { Sound.init(); continueGame(); } catch (err) { startFailed(err); } };

@@ -4197,18 +4197,24 @@ function breadBagV4(x, z, ry) {
   P(cushionGeo(0.3, 0.068, 0.25, 0.03, 0.01, 0.003, 0.5), M.breadBag, 0, 0.82, 0);
 }
 
-/* ---- lightning comes in through every window: a cold flash from the sky outside each pane ---- */
+/* ---- lightning: only the room you are standing in flashes, from the window you can see ---- */
 function lightningLightsV4() {
   W.flashLights = [];
   for (const win of hdWindows()) {
-    const c = win.center, p = new THREE.Vector3(c.x + win.o.x * 2.4, c.y + 1.3, c.z + win.o.z * 2.4);
-    const L0 = { id: 'lf' + W.flashLights.length, pos: p, color: new THREE.Color(0xc7d6ff), intensity: 3.4, dist: 9.5, lv: win.lv, on: false, group: 'flash', flicker: 0, outdoor: true, fix: null, mul: 1, wflash: true };
+    if (!win.inner) continue;
+    const c = win.center, p = new THREE.Vector3(c.x - win.o.x * 0.7, c.y + 0.35, c.z - win.o.z * 0.7);
+    const L0 = { id: 'lf' + W.flashLights.length, pos: p, color: new THREE.Color(0xc7d6ff), intensity: 3.0, dist: 7.0, lv: win.lv, on: false, group: 'flash', flicker: 0, outdoor: true, fix: null, mul: 1, wflash: true, win, noShadow: true };
     W.lights.push(L0); W.flashLights.push(L0);
   }
 }
 function hdLightning() {
   const lf = G.lightFlash, on = G.env === 'night' && (lf > 0.22 || (lf < 0.12 && lf > 0.05));
-  for (const L0 of W.flashLights || []) L0.on = on;
+  if (lf <= 0) W.flashPick = undefined;
+  else if (W.flashPick === undefined) {      // once per strike: the nearest window of the room you are in, if you can see it
+    W.flashPick = null;
+    if (hdIn()) { let bd = 6.5; for (const L0 of W.flashLights || []) { const c = L0.win.center, d = Math.hypot(c.x - P.x, c.z - P.z); if (L0.lv === P.level && d < bd && hdSeen(c)) { bd = d; W.flashPick = L0; } } }
+  }
+  for (const L0 of W.flashLights || []) L0.on = on && L0 === W.flashPick;
 }
 function hdCamera(dt) {
   HD.shake = Math.max(0, HD.shake - dt * 0.09);
@@ -6110,7 +6116,7 @@ function fxRender() {
   c.uInvProj.value.copy(camera.projectionMatrixInverse);
   c.uExposure.value = 0.95 * S.bright * 1.12; c.uTime.value = G.rt;
   c.uFear.value = clamp(G.fear, 0, 1); c.uCA.value = 0.0014 + G.fear * 0.006;
-  c.uFlash.value = flashlight.intensity > 0 ? 0.11 : 0; c.uLightning.value = G.lightFlash > 0.05 ? 1 : 0;
+  c.uFlash.value = flashlight.intensity > 0 ? 0.11 : 0; c.uLightning.value = (G.lightFlash > 0.05 && (camera.position.z > 8.1 || camera.position.x > 10.15)) ? 0.6 : 0;   // the sky-wide veil only outdoors
   if (Q.fxaa) {
     fxPass(m.comp, FX.rtLDR);
     const f = m.fxaa.uniforms; f.tSrc.value = FX.rtLDR.texture; f.uRes.value.set(FX.w, FX.h); f.uTime.value = G.rt;
@@ -6241,7 +6247,7 @@ function tick(dt) {
   let amb = outdoor ? 0.34 : (f.powerCut ? 0.075 : (f.lights ? 0.26 : 0.12));
   if (G.env === 'dawn') amb = 0.55;
   if (G.forceDark) amb = 0.03;
-  if (G.lightFlash > 0) amb += (G.lightFlash > 0.22 || (G.lightFlash < 0.12 && G.lightFlash > 0.05)) ? (outdoor ? 1.6 : 0.5) : 0;
+  if (G.lightFlash > 0) amb += (G.lightFlash > 0.22 || (G.lightFlash < 0.12 && G.lightFlash > 0.05)) ? (outdoor ? 1.0 : 0.22) : 0;   // a flash, not floodlights: indoors only the window side really lights up
   hemi.intensity = lerp(hemi.intensity, amb, G.lightFlash > 0 ? 1 : Math.min(1, dt * 3));
   if (W.hemiGround) hemi.groundColor.lerp((!outdoor && f.lights && !f.powerCut && !G.forceDark && G.env === 'night') ? W.bounce : W.hemiGround, Math.min(1, dt * 3));
   for (const gm of W.glassMats) if (!gm.uniforms) gm.emissiveIntensity = 0.55 + (G.lightFlash > 0 ? 2.5 : 0);
